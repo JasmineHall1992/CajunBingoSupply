@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Owner Dashboard — Cajun Bingo Supply</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">Cajun Bingo Supply</div>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="products.html" class="nav-badge">Premium Pull Tabs</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Password Gate -->
+  <div id="admin-gate">
+    <div class="admin-login">
+      <h2>Owner Access</h2>
+      <p>Enter the owner password to view the customer activity dashboard.</p>
+      <input type="password" id="admin-pass" placeholder="Owner password" autocomplete="off" />
+      <p class="auth-error" id="admin-error"></p>
+      <button class="btn auth-submit" onclick="checkPassword()">Enter Dashboard</button>
+    </div>
+  </div>
+
+  <!-- Dashboard (hidden until auth) -->
+  <div id="admin-dashboard" style="display:none">
+    <main>
+      <div class="admin-section">
+        <h2>Customer Activity Dashboard</h2>
+        <p>What your customers are saving — updated in real time.</p>
+
+        <div class="admin-summary" id="admin-summary"></div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+          <p class="account-section-label" style="margin:0">All Activity</p>
+          <button class="btn btn-outline-dark btn-sm" onclick="clearLog()" style="flex:none">Clear Log</button>
+        </div>
+
+        <div style="overflow-x:auto">
+          <table class="admin-table" id="activity-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="activity-body"></tbody>
+          </table>
+          <p id="no-activity" style="text-align:center;padding:3rem;color:#aaa;display:none">No activity recorded yet. Activity appears here when customers save or remove products.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    const OWNER_PASS = 'cajun2026';
+
+    function checkPassword() {
+      const val = document.getElementById('admin-pass').value;
+      if (val === OWNER_PASS) {
+        document.getElementById('admin-gate').style.display = 'none';
+        document.getElementById('admin-dashboard').style.display = 'block';
+        renderDashboard();
+      } else {
+        document.getElementById('admin-error').textContent = 'Incorrect password.';
+        document.getElementById('admin-pass').value = '';
+        document.getElementById('admin-pass').focus();
+      }
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && document.getElementById('admin-gate').style.display !== 'none') checkPassword();
+    });
+
+    function renderDashboard() {
+      const log = CBS.getActivityLog().slice().reverse();
+      const tbody = document.getElementById('activity-body');
+      const noActivity = document.getElementById('no-activity');
+
+      if (log.length === 0) {
+        tbody.innerHTML = '';
+        noActivity.style.display = 'block';
+        document.querySelector('.admin-table thead').style.display = 'none';
+      } else {
+        noActivity.style.display = 'none';
+        document.querySelector('.admin-table thead').style.display = '';
+        tbody.innerHTML = log.map(e => `
+          <tr>
+            <td>${new Date(e.ts).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</td>
+            <td>${e.email}</td>
+            <td>${e.productName || e.productId}</td>
+            <td><span class="admin-badge ${e.action}">${e.action === 'saved' ? '♥ Saved' : '♡ Removed'}</span></td>
+          </tr>`).join('');
+      }
+
+      // Summary stats
+      const saves = CBS.getActivityLog().filter(e => e.action === 'saved');
+      const counts = {};
+      saves.forEach(e => { counts[e.productName || e.productId] = (counts[e.productName || e.productId] || 0) + 1; });
+      const topProduct = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+      const uniqueCustomers = new Set(CBS.getActivityLog().map(e => e.email)).size;
+
+      document.getElementById('admin-summary').innerHTML = `
+        <div class="admin-stat"><h4>${saves.length}</h4><p>Total saves</p></div>
+        <div class="admin-stat"><h4>${uniqueCustomers}</h4><p>Customers active</p></div>
+        <div class="admin-stat"><h4>${topProduct ? topProduct[1] : 0}</h4><p>Most saves: ${topProduct ? topProduct[0].split(' Form')[0] : '—'}</p></div>`;
+    }
+
+    function clearLog() {
+      if (!confirm('Clear all activity data? This cannot be undone.')) return;
+      localStorage.removeItem('cbs_activity');
+      renderDashboard();
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account — Cajun Bingo Supply</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">Cajun Bingo Supply</div>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a id="nav-auth-link" href="login.html">Login</a></li>
+        <li><a href="products.html" class="nav-badge">Premium Pull Tabs</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="account-section">
+      <div class="account-header">
+        <div class="account-welcome">
+          <h2 id="welcome-name">My Account</h2>
+          <p id="welcome-email"></p>
+        </div>
+        <button class="btn btn-outline-dark" onclick="doLogout()">Log Out</button>
+      </div>
+
+      <p class="account-section-label">Saved Products</p>
+      <div id="favorites-container"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">Cajun Bingo Supply</div>
+        <p>Your trusted partner since 2005</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="products.html">Catalog</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-social">
+        <h4>Connect With Us</h4>
+        <ul>
+          <li><a href="#"><i data-lucide="facebook"></i> Facebook</a></li>
+          <li><a href="#"><i data-lucide="instagram"></i> Instagram</a></li>
+          <li><a href="#"><i data-lucide="youtube"></i> YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    const user = CBS.currentUser();
+    if (!user) window.location.href = 'login.html';
+
+    document.getElementById('welcome-name').textContent = 'Welcome back, ' + (user ? (user.name || 'there') : '') + '!';
+    document.getElementById('welcome-email').textContent = user ? user.email : '';
+
+    function doLogout() {
+      CBS.logout();
+      window.location.href = 'login.html';
+    }
+
+    function removeFav(productId) {
+      const favs = CBS.getUserFavorites(user.email);
+      const fav = favs.find(f => f.id === productId);
+      if (fav) CBS.toggleFavorite(fav);
+      renderFavorites();
+    }
+
+    function renderFavorites() {
+      const favs = CBS.getUserFavorites(user.email);
+      const container = document.getElementById('favorites-container');
+      if (favs.length === 0) {
+        container.innerHTML = `
+          <div class="favorites-empty">
+            <p>You haven't saved any products yet.</p>
+            <a href="products.html">Browse the catalog</a> and tap ♡ on any product to save it here.
+          </div>`;
+        return;
+      }
+      const cards = favs.map(f => `
+        <div class="product-card">
+          <div class="product-img ${f.imgClass || ''}">
+            <span class="product-label">${f.gameName || f.name}</span>
+          </div>
+          <div class="product-info">
+            <h3>${f.name}</h3>
+            <p class="price">$1.00 per card</p>
+            <p class="saved-date">Saved ${new Date(f.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+            <div class="card-actions">
+              <a href="products.html" class="btn btn-sm">View in Catalog</a>
+              <button class="btn btn-sm btn-outline-dark" onclick="removeFav('${f.id}')">Remove</button>
+            </div>
+          </div>
+        </div>`).join('');
+      container.innerHTML = `<div class="product-grid">${cards}</div>`;
+    }
+
+    renderFavorites();
+  </script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

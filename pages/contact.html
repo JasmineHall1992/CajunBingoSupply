@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Cajun Bingo Supply</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">Cajun Bingo Supply</div>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a id="nav-auth-link" href="login.html">Login</a></li>
+        <li><a href="products.html" class="nav-badge">Premium Pull Tabs</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <h1>Contact Us</h1>
+      <p>Questions, bulk orders, or custom requests — we're here to help.</p>
+    </section>
+
+    <section class="contact-section">
+      <form class="contact-form" action="#" method="POST">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required />
+
+        <label for="phone">Phone (optional)</label>
+        <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" />
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" placeholder="Tell us what you need..." required></textarea>
+
+        <button type="submit" class="btn"><i data-lucide="send"></i> Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">Cajun Bingo Supply</div>
+        <p>Your trusted partner since 2005</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="products.html">Catalog</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-social">
+        <h4>Connect With Us</h4>
+        <ul>
+          <li><a href="#"><i data-lucide="facebook"></i> Facebook</a></li>
+          <li><a href="#"><i data-lucide="instagram"></i> Instagram</a></li>
+          <li><a href="#"><i data-lucide="youtube"></i> YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

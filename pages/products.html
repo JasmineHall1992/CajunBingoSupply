@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pull Tab Catalog — Cajun Bingo Supply</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">Cajun Bingo Supply</div>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a id="nav-auth-link" href="login.html">Login</a></li>
+        <li><a href="products.html" class="nav-badge">Premium Pull Tabs</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <h1>Pull Tab Catalog</h1>
+      <p>Browse our current inventory of premium pull tab games — all $1.00 per card</p>
+    </section>
+
+    <!-- Search bar -->
+    <div class="catalog-search">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by game name, form number, or keyword..."
+        oninput="filterProducts()"
+      />
+    </div>
+
+    <section class="product-grid" id="productGrid">
+
+      <!-- Killer Bees KB2 -->
+      <div class="product-card" data-product-id="KB2" data-product-name="Killer Bees Form KB2" data-game-name="Killer Bees" data-img-class="kb-img" data-name="killer bees kb2 form daub bingo">
+        <div class="product-img kb-img">
+          <span class="product-label">Killer Bees</span>
+        </div>
+        <div class="product-info">
+          <h3>Killer Bees <span class="form-badge">Form KB2</span></h3>
+          <p class="price">$1.00 per card</p>
+          <div class="payout-box">
+            <div class="payout-row"><span>Cards per deal</span><strong>660</strong></div>
+            <div class="payout-row"><span>Takes in</span><strong>$660.00</strong></div>
+            <div class="payout-row highlight"><span>Daub Prize</span><strong>$400</strong></div>
+            <div class="payout-row"><span>Top Instant Win</span><strong>$50</strong></div>
+            <div class="payout-row"><span>Payout</span><strong>72.73%</strong></div>
+            <div class="payout-row gross"><span>Gross Profit</span><strong>$180.00</strong></div>
+          </div>
+          <div class="card-actions">
+            <a href="../images/products/KB2_KillerBees.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
+            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Killer Bees KB3 -->
+      <div class="product-card" data-product-id="KB3" data-product-name="Killer Bees Form KB3" data-game-name="Killer Bees" data-img-class="kb-img" data-name="killer bees kb3 form daub bingo">
+        <div class="product-img kb-img">
+          <span class="product-label">Killer Bees</span>
+        </div>
+        <div class="product-info">
+          <h3>Killer Bees <span class="form-badge">Form KB3</span></h3>
+          <p class="price">$1.00 per card</p>
+          <div class="payout-box">
+            <div class="payout-row"><span>Cards per deal</span><strong>1,440</strong></div>
+            <div class="payout-row"><span>Takes in</span><strong>$1,440.00</strong></div>
+            <div class="payout-row highlight"><span>Daub Prize</span><strong>$599</strong></div>
+            <div class="payout-row"><span>Top Instant Win</span><strong>$100</strong></div>
+            <div class="payout-row"><span>Payout</span><strong>72.15%</strong></div>
+            <div class="payout-row gross"><span>Gross Profit</span><strong>$401.00</strong></div>
+          </div>
+          <div class="card-actions">
+            <a href="../images/products/KB2_KillerBees.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
+            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rubber Ducky Downline RBDD01 -->
+      <div class="product-card" data-product-id="RBDD01" data-product-name="Rubber Ducky Downline RBDD01" data-game-name="Rubber Ducky Downline" data-img-class="rd-img" data-name="rubber ducky downline rbdd01 race bingo hold">
+        <div class="product-img rd-img">
+          <span class="product-label">Rubber Ducky Downline</span>
+        </div>
+        <div class="product-info">
+          <h3>Rubber Ducky Downline <span class="form-badge">RBDD01</span></h3>
+          <p class="price">$1.00 per card</p>
+          <div class="payout-box">
+            <div class="payout-row"><span>Cards per deal</span><strong>385</strong></div>
+            <div class="payout-row"><span>Takes in</span><strong>$385.00</strong></div>
+            <div class="payout-row highlight"><span>Duck Winner</span><strong>$200</strong></div>
+            <div class="payout-row"><span>Bingo Winner</span><strong>$50</strong></div>
+            <div class="payout-row"><span>Payout</span><strong>71.17%</strong></div>
+            <div class="payout-row gross"><span>Gross Profit</span><strong>$111.00</strong></div>
+          </div>
+          <div class="card-actions">
+            <a href="../images/products/RBDD02 $1 Rubber Ducky Downline.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
+            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rubber Ducky Downline RBDD02 -->
+      <div class="product-card" data-product-id="RBDD02" data-product-name="Rubber Ducky Downline RBDD02" data-game-name="Rubber Ducky Downline" data-img-class="rd-img" data-name="rubber ducky downline rbdd02 race bingo hold">
+        <div class="product-img rd-img">
+          <span class="product-label">Rubber Ducky Downline</span>
+        </div>
+        <div class="product-info">
+          <h3>Rubber Ducky Downline <span class="form-badge">RBDD02</span></h3>
+          <p class="price">$1.00 per card</p>
+          <div class="payout-box">
+            <div class="payout-row"><span>Cards per deal</span><strong>630</strong></div>
+            <div class="payout-row"><span>Takes in</span><strong>$630.00</strong></div>
+            <div class="payout-row highlight"><span>Duck Winner</span><strong>$300</strong></div>
+            <div class="payout-row"><span>Bingo Winner</span><strong>$100</strong></div>
+            <div class="payout-row"><span>Payout</span><strong>70.48%</strong></div>
+            <div class="payout-row gross"><span>Gross Profit</span><strong>$186.00</strong></div>
+          </div>
+          <div class="card-actions">
+            <a href="../images/products/RBDD02 $1 Rubber Ducky Downline.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
+            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rubber Ducky Downline RBDD03 -->
+      <div class="product-card" data-product-id="RBDD03" data-product-name="Rubber Ducky Downline RBDD03" data-game-name="Rubber Ducky Downline" data-img-class="rd-img" data-name="rubber ducky downline rbdd03 race bingo hold">
+        <div class="product-img rd-img">
+          <span class="product-label">Rubber Ducky Downline</span>
+        </div>
+        <div class="product-info">
+          <h3>Rubber Ducky Downline <span class="form-badge">RBDD03</span></h3>
+          <p class="price">$1.00 per card</p>
+          <div class="payout-box">
+            <div class="payout-row"><span>Cards per deal</span><strong>945</strong></div>
+            <div class="payout-row"><span>Takes in</span><strong>$945.00</strong></div>
+            <div class="payout-row highlight"><span>Duck Winner</span><strong>$500</strong></div>
+            <div class="payout-row"><span>Bingo Winner</span><strong>$100</strong></div>
+            <div class="payout-row"><span>Payout</span><strong>71.96%</strong></div>
+            <div class="payout-row gross"><span>Gross Profit</span><strong>$265.00</strong></div>
+          </div>
+          <div class="card-actions">
+            <a href="../images/products/RBDD02 $1 Rubber Ducky Downline.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
+            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tiger Ball TB40 -->
+      <div class="product-card" data-product-id="TB40" data-product-name="Tiger Ball Form TB40" data-game-name="Tiger Ball" data-img-class="tb-img" data-name="tiger ball tb40 hold purple gold bingo">
+        <div class="product-img tb-img">
+          <span class="product-label">Tiger Ball</span>
+        </div>
+        <div class="product-info">
+          <h3>Tiger Ball <span class="form-badge">Form TB40</span></h3>
+          <p class="price">$1.00 per card</p>
+          <div class="payout-box">
+            <div class="payout-row"><span>Cards per deal</span><strong>840</strong></div>
+            <div class="payout-row"><span>Takes in</span><strong>$840.00</strong></div>
+            <div class="payout-row highlight"><span>Purple Winner</span><strong>$400</strong></div>
+            <div class="payout-row"><span>Gold Winner</span><strong>$100</strong></div>
+            <div class="payout-row"><span>Payout</span><strong>70.24%</strong></div>
+            <div class="payout-row gross"><span>Gross Profit</span><strong>$250.00</strong></div>
+          </div>
+          <div class="card-actions">
+            <a href="../images/products/TB40_TigerBall_PROMO.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
+            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <p class="no-results" id="noResults" style="display:none;">No products match your search.</p>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">Cajun Bingo Supply</div>
+        <p>Your trusted partner since 2005</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="products.html">Catalog</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-social">
+        <h4>Connect With Us</h4>
+        <ul>
+          <li><a href="#"><i data-lucide="facebook"></i> Facebook</a></li>
+          <li><a href="#"><i data-lucide="instagram"></i> Instagram</a></li>
+          <li><a href="#"><i data-lucide="youtube"></i> YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    if (!CBS.currentUser()) window.location.href = 'login.html';
+
+    function filterProducts() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.product-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const text = card.dataset.name + ' ' + card.innerText.toLowerCase();
+        const show = text.includes(query);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    function toggleFav(btn) {
+      const card = btn.closest('.product-card');
+      const result = CBS.toggleFavorite({
+        id: card.dataset.productId,
+        name: card.dataset.productName,
+        gameName: card.dataset.gameName,
+        imgClass: card.dataset.imgClass
+      });
+      if (!result.ok && result.needsLogin) {
+        window.location.href = 'login.html';
+        return;
+      }
+      btn.classList.toggle('favorited', result.saved);
+      btn.innerHTML = result.saved ? '&#9829;' : '&#9825;';
+      btn.title = result.saved ? 'Remove from favorites' : 'Save to favorites';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.product-card').forEach(card => {
+        const btn = card.querySelector('.btn-fav');
+        if (btn && CBS.isFavorited(card.dataset.productId)) {
+          btn.classList.add('favorited');
+          btn.innerHTML = '&#9829;';
+          btn.title = 'Remove from favorites';
+        }
+      });
+    });
+  </script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
