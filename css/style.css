@@ -52,14 +52,34 @@ nav ul a:hover { color: #FFD700; }
 
 .nav-badge {
   background: #FFD700;
-  color: #8b0000 !important;
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
+  color: #1a0000 !important;
+  padding: 0.36rem 0.9rem;
+  border-radius: 4px;
   font-weight: 700;
-  font-size: 0.85rem !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-.nav-badge:hover { background: #e6c200; color: #8b0000 !important; }
+.nav-badge:hover { background: #e6c200; color: #1a0000 !important; }
+
+.nav-login-btn {
+  border: 1px solid rgba(255,215,0,0.6);
+  color: rgba(255,215,0,0.85) !important;
+  padding: 0.36rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.nav-login-btn:hover {
+  background: #FFD700;
+  border-color: #FFD700;
+  color: #1a0000 !important;
+}
 
 /* Buttons */
 .btn {
@@ -516,9 +536,12 @@ footer {
   position: relative;
 }
 
-.kb-img  { background: linear-gradient(135deg, #1a1a1a, #f5c400); }
-.rd-img  { background: linear-gradient(135deg, #0077cc, #ffe066); }
-.tb-img  { background: linear-gradient(135deg, #cc6600, #ffd700); }
+.kb-img   { background: linear-gradient(135deg, #1a1a1a, #f5c400); }
+.rd-img   { background: linear-gradient(135deg, #0077cc, #ffe066); }
+.tb-img   { background: linear-gradient(135deg, #cc6600, #ffd700); }
+.ba-img   { background: linear-gradient(135deg, #00838f, #43e97b); }
+.cat-img  { background: linear-gradient(135deg, #c2185b, #ff6ec7); }
+.dill-img { background: linear-gradient(135deg, #2e7d32, #a5d6a7); }
 
 .product-label {
   color: #fff;
@@ -1050,8 +1073,65 @@ footer {
 
 /* Nav - dark refined */
 header {
-  background: linear-gradient(180deg, #09000d 0%, #0e000b 100%);
-  border-bottom: 1px solid rgba(255,215,0,0.1);
+  background: #07000d;
+  border-top: 2px solid #FFD700;
+  border-bottom: 1px solid rgba(255,215,0,0.18);
+  box-shadow: 0 4px 28px rgba(0,0,0,0.7);
+}
+
+nav {
+  height: 72px;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.1;
+  cursor: default;
+}
+
+.logo-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: #FFD700;
+  letter-spacing: 0.03em;
+}
+
+.logo-est {
+  font-size: 0.58rem;
+  letter-spacing: 0.24em;
+  color: rgba(255,215,0,0.48);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+nav ul a:not(.nav-badge):not(.nav-login-btn) {
+  position: relative;
+  font-size: 0.88rem;
+  letter-spacing: 0.07em;
+  color: rgba(255,255,255,0.72);
+  padding-bottom: 3px;
+}
+
+nav ul a:not(.nav-badge):not(.nav-login-btn)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #FFD700;
+  transition: width 0.25s ease;
+}
+
+nav ul a:not(.nav-badge):not(.nav-login-btn):hover {
+  color: #FFD700 !important;
+}
+
+nav ul a:not(.nav-badge):not(.nav-login-btn):hover::after {
+  width: 100%;
 }
 
 /* Hero - deep velvet */
@@ -1226,6 +1306,7 @@ header {
   max-width: none;
   margin: 0;
   padding: 6rem 2rem;
+  text-align: center;
 }
 
 .team-section h2 {
@@ -1239,72 +1320,100 @@ header {
   margin-bottom: 0.5rem;
 }
 
-.team-grid {
-  max-width: 1100px;
-  margin: 0 auto;
-}
+.section-sub { color: #9b8aaa; font-size: 0.95rem; letter-spacing: 0.04em; }
 
-.section-sub { color: #6a5a7a; }
-
-.team-card {
-  background: linear-gradient(145deg, #160d22, #0d0914);
-  border: 1px solid rgba(255,215,0,0.15);
-  border-radius: 16px;
-  padding: 2.5rem 2rem;
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.45);
-}
-
-.team-card:hover {
-  border-color: rgba(255,215,0,0.38);
-  transform: translateY(-7px);
-  box-shadow: 0 16px 45px rgba(0,0,0,0.5), 0 0 35px rgba(255,215,0,0.05);
-}
-
-.team-photo {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #2a1545, #1a0d2e);
-  border: 1.5px solid rgba(255,215,0,0.28);
-  box-shadow:
-    0 0 0 4px rgba(255,215,0,0.06),
-    0 0 30px rgba(255,215,0,0.08);
-  margin: 0 auto 1.5rem;
+.team-divider {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  gap: 0.75rem;
+  margin: 1.25rem auto 2.75rem;
+  max-width: 260px;
 }
 
-.team-photo::after {
-  content: '';
-  position: absolute;
-  inset: 5px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,215,0,0.12);
-  pointer-events: none;
+.team-divider span {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent);
 }
 
-.team-initial {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 2rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #d4a017 0%, #FFD700 50%, #fff8dc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1;
-  letter-spacing: 0.02em;
+.team-divider i {
+  color: rgba(255,215,0,0.55);
+  width: 14px;
+  height: 14px;
+}
+
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.team-card {
+  flex: 0 1 380px;
+  background: linear-gradient(160deg, #180f26 0%, #0d0817 100%);
+  border: 1px solid rgba(255,215,0,0.14);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.5);
+  text-align: left;
+}
+
+.team-card:hover {
+  border-color: rgba(255,215,0,0.32);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 0 40px rgba(255,215,0,0.04);
+}
+
+.team-photo-frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #120820;
+}
+
+.team-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.team-card-body {
+  padding: 1.75rem 1.75rem 2rem;
 }
 
 .team-card h3 {
-  color: #FFD700;
   font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.25rem;
+  color: #FFD700;
+  margin-bottom: 0.3rem;
 }
 
-.team-title { color: rgba(255,215,0,0.52); font-size: 0.74rem; letter-spacing: 0.1em; }
-.team-card p:last-child { color: #8070a0; font-size: 0.9rem; }
+.team-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255,215,0,0.5);
+}
+
+.team-hr {
+  border: none;
+  border-top: 1px solid rgba(255,215,0,0.12);
+  margin: 1rem 0;
+}
+
+.team-bio {
+  color: #a898bc;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
 
 /* ================================================================
    SERVICES SECTION — Dark luxury
@@ -1460,6 +1569,81 @@ header {
   vertical-align: middle;
   margin-right: 0.3rem;
   flex-shrink: 0;
+}
+
+/* Flyer lightbox modal */
+.flyer-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(5,0,9,0.88);
+  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.flyer-modal.open { display: flex; }
+
+.flyer-modal-inner {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  max-height: 90vh;
+  background: #0e000b;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,160,23,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.flyer-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+.flyer-modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: #FFD700;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.flyer-modal-close {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.flyer-modal-close:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+.flyer-modal-body {
+  flex: 1;
+  overflow: hidden;
+}
+
+.flyer-modal-body iframe {
+  display: block;
+  width: 100%;
+  height: 75vh;
+  border: none;
+}
+
+@media (max-width: 600px) {
+  .flyer-modal-body iframe { height: 60vh; }
 }
 
 .btn-outline svg { stroke: #fff; }

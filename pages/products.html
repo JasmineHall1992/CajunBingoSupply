@@ -4,17 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pull Tab Catalog — Cajun Bingo Supply</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css" />
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xb62v217zr");
+  </script>
 </head>
 <body>
 
   <header>
     <nav>
-      <div class="logo">Cajun Bingo Supply</div>
+      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1988</span></div>
       <ul>
         <li><a href="../index.html">Home</a></li>
-        <li><a id="nav-auth-link" href="login.html">Login</a></li>
+        <li><a id="nav-auth-link" href="login.html" class="nav-login-btn">Login</a></li>
         <li><a href="products.html" class="nav-badge">Premium Pull Tabs</a></li>
+        <li><a href="raffles.html" class="nav-badge">Raffles</a></li>
       </ul>
     </nav>
   </header>
@@ -54,7 +65,7 @@
             <div class="payout-row gross"><span>Gross Profit</span><strong>$180.00</strong></div>
           </div>
           <div class="card-actions">
-            <a href="../images/products/KB2_KillerBees.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <button class="btn btn-sm" onclick="openFlyer('../images/products/KB2_KillerBees.pdf','Killer Bees — Form KB2')">View Flyer</button>
             <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
             <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
           </div>
@@ -78,7 +89,7 @@
             <div class="payout-row gross"><span>Gross Profit</span><strong>$401.00</strong></div>
           </div>
           <div class="card-actions">
-            <a href="../images/products/KB2_KillerBees.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <button class="btn btn-sm" onclick="openFlyer('../images/products/KB2_KillerBees.pdf','Killer Bees — Form KB3')">View Flyer</button>
             <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
             <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
           </div>
@@ -102,7 +113,7 @@
             <div class="payout-row gross"><span>Gross Profit</span><strong>$111.00</strong></div>
           </div>
           <div class="card-actions">
-            <a href="../images/products/RBDD02 $1 Rubber Ducky Downline.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <button class="btn btn-sm" onclick="openFlyer('../images/products/RBDD02 $1 Rubber Ducky Downline.pdf','Rubber Ducky Downline — RBDD01')">View Flyer</button>
             <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
             <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
           </div>
@@ -126,7 +137,7 @@
             <div class="payout-row gross"><span>Gross Profit</span><strong>$186.00</strong></div>
           </div>
           <div class="card-actions">
-            <a href="../images/products/RBDD02 $1 Rubber Ducky Downline.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <button class="btn btn-sm" onclick="openFlyer('../images/products/RBDD02 $1 Rubber Ducky Downline.pdf','Rubber Ducky Downline — RBDD02')">View Flyer</button>
             <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
             <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
           </div>
@@ -150,7 +161,7 @@
             <div class="payout-row gross"><span>Gross Profit</span><strong>$265.00</strong></div>
           </div>
           <div class="card-actions">
-            <a href="../images/products/RBDD02 $1 Rubber Ducky Downline.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <button class="btn btn-sm" onclick="openFlyer('../images/products/RBDD02 $1 Rubber Ducky Downline.pdf','Rubber Ducky Downline — RBDD03')">View Flyer</button>
             <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
             <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
           </div>
@@ -174,7 +185,7 @@
             <div class="payout-row gross"><span>Gross Profit</span><strong>$250.00</strong></div>
           </div>
           <div class="card-actions">
-            <a href="../images/products/TB40_TigerBall_PROMO.pdf" target="_blank" class="btn btn-sm">View Flyer</a>
+            <button class="btn btn-sm" onclick="openFlyer('../images/products/TB40_TigerBall_PROMO.pdf','Tiger Ball — Form TB40')">View Flyer</button>
             <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
             <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
           </div>
@@ -190,14 +201,14 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="logo">Cajun Bingo Supply</div>
-        <p>Your trusted partner since 2005</p>
+        <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1988</span></div>
+        <p>Your trusted partner since 1988</p>
       </div>
       <div class="footer-links">
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="products.html">Catalog</a></li>
-          <li><a href="login.html">Login</a></li>
+          <li><a href="products.html">Pull Tabs</a></li>
+          <li><a href="raffles.html">Raffles</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="about.html">About Us</a></li>
         </ul>
@@ -214,9 +225,41 @@
     <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
   </footer>
 
+  <!-- Flyer lightbox modal -->
+  <div class="flyer-modal" id="flyerModal" onclick="flyerOverlayClose(event)">
+    <div class="flyer-modal-inner">
+      <div class="flyer-modal-header">
+        <span class="flyer-modal-title" id="flyerModalTitle"></span>
+        <button class="flyer-modal-close" onclick="closeFlyer()" aria-label="Close">&times;</button>
+      </div>
+      <div class="flyer-modal-body">
+        <iframe id="flyerFrame" src="" title="Product Flyer"></iframe>
+      </div>
+    </div>
+  </div>
+
   <script src="../js/auth.js"></script>
   <script>
     if (!CBS.currentUser()) window.location.href = 'login.html';
+
+    function openFlyer(src, title) {
+      document.getElementById('flyerFrame').src = src;
+      document.getElementById('flyerModalTitle').textContent = title;
+      document.getElementById('flyerModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeFlyer() {
+      document.getElementById('flyerModal').classList.remove('open');
+      document.getElementById('flyerFrame').src = '';
+      document.body.style.overflow = '';
+    }
+
+    function flyerOverlayClose(e) {
+      if (e.target === document.getElementById('flyerModal')) closeFlyer();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFlyer(); });
 
     function filterProducts() {
       const query = document.getElementById('searchInput').value.toLowerCase();

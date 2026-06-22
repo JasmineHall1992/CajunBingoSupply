@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raffle Catalog — Cajun Bingo Supply</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css" />
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xb62v217zr");
+  </script>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1988</span></div>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a id="nav-auth-link" href="login.html" class="nav-login-btn">Login</a></li>
+        <li><a href="products.html" class="nav-badge">Premium Pull Tabs</a></li>
+        <li><a href="raffles.html" class="nav-badge">Raffles</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <h1>Raffle Catalog</h1>
+      <p>Browse our current raffle game inventory — perfect for charitable gaming events</p>
+    </section>
+
+    <!-- Search bar -->
+    <div class="catalog-search">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by game name, form number, or keyword..."
+        oninput="filterProducts()"
+      />
+    </div>
+
+    <section class="product-grid" id="productGrid">
+
+      <!-- Lucky Cat CAT1R -->
+      <div class="product-card" data-product-id="CAT1R" data-product-name="Lucky Cat Raffle CAT1R" data-game-name="Lucky Cat" data-img-class="cat-img" data-name="lucky cat cat1r raffle bingo daub">
+        <div class="product-img cat-img">
+          <span class="product-label">Lucky Cat</span>
+        </div>
+        <div class="product-info">
+          <h3>Lucky Cat <span class="form-badge">Form CAT1R</span></h3>
+          <p class="price">$5.00 per card</p>
+          <div class="payout-box">
+            <div class="payout-row"><span>Cards per set</span><strong>180</strong></div>
+            <div class="payout-row"><span>Takes in</span><strong>$900.00</strong></div>
+            <div class="payout-row highlight"><span>Raffle Winner</span><strong>$599.00</strong></div>
+            <div class="payout-row"><span>Payout</span><strong>66.65%</strong></div>
+            <div class="payout-row gross"><span>Gross Profit</span><strong>$301.00</strong></div>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-sm" onclick="openFlyer('../images/products/Lucky Cat_CAT1R_Flier.pdf','Lucky Cat — Form CAT1R')">View Flyer</button>
+            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
+            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- The Big Dill TBD -->
+      <div class="product-card" data-product-id="TBD" data-product-name="The Big Dill Raffle TBD" data-game-name="The Big Dill" data-img-class="dill-img" data-name="big dill tbd raffle daub bingo item">
+        <div class="product-img dill-img">
+          <span class="product-label">The Big Dill</span>
+        </div>
+        <div class="product-info">
+          <h3>The Big Dill <span class="form-badge">Item TBD</span></h3>
+          <p class="price">Contact us for pricing</p>
+          <div class="payout-box">
+            <div class="payout-row"><span>Cards per set</span><strong>150</strong></div>
+            <div class="payout-row"><span>Sets per game</span><strong>7 (A–G)</strong></div>
+            <div class="payout-row highlight"><span>Unique tickets</span><strong>1,050</strong></div>
+            <div class="payout-row"><span>Prize</span><strong>Item TBD</strong></div>
+            <div class="payout-row"><span>Daub 1–75 to win</span><strong></strong></div>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-sm" onclick="openFlyer('../images/products/TBD The Big Dill Raffle.pdf','The Big Dill — Item TBD Raffle')">View Flyer</button>
+            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
+            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bingo Animals BA180 -->
+      <div class="product-card" data-product-id="BA180" data-product-name="Bingo Animals BA180" data-game-name="Bingo Animals" data-img-class="ba-img" data-name="bingo animals ba180 daub paper animals">
+        <div class="product-img ba-img">
+          <span class="product-label">Bingo Animals</span>
+        </div>
+        <div class="product-info">
+          <h3>Bingo Animals <span class="form-badge">Form BA180</span></h3>
+          <p class="price">Contact us for pricing</p>
+          <div class="payout-box">
+            <div class="payout-row"><span>Cards per set</span><strong>180</strong></div>
+            <div class="payout-row"><span>Sets per case</span><strong>8</strong></div>
+            <div class="payout-row highlight"><span>Unique faces/case</span><strong>1,440</strong></div>
+            <div class="payout-row"><span>Daub 1–75 to win</span><strong></strong></div>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-sm" onclick="openFlyer('../images/products/Bingo Animals_BA180_Flier.pdf','Bingo Animals — Form BA180')">View Flyer</button>
+            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
+            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <p class="no-results" id="noResults" style="display:none;">No products match your search.</p>
+
+  </main>
+
+  <!-- Flyer lightbox modal -->
+  <div class="flyer-modal" id="flyerModal" onclick="flyerOverlayClose(event)">
+    <div class="flyer-modal-inner">
+      <div class="flyer-modal-header">
+        <span class="flyer-modal-title" id="flyerModalTitle"></span>
+        <button class="flyer-modal-close" onclick="closeFlyer()" aria-label="Close">&times;</button>
+      </div>
+      <div class="flyer-modal-body">
+        <iframe id="flyerFrame" src="" title="Product Flyer"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1988</span></div>
+        <p>Your trusted partner since 1988</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="products.html">Pull Tabs</a></li>
+          <li><a href="raffles.html">Raffles</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-social">
+        <h4>Connect With Us</h4>
+        <ul>
+          <li><a href="#"><i data-lucide="facebook"></i> Facebook</a></li>
+          <li><a href="#"><i data-lucide="instagram"></i> Instagram</a></li>
+          <li><a href="#"><i data-lucide="youtube"></i> YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    if (!CBS.currentUser()) window.location.href = 'login.html';
+
+    function openFlyer(src, title) {
+      document.getElementById('flyerFrame').src = src;
+      document.getElementById('flyerModalTitle').textContent = title;
+      document.getElementById('flyerModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeFlyer() {
+      document.getElementById('flyerModal').classList.remove('open');
+      document.getElementById('flyerFrame').src = '';
+      document.body.style.overflow = '';
+    }
+
+    function flyerOverlayClose(e) {
+      if (e.target === document.getElementById('flyerModal')) closeFlyer();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFlyer(); });
+
+    function filterProducts() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.product-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const text = card.dataset.name + ' ' + card.innerText.toLowerCase();
+        const show = text.includes(query);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    function toggleFav(btn) {
+      const card = btn.closest('.product-card');
+      const result = CBS.toggleFavorite({
+        id: card.dataset.productId,
+        name: card.dataset.productName,
+        gameName: card.dataset.gameName,
+        imgClass: card.dataset.imgClass
+      });
+      if (!result.ok && result.needsLogin) {
+        window.location.href = 'login.html';
+        return;
+      }
+      btn.classList.toggle('favorited', result.saved);
+      btn.innerHTML = result.saved ? '&#9829;' : '&#9825;';
+      btn.title = result.saved ? 'Remove from favorites' : 'Save to favorites';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.product-card').forEach(card => {
+        const btn = card.querySelector('.btn-fav');
+        if (btn && CBS.isFavorited(card.dataset.productId)) {
+          btn.classList.add('favorited');
+          btn.innerHTML = '&#9829;';
+          btn.title = 'Remove from favorites';
+        }
+      });
+    });
+  </script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
