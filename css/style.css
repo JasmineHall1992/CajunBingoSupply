@@ -319,11 +319,6 @@ nav ul a:hover { color: #FFD700; }
   letter-spacing: 0.05em;
 }
 
-.team-card p:last-child {
-  font-size: 0.95rem;
-  color: #555;
-}
-
 /* Services */
 .services-section {
   background: #f4f4f8;
@@ -705,41 +700,91 @@ footer {
 
 /* Login page */
 .login-section {
-  min-height: calc(100vh - 64px);
-  background: #f4f4f8;
+  min-height: calc(100vh - 72px);
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(90,0,55,0.45) 0%, transparent 52%),
+    radial-gradient(ellipse at 80% 40%, rgba(55,0,80,0.38) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 100%, rgba(130,0,40,0.25) 0%, transparent 50%),
+    linear-gradient(180deg, #050009 0%, #0e0018 55%, #050009 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 3rem 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Mini B·I·N·G·O badge row */
+.login-bingo-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.login-bingo-row span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: rgba(255,255,255,0.9);
+}
+
+.login-bingo-row em {
+  font-style: normal;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.lbr-b { background: linear-gradient(145deg, #3b82f6, #1d4ed8); }
+.lbr-i { background: linear-gradient(145deg, #f43f5e, #be123c); }
+.lbr-n { background: linear-gradient(145deg, #a78bfa, #7c3aed); }
+.lbr-g { background: linear-gradient(145deg, #4ade80, #15803d); }
+.lbr-o { background: linear-gradient(145deg, #fb923c, #c2410c); }
+
 .login-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 2.5rem 2rem;
+  background: linear-gradient(160deg, #1a0f2a 0%, #0e0819 100%);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 18px;
+  padding: 2.5rem 2.25rem;
   width: 100%;
-  max-width: 420px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  max-width: 440px;
+  box-shadow: 0 12px 60px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,215,0,0.06);
+  position: relative;
+  z-index: 1;
 }
 
 .login-logo {
-  font-size: 1.25rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #8b0000;
+  background: linear-gradient(135deg, #d4a017 0%, #fff8dc 45%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-align: center;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.3rem;
 }
 
 .login-tagline {
   text-align: center;
-  color: #888;
-  font-size: 0.85rem;
+  color: rgba(255,215,0,0.4);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
   margin-bottom: 2rem;
 }
 
 .login-tabs {
   display: flex;
-  border-bottom: 2px solid #eee;
+  border-bottom: 1px solid rgba(255,215,0,0.12);
   margin-bottom: 1.75rem;
 }
 
@@ -749,16 +794,17 @@ footer {
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
+  margin-bottom: -1px;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-family: inherit;
   font-weight: 600;
-  color: #aaa;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.3);
   transition: color 0.2s, border-color 0.2s;
 }
 
-.login-tab.active { color: #8b0000; border-bottom-color: #8b0000; }
+.login-tab.active { color: #FFD700; border-bottom-color: #FFD700; }
 
 .google-btn {
   display: flex;
@@ -767,19 +813,19 @@ footer {
   gap: 0.75rem;
   width: 100%;
   padding: 0.7rem 1rem;
-  border: 1.5px solid #ddd;
-  border-radius: 6px;
-  background: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-family: inherit;
   font-weight: 600;
-  color: #333;
+  color: rgba(255,255,255,0.8);
   transition: background 0.15s, border-color 0.15s;
   margin-bottom: 1.25rem;
 }
 
-.google-btn:hover { background: #f7f7f7; border-color: #bbb; }
+.google-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.22); }
 
 .auth-divider {
   text-align: center;
@@ -794,19 +840,20 @@ footer {
   left: 0;
   right: 0;
   height: 1px;
-  background: #eee;
+  background: rgba(255,215,0,0.1);
 }
 
 .auth-divider span {
-  background: #fff;
+  background: #160d24;
   padding: 0 0.75rem;
-  color: #bbb;
-  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+  font-size: 0.78rem;
   position: relative;
+  letter-spacing: 0.06em;
 }
 
 .auth-error {
-  color: #c0392b;
+  color: #f87171;
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
   min-height: 1.2em;
@@ -819,38 +866,52 @@ footer {
   margin-bottom: 1rem;
 }
 
-.form-group label { font-size: 0.875rem; font-weight: 600; color: #444; }
-
-.form-group input {
-  padding: 0.65rem 0.9rem;
-  border: 1.5px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-family: inherit;
-  transition: border-color 0.2s;
+.form-group label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,215,0,0.6);
 }
 
-.form-group input:focus { outline: none; border-color: #8b0000; }
+.form-group input {
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(255,215,0,0.15);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.form-group input::placeholder { color: rgba(255,255,255,0.22); }
+
+.form-group input:focus {
+  outline: none;
+  border-color: rgba(255,215,0,0.5);
+  background: rgba(255,255,255,0.08);
+}
 
 .form-check {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.85rem;
-  color: #666;
+  color: rgba(255,255,255,0.4);
   margin-bottom: 1.25rem;
   gap: 0.5rem;
 }
 
 .form-check label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
 
-.forgot-link { color: #8b0000; font-weight: 600; }
-.forgot-link:hover { text-decoration: underline; }
+.forgot-link { color: rgba(255,215,0,0.6); font-weight: 600; }
+.forgot-link:hover { color: #FFD700; text-decoration: underline; }
 
 .auth-submit { width: 100%; margin-bottom: 1rem; }
 
-.auth-switch { text-align: center; font-size: 0.875rem; color: #888; }
-.auth-switch a { color: #8b0000; font-weight: 600; }
+.auth-switch { text-align: center; font-size: 0.875rem; color: rgba(255,255,255,0.38); }
+.auth-switch a { color: #FFD700; font-weight: 600; }
 .auth-switch a:hover { text-decoration: underline; }
 
 /* Google sign-in overlay */
@@ -1410,7 +1471,7 @@ nav ul a:not(.nav-badge):not(.nav-login-btn):hover::after {
 }
 
 .team-bio {
-  color: #a898bc;
+  color: #ffffff;
   font-size: 0.92rem;
   line-height: 1.7;
 }
