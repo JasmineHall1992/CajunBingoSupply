@@ -283,33 +283,6 @@ nav ul a:hover { color: #FFD700; }
   margin-bottom: 3rem;
 }
 
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
-}
-
-.team-card {
-  background: #f9f9f9;
-  border-radius: 8px;
-  padding: 2rem;
-  text-align: center;
-}
-
-.team-photo.placeholder {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: #ddd;
-  margin: 0 auto 1.25rem;
-}
-
-.team-card h3 {
-  font-size: 1.15rem;
-  color: #8b0000;
-  margin-bottom: 0.25rem;
-}
-
 .team-title {
   font-size: 0.85rem;
   font-weight: 700;
@@ -651,13 +624,52 @@ footer {
 
 /* About */
 .about-content {
-  max-width: 720px;
+  max-width: 1000px;
   margin: 3rem auto;
   padding: 0 2rem;
 }
 
 .about-content p { margin-bottom: 1rem; font-size: 1.05rem; }
 .about-content a { color: #FFD700; font-weight: 600; }
+
+.about-row {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.about-row:last-child { margin-bottom: 0; }
+
+.about-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.about-row-media {
+  flex: 0 0 42%;
+}
+
+.about-row-media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+  display: block;
+}
+
+.about-row-text { flex: 1; }
+.about-row-text p:last-child { margin-bottom: 0; }
+
+@media (max-width: 700px) {
+  .about-row, .about-row-reverse {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .about-row-media { flex: none; width: 100%; }
+}
 
 /* Contact */
 .contact-section {
@@ -1359,6 +1371,64 @@ nav ul a:not(.nav-badge):not(.nav-login-btn):hover::after {
 .bingo-ball:nth-child(8) { animation-duration: 5.9s; animation-delay: 0.5s; }
 
 /* ================================================================
+   STATS BAR — Dark luxury
+   ================================================================ */
+
+.stats-section {
+  background: #06000c;
+  padding: 3.5rem 2rem;
+}
+
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-number {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #d4a017 0%, #fff8dc 45%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.1;
+}
+
+.stat-label {
+  margin-top: 0.4rem;
+  color: #9b8aaa;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(180deg, transparent, rgba(255,215,0,0.3), transparent);
+}
+
+@media (max-width: 700px) {
+  .stats-row { gap: 2rem; }
+  .stat-divider { display: none; }
+  .stat-number { font-size: 2rem; }
+}
+
+/* ================================================================
    TEAM SECTION — Dark luxury cards
    ================================================================ */
 
@@ -1404,54 +1474,42 @@ nav ul a:not(.nav-badge):not(.nav-login-btn):hover::after {
   height: 14px;
 }
 
-.team-grid {
+/* Zigzag layout */
+.team-zigzag {
   display: flex;
-  flex-wrap: wrap;
-  gap: 2.5rem;
-  justify-content: center;
-  max-width: 900px;
+  flex-direction: column;
+  gap: 4.5rem;
+  max-width: 1000px;
   margin: 0 auto;
-}
-
-.team-card {
-  flex: 0 1 380px;
-  background: linear-gradient(160deg, #180f26 0%, #0d0817 100%);
-  border: 1px solid rgba(255,215,0,0.14);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 6px 32px rgba(0,0,0,0.5);
   text-align: left;
 }
 
-.team-card:hover {
-  border-color: rgba(255,215,0,0.32);
-  transform: translateY(-6px);
-  box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 0 40px rgba(255,215,0,0.04);
+.team-row {
+  display: flex;
+  align-items: center;
+  gap: 2.75rem;
 }
 
-.team-photo-frame {
+.team-row-reverse { flex-direction: row-reverse; }
+
+.team-row-media { flex: 0 0 38%; }
+
+.team-row-media img {
   width: 100%;
   aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background: #120820;
-}
-
-.team-photo-frame img {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
   object-position: center top;
+  border-radius: 16px;
+  border: 1px solid rgba(255,215,0,0.14);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
   display: block;
 }
 
-.team-card-body {
-  padding: 1.75rem 1.75rem 2rem;
-}
+.team-row-text { flex: 1; }
 
-.team-card h3 {
+.team-row-text h3 {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   color: #FFD700;
   margin-bottom: 0.3rem;
 }
@@ -1474,6 +1532,16 @@ nav ul a:not(.nav-badge):not(.nav-login-btn):hover::after {
   color: #ffffff;
   font-size: 0.92rem;
   line-height: 1.7;
+}
+
+@media (max-width: 700px) {
+  .team-zigzag { gap: 3rem; }
+  .team-row, .team-row-reverse {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+  .team-row-media { flex: none; width: 100%; }
 }
 
 /* ================================================================
