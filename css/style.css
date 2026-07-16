@@ -21,9 +21,10 @@ header {
 }
 
 nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
+  gap: 1.5rem;
   height: 64px;
   max-width: 1100px;
   margin: 0 auto;
@@ -33,53 +34,29 @@ nav {
   font-size: 1.25rem;
   font-weight: 700;
   color: #FFD700;
+  justify-self: center;
 }
 
-nav ul {
+.nav-left, .nav-right {
   list-style: none;
   display: flex;
   align-items: center;
   gap: 2rem;
 }
 
-nav ul a {
+.nav-left { justify-self: start; }
+.nav-right { justify-self: end; }
+
+.nav-left a, .nav-right a {
   color: #ddd;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   transition: color 0.2s;
 }
 
-nav ul a:hover { color: #FFD700; }
-
-.nav-badge {
-  background: #FFD700;
-  color: #1a0000 !important;
-  padding: 0.36rem 0.9rem;
-  border-radius: 4px;
-  font-weight: 700;
-  font-size: 0.72rem !important;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
-.nav-badge:hover { background: #e6c200; color: #1a0000 !important; }
-
-.nav-login-btn {
-  border: 1px solid rgba(255,215,0,0.6);
-  color: rgba(255,215,0,0.85) !important;
-  padding: 0.36rem 1rem;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 0.78rem !important;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
-}
-
-.nav-login-btn:hover {
-  background: #FFD700;
-  border-color: #FFD700;
-  color: #1a0000 !important;
-}
+.nav-left a:hover, .nav-right a:hover { color: #FFD700; }
 
 /* Buttons */
 .btn {
@@ -706,8 +683,7 @@ footer {
 @media (max-width: 700px) {
   .hero h1 { font-size: 2rem; }
   .footer-inner { grid-template-columns: 1fr; }
-  nav ul { gap: 1rem; }
-  .nav-badge { display: none; }
+  .nav-left, .nav-right { gap: 1rem; }
 }
 
 /* Login page */
@@ -1159,6 +1135,7 @@ nav {
 .logo {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1px;
   line-height: 1.1;
   cursor: default;
@@ -1166,29 +1143,29 @@ nav {
 
 .logo-name {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.22rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #FFD700;
   letter-spacing: 0.03em;
 }
 
 .logo-est {
-  font-size: 0.58rem;
+  font-size: 0.8rem;
   letter-spacing: 0.24em;
   color: rgba(255,215,0,0.48);
   font-weight: 600;
   text-transform: uppercase;
 }
 
-nav ul a:not(.nav-badge):not(.nav-login-btn) {
+.nav-left a, .nav-right a {
   position: relative;
-  font-size: 0.88rem;
-  letter-spacing: 0.07em;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
   color: rgba(255,255,255,0.72);
   padding-bottom: 3px;
 }
 
-nav ul a:not(.nav-badge):not(.nav-login-btn)::after {
+.nav-left a::after, .nav-right a::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -1199,12 +1176,24 @@ nav ul a:not(.nav-badge):not(.nav-login-btn)::after {
   transition: width 0.25s ease;
 }
 
-nav ul a:not(.nav-badge):not(.nav-login-btn):hover {
+.nav-left a:hover, .nav-right a:hover {
   color: #FFD700 !important;
 }
 
-nav ul a:not(.nav-badge):not(.nav-login-btn):hover::after {
+.nav-left a:hover::after, .nav-right a:hover::after {
   width: 100%;
+}
+
+/* Homepage-only: nav floats transparent over the hero photo */
+body.home header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  z-index: 10;
 }
 
 /* Hero - deep velvet */
@@ -1215,6 +1204,13 @@ nav ul a:not(.nav-badge):not(.nav-login-btn):hover::after {
     radial-gradient(ellipse at 50% 0%, rgba(130,0,40,0.3) 0%, transparent 46%),
     linear-gradient(180deg, #050009 0%, #110020 50%, #050009 100%);
   padding: 9rem 2rem 8rem;
+}
+
+body.home .hero {
+  background:
+    linear-gradient(180deg, rgba(2,0,4,0.62) 0%, rgba(4,0,7,0.55) 45%, rgba(2,0,4,0.72) 100%),
+    url('../images/hero-bg.jpg') center / cover no-repeat;
+  padding-top: 11rem;
 }
 
 .hero::before {
@@ -1268,7 +1264,7 @@ nav ul a:not(.nav-badge):not(.nav-login-btn):hover::after {
   line-height: 1.85;
 }
 
-.hero-social a { color: #6a5a7a; }
+.hero-social a { color: rgba(255,255,255,0.8); }
 .hero-social a:hover { color: #FFD700; }
 
 .family-badge {
@@ -1383,8 +1379,8 @@ nav ul a:not(.nav-badge):not(.nav-login-btn):hover::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3.5rem;
-  max-width: 900px;
+  gap: 2.5rem;
+  max-width: 1150px;
   margin: 0 auto;
   flex-wrap: wrap;
 }
