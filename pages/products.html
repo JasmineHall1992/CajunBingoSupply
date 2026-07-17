@@ -22,18 +22,19 @@
     <nav>
       <ul class="nav-left">
         <li><a href="../index.html">Home</a></li>
+        <li><a href="products.html">Premium Pull Tabs</a></li>
+      </ul>
+      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="../images/logo-placeholder-smiley.png" alt="" /></div>
+      <ul class="nav-right">
+        <li><a href="raffles.html">Raffles</a></li>
         <li><a id="nav-auth-link" href="login.html">Login</a></li>
       </ul>
-      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span></div>
-      <ul class="nav-right">
-        <li><a href="products.html">Premium Pull Tabs</a></li>
-        <li><a href="raffles.html">Raffles</a></li>
-      </ul>
     </nav>
+    <a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" class="nav-logout-corner" style="display:none;">Log Out</a>
   </header>
 
   <main>
-    <section class="page-header">
+    <section class="page-header page-header-pulltabs">
       <h1>Pull Tab Catalog</h1>
       <p>Browse our current inventory of premium pull tab games — all $1.00 per card</p>
     </section>
@@ -48,153 +49,7 @@
       />
     </div>
 
-    <section class="product-grid" id="productGrid">
-
-      <!-- Killer Bees KB2 -->
-      <div class="product-card" data-product-id="KB2" data-product-name="Killer Bees Form KB2" data-game-name="Killer Bees" data-img-class="kb-img" data-name="killer bees kb2 form daub bingo">
-        <div class="product-img kb-img">
-          <span class="product-label">Killer Bees</span>
-        </div>
-        <div class="product-info">
-          <h3>Killer Bees <span class="form-badge">Form KB2</span></h3>
-          <p class="price">$1.00 per card</p>
-          <div class="payout-box">
-            <div class="payout-row"><span>Cards per deal</span><strong>660</strong></div>
-            <div class="payout-row"><span>Takes in</span><strong>$660.00</strong></div>
-            <div class="payout-row highlight"><span>Daub Prize</span><strong>$400</strong></div>
-            <div class="payout-row"><span>Top Instant Win</span><strong>$50</strong></div>
-            <div class="payout-row"><span>Payout</span><strong>72.73%</strong></div>
-            <div class="payout-row gross"><span>Gross Profit</span><strong>$180.00</strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-sm" onclick="openFlyer('../images/products/KB2_KillerBees.pdf','Killer Bees — Form KB2')">View Flyer</button>
-            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
-            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Killer Bees KB3 -->
-      <div class="product-card" data-product-id="KB3" data-product-name="Killer Bees Form KB3" data-game-name="Killer Bees" data-img-class="kb-img" data-name="killer bees kb3 form daub bingo">
-        <div class="product-img kb-img">
-          <span class="product-label">Killer Bees</span>
-        </div>
-        <div class="product-info">
-          <h3>Killer Bees <span class="form-badge">Form KB3</span></h3>
-          <p class="price">$1.00 per card</p>
-          <div class="payout-box">
-            <div class="payout-row"><span>Cards per deal</span><strong>1,440</strong></div>
-            <div class="payout-row"><span>Takes in</span><strong>$1,440.00</strong></div>
-            <div class="payout-row highlight"><span>Daub Prize</span><strong>$599</strong></div>
-            <div class="payout-row"><span>Top Instant Win</span><strong>$100</strong></div>
-            <div class="payout-row"><span>Payout</span><strong>72.15%</strong></div>
-            <div class="payout-row gross"><span>Gross Profit</span><strong>$401.00</strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-sm" onclick="openFlyer('../images/products/KB2_KillerBees.pdf','Killer Bees — Form KB3')">View Flyer</button>
-            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
-            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Rubber Ducky Downline RBDD01 -->
-      <div class="product-card" data-product-id="RBDD01" data-product-name="Rubber Ducky Downline RBDD01" data-game-name="Rubber Ducky Downline" data-img-class="rd-img" data-name="rubber ducky downline rbdd01 race bingo hold">
-        <div class="product-img rd-img">
-          <span class="product-label">Rubber Ducky Downline</span>
-        </div>
-        <div class="product-info">
-          <h3>Rubber Ducky Downline <span class="form-badge">RBDD01</span></h3>
-          <p class="price">$1.00 per card</p>
-          <div class="payout-box">
-            <div class="payout-row"><span>Cards per deal</span><strong>385</strong></div>
-            <div class="payout-row"><span>Takes in</span><strong>$385.00</strong></div>
-            <div class="payout-row highlight"><span>Duck Winner</span><strong>$200</strong></div>
-            <div class="payout-row"><span>Bingo Winner</span><strong>$50</strong></div>
-            <div class="payout-row"><span>Payout</span><strong>71.17%</strong></div>
-            <div class="payout-row gross"><span>Gross Profit</span><strong>$111.00</strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-sm" onclick="openFlyer('../images/products/RBDD02 $1 Rubber Ducky Downline.pdf','Rubber Ducky Downline — RBDD01')">View Flyer</button>
-            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
-            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Rubber Ducky Downline RBDD02 -->
-      <div class="product-card" data-product-id="RBDD02" data-product-name="Rubber Ducky Downline RBDD02" data-game-name="Rubber Ducky Downline" data-img-class="rd-img" data-name="rubber ducky downline rbdd02 race bingo hold">
-        <div class="product-img rd-img">
-          <span class="product-label">Rubber Ducky Downline</span>
-        </div>
-        <div class="product-info">
-          <h3>Rubber Ducky Downline <span class="form-badge">RBDD02</span></h3>
-          <p class="price">$1.00 per card</p>
-          <div class="payout-box">
-            <div class="payout-row"><span>Cards per deal</span><strong>630</strong></div>
-            <div class="payout-row"><span>Takes in</span><strong>$630.00</strong></div>
-            <div class="payout-row highlight"><span>Duck Winner</span><strong>$300</strong></div>
-            <div class="payout-row"><span>Bingo Winner</span><strong>$100</strong></div>
-            <div class="payout-row"><span>Payout</span><strong>70.48%</strong></div>
-            <div class="payout-row gross"><span>Gross Profit</span><strong>$186.00</strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-sm" onclick="openFlyer('../images/products/RBDD02 $1 Rubber Ducky Downline.pdf','Rubber Ducky Downline — RBDD02')">View Flyer</button>
-            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
-            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Rubber Ducky Downline RBDD03 -->
-      <div class="product-card" data-product-id="RBDD03" data-product-name="Rubber Ducky Downline RBDD03" data-game-name="Rubber Ducky Downline" data-img-class="rd-img" data-name="rubber ducky downline rbdd03 race bingo hold">
-        <div class="product-img rd-img">
-          <span class="product-label">Rubber Ducky Downline</span>
-        </div>
-        <div class="product-info">
-          <h3>Rubber Ducky Downline <span class="form-badge">RBDD03</span></h3>
-          <p class="price">$1.00 per card</p>
-          <div class="payout-box">
-            <div class="payout-row"><span>Cards per deal</span><strong>945</strong></div>
-            <div class="payout-row"><span>Takes in</span><strong>$945.00</strong></div>
-            <div class="payout-row highlight"><span>Duck Winner</span><strong>$500</strong></div>
-            <div class="payout-row"><span>Bingo Winner</span><strong>$100</strong></div>
-            <div class="payout-row"><span>Payout</span><strong>71.96%</strong></div>
-            <div class="payout-row gross"><span>Gross Profit</span><strong>$265.00</strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-sm" onclick="openFlyer('../images/products/RBDD02 $1 Rubber Ducky Downline.pdf','Rubber Ducky Downline — RBDD03')">View Flyer</button>
-            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
-            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tiger Ball TB40 -->
-      <div class="product-card" data-product-id="TB40" data-product-name="Tiger Ball Form TB40" data-game-name="Tiger Ball" data-img-class="tb-img" data-name="tiger ball tb40 hold purple gold bingo">
-        <div class="product-img tb-img">
-          <span class="product-label">Tiger Ball</span>
-        </div>
-        <div class="product-info">
-          <h3>Tiger Ball <span class="form-badge">Form TB40</span></h3>
-          <p class="price">$1.00 per card</p>
-          <div class="payout-box">
-            <div class="payout-row"><span>Cards per deal</span><strong>840</strong></div>
-            <div class="payout-row"><span>Takes in</span><strong>$840.00</strong></div>
-            <div class="payout-row highlight"><span>Purple Winner</span><strong>$400</strong></div>
-            <div class="payout-row"><span>Gold Winner</span><strong>$100</strong></div>
-            <div class="payout-row"><span>Payout</span><strong>70.24%</strong></div>
-            <div class="payout-row gross"><span>Gross Profit</span><strong>$250.00</strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-sm" onclick="openFlyer('../images/products/TB40_TigerBall_PROMO.pdf','Tiger Ball — Form TB40')">View Flyer</button>
-            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
-            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
-          </div>
-        </div>
-      </div>
-
-    </section>
+    <section class="product-grid" id="productGrid"></section>
 
     <p class="no-results" id="noResults" style="display:none;">No products match your search.</p>
 
@@ -240,9 +95,12 @@
     </div>
   </div>
 
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    if (!CBS.currentUser()) window.location.href = 'login.html';
+    let allProducts = [];
+    let favoriteIds = new Set();
 
     function openFlyer(src, title) {
       document.getElementById('flyerFrame').src = src;
@@ -263,46 +121,84 @@
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFlyer(); });
 
-    function filterProducts() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const cards = document.querySelectorAll('.product-card');
-      let visible = 0;
-      cards.forEach(card => {
-        const text = card.dataset.name + ' ' + card.innerText.toLowerCase();
-        const show = text.includes(query);
-        card.style.display = show ? '' : 'none';
-        if (show) visible++;
-      });
-      document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+    function payoutRowsHtml(rows) {
+      return (rows || []).map(row => {
+        const cls = row.style && row.style !== 'default' ? ' ' + row.style : '';
+        return `<div class="payout-row${cls}"><span>${row.label}</span><strong>${row.value || ''}</strong></div>`;
+      }).join('');
     }
 
-    function toggleFav(btn) {
-      const card = btn.closest('.product-card');
-      const result = CBS.toggleFavorite({
-        id: card.dataset.productId,
-        name: card.dataset.productName,
-        gameName: card.dataset.gameName,
-        imgClass: card.dataset.imgClass
-      });
+    function cardMediaHtml(p) {
+      const title = `${p.name} — ${p.form_label || ''}`;
+      if (p.flyer_path) {
+        const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
+        const inner = isImage
+          ? `<img src="${p.flyer_path}" alt="${title} flyer preview" />`
+          : `<iframe src="${p.flyer_path}#toolbar=0&view=FitH" title="${title} flyer preview"></iframe>`;
+        return `<div class="flyer-preview" onclick="openFlyer('${p.flyer_path}','${title}')">${inner}</div>`;
+      }
+      return `<div class="product-img ${p.img_class || ''}"><span class="product-label">${p.name}</span></div>`;
+    }
+
+    function productCardHtml(p, i) {
+      const favorited = favoriteIds.has(p.id);
+      return `
+        <div class="product-card" data-product-id="${p.id}" data-name="${(p.name + ' ' + (p.form_label || '')).toLowerCase()}" style="animation-delay:${(i * 0.08).toFixed(2)}s">
+          ${cardMediaHtml(p)}
+          <div class="product-info">
+            <h3>${p.name} <span class="form-badge">${p.form_label || ''}</span></h3>
+            <p class="price">${p.price_display}</p>
+            <div class="payout-box">${payoutRowsHtml(p.payout_rows)}</div>
+            <div class="card-actions">
+              <a href="contact.html?product=${p.id}" class="btn btn-sm btn-outline-dark">Order</a>
+              <button class="btn-fav${favorited ? ' favorited' : ''}" onclick="toggleFav('${p.id}', this)" title="${favorited ? 'Remove from favorites' : 'Save to favorites'}">${favorited ? '&#9829;' : '&#9825;'}</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderProducts(list) {
+      document.getElementById('productGrid').innerHTML = list.map(productCardHtml).join('');
+      document.getElementById('noResults').style.display = list.length === 0 ? 'block' : 'none';
+    }
+
+    function filterProducts() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      renderProducts(allProducts.filter(p =>
+        (p.name + ' ' + (p.form_label || '') + ' ' + p.category).toLowerCase().includes(query)
+      ));
+    }
+
+    async function toggleFav(productId, btn) {
+      const result = await CBS.toggleFavorite({ id: productId });
       if (!result.ok && result.needsLogin) {
         window.location.href = 'login.html';
         return;
       }
+      if (result.saved) favoriteIds.add(productId); else favoriteIds.delete(productId);
       btn.classList.toggle('favorited', result.saved);
       btn.innerHTML = result.saved ? '&#9829;' : '&#9825;';
       btn.title = result.saved ? 'Remove from favorites' : 'Save to favorites';
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.product-card').forEach(card => {
-        const btn = card.querySelector('.btn-fav');
-        if (btn && CBS.isFavorited(card.dataset.productId)) {
-          btn.classList.add('favorited');
-          btn.innerHTML = '&#9829;';
-          btn.title = 'Remove from favorites';
-        }
-      });
-    });
+    (async () => {
+      const user = await CBS.currentUser();
+      if (!user || user.status !== 'approved') {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const favs = await CBS.getUserFavorites();
+      favoriteIds = new Set(favs.map(f => f.product_id));
+
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .eq('category', 'pull-tab')
+        .order('sort_order');
+      allProducts = data || [];
+      renderProducts(allProducts);
+    })();
   </script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script>lucide.createIcons();</script>

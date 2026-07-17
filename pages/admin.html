@@ -22,116 +22,441 @@
     <nav>
       <ul class="nav-left">
         <li><a href="../index.html">Home</a></li>
-      </ul>
-      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span></div>
-      <ul class="nav-right">
         <li><a href="products.html">Premium Pull Tabs</a></li>
       </ul>
+      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="../images/logo-placeholder-smiley.png" alt="" /></div>
+      <ul class="nav-right">
+        <li><a href="raffles.html">Raffles</a></li>
+        <li><a id="nav-auth-link" href="login.html">Login</a></li>
+      </ul>
     </nav>
+    <a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" class="nav-logout-corner" style="display:none;">Log Out</a>
   </header>
 
-  <!-- Password Gate -->
-  <div id="admin-gate">
+  <!-- Shown only if signed in but not an admin account -->
+  <div id="admin-gate" style="display:none">
     <div class="admin-login">
-      <h2>Owner Access</h2>
-      <p>Enter the owner password to view the customer activity dashboard.</p>
-      <input type="password" id="admin-pass" placeholder="Owner password" autocomplete="off" />
-      <p class="auth-error" id="admin-error"></p>
-      <button class="btn auth-submit" onclick="checkPassword()">Enter Dashboard</button>
+      <h2>Not Authorized</h2>
+      <p>This account doesn't have admin access.</p>
+      <a href="account.html" class="btn auth-submit" style="display:inline-block;text-decoration:none;">Back to My Account</a>
     </div>
   </div>
 
-  <!-- Dashboard (hidden until auth) -->
+  <!-- Dashboard (hidden until authenticated as an admin) -->
   <div id="admin-dashboard" style="display:none">
-    <main>
-      <div class="admin-section">
-        <h2>Customer Activity Dashboard</h2>
-        <p>What your customers are saving — updated in real time.</p>
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <p class="admin-sidebar-label">Menu</p>
+        <nav class="admin-sidebar-nav">
+          <button class="admin-nav-item active" id="tabbtn-pending" onclick="switchAdminTab('pending')"><i data-lucide="user-plus"></i> Pending Signups</button>
+          <button class="admin-nav-item" id="tabbtn-users" onclick="switchAdminTab('users')"><i data-lucide="users"></i> All Users</button>
+          <button class="admin-nav-item" id="tabbtn-catalog" onclick="switchAdminTab('catalog')"><i data-lucide="package"></i> Catalog</button>
+          <button class="admin-nav-item" id="tabbtn-activity" onclick="switchAdminTab('activity')"><i data-lucide="activity"></i> Activity Log</button>
+        </nav>
+      </aside>
 
-        <div class="admin-summary" id="admin-summary"></div>
+      <main class="admin-main">
+        <div class="admin-section">
+          <div class="admin-topbar">
+            <div>
+              <h2>Owner Dashboard</h2>
+              <p>Signed in as <span id="admin-whoami"></span></p>
+            </div>
+            <button class="btn btn-outline-dark btn-sm" onclick="adminSignOut()" style="flex:none">Sign Out</button>
+          </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
-          <p class="account-section-label" style="margin:0">All Activity</p>
-          <button class="btn btn-outline-dark btn-sm" onclick="clearLog()" style="flex:none">Clear Log</button>
+          <!-- Pending Signups -->
+        <div id="tab-pending" class="admin-tab-panel">
+          <div style="overflow-x:auto">
+            <table class="admin-table" id="pending-table">
+              <thead><tr><th>Requested</th><th>Name</th><th>Email</th><th>Actions</th></tr></thead>
+              <tbody id="pending-body"></tbody>
+            </table>
+            <p id="no-pending" style="text-align:center;padding:3rem;color:#aaa;display:none">No pending signup requests.</p>
+          </div>
         </div>
 
-        <div style="overflow-x:auto">
-          <table class="admin-table" id="activity-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Customer</th>
-                <th>Product</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="activity-body"></tbody>
-          </table>
-          <p id="no-activity" style="text-align:center;padding:3rem;color:#aaa;display:none">No activity recorded yet. Activity appears here when customers save or remove products.</p>
+        <!-- All Users -->
+        <div id="tab-users" class="admin-tab-panel" style="display:none">
+          <div style="overflow-x:auto">
+            <table class="admin-table" id="users-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
+              <tbody id="users-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Catalog -->
+        <div id="tab-catalog" class="admin-tab-panel" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+            <p class="account-section-label" style="margin:0">Products</p>
+            <button class="btn btn-sm" onclick="openProductForm()">+ Add Product</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table" id="catalog-table">
+              <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Active</th><th>Actions</th></tr></thead>
+              <tbody id="catalog-body"></tbody>
+            </table>
+          </div>
+
+          <div id="product-form-wrap" style="display:none; margin-top:2rem; border-top:1px solid #eee; padding-top:1.5rem;">
+            <h3 id="product-form-title">Add Product</h3>
+            <input type="hidden" id="pf-original-id" />
+            <div class="form-group"><label>ID (slug — can't change after creation)</label><input type="text" id="pf-id" placeholder="e.g. KB2" /></div>
+            <div class="form-group"><label>Name</label><input type="text" id="pf-name" placeholder="e.g. Killer Bees" /></div>
+            <div class="form-group"><label>Form / item label</label><input type="text" id="pf-form-label" placeholder="e.g. Form KB2" /></div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="pf-category"><option value="pull-tab">Pull Tab</option><option value="raffle">Raffle</option></select>
+            </div>
+            <div class="form-group"><label>Price display</label><input type="text" id="pf-price" placeholder="e.g. $1.00 per card" /></div>
+            <div class="form-group"><label>Image CSS class</label><input type="text" id="pf-img-class" placeholder="e.g. kb-img" /></div>
+            <div class="form-group">
+              <label>Flyer (PDF or image)</label>
+              <input type="file" id="pf-flyer-file" accept="application/pdf,image/*" onchange="uploadFlyer(this)" />
+              <p id="pf-flyer-status" style="font-size:0.8rem;color:#888;margin-top:0.35rem;"></p>
+              <a id="pf-flyer-link" href="#" target="_blank" style="font-size:0.85rem;display:none;">View current flyer</a>
+              <input type="text" id="pf-flyer" placeholder="or paste a flyer URL directly" style="margin-top:0.5rem;" />
+            </div>
+            <div class="form-group"><label>Sort order</label><input type="number" id="pf-sort" value="0" /></div>
+
+            <label style="display:block;margin:1rem 0 0.5rem;font-weight:600;">Payout rows</label>
+            <div id="payout-rows-editor"></div>
+            <button type="button" class="btn btn-sm btn-outline-dark" onclick="addPayoutRow()">+ Add Row</button>
+
+            <div style="margin-top:1.5rem;display:flex;gap:0.75rem;">
+              <button class="btn" onclick="saveProduct()">Save Product</button>
+              <button class="btn btn-outline-dark" onclick="closeProductForm()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div id="tab-activity" class="admin-tab-panel" style="display:none">
+          <div class="admin-summary" id="admin-summary"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+            <p class="account-section-label" style="margin:0">All Activity</p>
+            <button class="btn btn-outline-dark btn-sm" onclick="clearLog()" style="flex:none">Clear Log</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table" id="activity-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Customer</th>
+                  <th>Product</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="activity-body"></tbody>
+            </table>
+            <p id="no-activity" style="text-align:center;padding:3rem;color:#aaa;display:none">No activity recorded yet. Activity appears here when customers save or remove products.</p>
+          </div>
         </div>
       </div>
-    </main>
+      </main>
+    </div>
   </div>
 
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    const OWNER_PASS = 'cajun2026';
+    async function adminSignOut() {
+      await CBS.logout();
+      window.location.href = 'login.html';
+    }
 
-    function checkPassword() {
-      const val = document.getElementById('admin-pass').value;
-      if (val === OWNER_PASS) {
-        document.getElementById('admin-gate').style.display = 'none';
-        document.getElementById('admin-dashboard').style.display = 'block';
-        renderDashboard();
+    (async () => {
+      const user = await CBS.currentUser();
+      if (!user || user.status !== 'approved') {
+        window.location.href = 'login.html';
+        return;
+      }
+      if (user.role !== 'admin') {
+        document.getElementById('admin-gate').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('admin-dashboard').style.display = 'block';
+      document.getElementById('admin-whoami').textContent = user.name + ' (' + user.email + ')';
+
+      loadPending();
+      loadUsers();
+      loadCatalog();
+      loadActivity();
+    })();
+
+    function switchAdminTab(tab) {
+      ['pending', 'users', 'catalog', 'activity'].forEach(t => {
+        document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
+        document.getElementById('tabbtn-' + t).classList.toggle('active', t === tab);
+      });
+      if (tab === 'pending') loadPending();
+      if (tab === 'users') loadUsers();
+      if (tab === 'catalog') loadCatalog();
+      if (tab === 'activity') loadActivity();
+    }
+
+    // ---- Pending Signups ----
+
+    async function loadPending() {
+      const rows = await CBS.getPendingSignups();
+      const tbody = document.getElementById('pending-body');
+      const noPending = document.getElementById('no-pending');
+      if (rows.length === 0) {
+        tbody.innerHTML = '';
+        noPending.style.display = 'block';
+        document.querySelector('#pending-table thead').style.display = 'none';
       } else {
-        document.getElementById('admin-error').textContent = 'Incorrect password.';
-        document.getElementById('admin-pass').value = '';
-        document.getElementById('admin-pass').focus();
+        noPending.style.display = 'none';
+        document.querySelector('#pending-table thead').style.display = '';
+        tbody.innerHTML = rows.map(p => `
+          <tr>
+            <td>${new Date(p.requested_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+            <td>${p.name || '—'}</td>
+            <td>${p.email}</td>
+            <td>
+              <button class="btn btn-sm" onclick="approveSignup('${p.id}')">Approve</button>
+              <button class="btn btn-sm btn-danger" onclick="rejectSignup('${p.id}')">Reject</button>
+            </td>
+          </tr>`).join('');
       }
     }
 
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && document.getElementById('admin-gate').style.display !== 'none') checkPassword();
-    });
+    async function approveSignup(id) {
+      await CBS.reviewSignup(id, 'approved');
+      loadPending();
+      loadUsers();
+    }
 
-    function renderDashboard() {
-      const log = CBS.getActivityLog().slice().reverse();
+    async function rejectSignup(id) {
+      const reason = prompt('Reason for rejecting (optional):') || '';
+      await CBS.reviewSignup(id, 'rejected', reason);
+      loadPending();
+      loadUsers();
+    }
+
+    // ---- All Users ----
+
+    async function loadUsers() {
+      const rows = await CBS.getAllUsers();
+      document.getElementById('users-body').innerHTML = rows.map(u => `
+        <tr>
+          <td>${u.name || '—'}</td>
+          <td>${u.email}</td>
+          <td><span class="admin-badge ${u.status}">${u.status}</span></td>
+          <td>${u.role}</td>
+          <td>${new Date(u.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+          <td><button class="btn btn-sm btn-danger" onclick="deleteUser('${u.id}','${u.email}')">Delete</button></td>
+        </tr>`).join('');
+    }
+
+    async function deleteUser(id, email) {
+      if (!confirm('Delete the account for ' + email + '? This cannot be undone.')) return;
+      const { error } = await supabase.functions.invoke('admin-delete-user', { body: { userId: id } });
+      if (error) { alert('Delete failed: ' + error.message); return; }
+      loadUsers();
+    }
+
+    // ---- Catalog ----
+
+    let editingPayoutRows = [];
+
+    async function loadCatalog() {
+      const { data } = await supabase.from('products').select('*').order('category').order('sort_order');
+      const rows = data || [];
+      document.getElementById('catalog-body').innerHTML = rows.map(p => `
+        <tr>
+          <td>${p.id}</td>
+          <td>${p.name}</td>
+          <td>${p.category}</td>
+          <td>${p.price_display}</td>
+          <td>${p.is_active ? 'Yes' : 'No'}</td>
+          <td>
+            <button class="btn btn-sm" onclick='openProductForm(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Edit</button>
+            <button class="btn btn-sm btn-outline-dark" onclick="toggleActive('${p.id}', ${p.is_active})">${p.is_active ? 'Deactivate' : 'Activate'}</button>
+            <button class="btn btn-sm btn-danger" onclick="hardDeleteProduct('${p.id}')">Delete</button>
+          </td>
+        </tr>`).join('');
+    }
+
+    async function toggleActive(id, current) {
+      await supabase.from('products').update({ is_active: !current }).eq('id', id);
+      loadCatalog();
+    }
+
+    async function hardDeleteProduct(id) {
+      if (!confirm('Permanently delete product ' + id + '? This cannot be undone.')) return;
+      await supabase.from('products').delete().eq('id', id);
+      loadCatalog();
+    }
+
+    function openProductForm(product) {
+      document.getElementById('product-form-wrap').style.display = 'block';
+      document.getElementById('product-form-title').textContent = product ? 'Edit Product' : 'Add Product';
+      document.getElementById('pf-original-id').value = product ? product.id : '';
+      document.getElementById('pf-id').value = product ? product.id : '';
+      document.getElementById('pf-id').disabled = !!product;
+      document.getElementById('pf-name').value = product ? product.name : '';
+      document.getElementById('pf-form-label').value = product ? (product.form_label || '') : '';
+      document.getElementById('pf-category').value = product ? product.category : 'pull-tab';
+      document.getElementById('pf-price').value = product ? product.price_display : '';
+      document.getElementById('pf-img-class').value = product ? (product.img_class || '') : '';
+      document.getElementById('pf-flyer').value = product ? (product.flyer_path || '') : '';
+      document.getElementById('pf-flyer-file').value = '';
+      document.getElementById('pf-flyer-status').textContent = '';
+      const flyerLink = document.getElementById('pf-flyer-link');
+      if (product && product.flyer_path) {
+        flyerLink.href = product.flyer_path;
+        flyerLink.style.display = 'inline';
+      } else {
+        flyerLink.style.display = 'none';
+      }
+      document.getElementById('pf-sort').value = product ? product.sort_order : 0;
+
+      editingPayoutRows = product && product.payout_rows ? JSON.parse(JSON.stringify(product.payout_rows)) : [];
+      renderPayoutRowsEditor();
+      document.getElementById('product-form-wrap').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeProductForm() {
+      document.getElementById('product-form-wrap').style.display = 'none';
+    }
+
+    async function uploadFlyer(inputEl) {
+      const file = inputEl.files[0];
+      if (!file) return;
+
+      const statusEl = document.getElementById('pf-flyer-status');
+      statusEl.textContent = 'Uploading...';
+
+      const productId = document.getElementById('pf-id').value.trim() || 'product';
+      const ext = file.name.split('.').pop();
+      const path = `${productId}-${Date.now()}.${ext}`;
+
+      const { error } = await supabase.storage.from('flyers').upload(path, file, { upsert: true });
+      if (error) {
+        statusEl.textContent = 'Upload failed: ' + error.message;
+        return;
+      }
+
+      const { data } = supabase.storage.from('flyers').getPublicUrl(path);
+      document.getElementById('pf-flyer').value = data.publicUrl;
+      const flyerLink = document.getElementById('pf-flyer-link');
+      flyerLink.href = data.publicUrl;
+      flyerLink.style.display = 'inline';
+      statusEl.textContent = 'Uploaded — ' + file.name;
+    }
+
+    function renderPayoutRowsEditor() {
+      const wrap = document.getElementById('payout-rows-editor');
+      wrap.innerHTML = editingPayoutRows.map((row, i) => `
+        <div class="payout-row-editor-row">
+          <input type="text" placeholder="Label" value="${(row.label || '').replace(/"/g, '&quot;')}" oninput="editingPayoutRows[${i}].label = this.value" />
+          <input type="text" placeholder="Value" value="${(row.value || '').replace(/"/g, '&quot;')}" oninput="editingPayoutRows[${i}].value = this.value" />
+          <select onchange="editingPayoutRows[${i}].style = this.value">
+            <option value="default" ${row.style === 'default' ? 'selected' : ''}>default</option>
+            <option value="highlight" ${row.style === 'highlight' ? 'selected' : ''}>highlight</option>
+            <option value="gross" ${row.style === 'gross' ? 'selected' : ''}>gross</option>
+          </select>
+          <button type="button" class="btn btn-sm btn-danger" onclick="removePayoutRow(${i})">&times;</button>
+        </div>`).join('');
+    }
+
+    function addPayoutRow() {
+      editingPayoutRows.push({ label: '', value: '', style: 'default' });
+      renderPayoutRowsEditor();
+    }
+
+    function removePayoutRow(i) {
+      editingPayoutRows.splice(i, 1);
+      renderPayoutRowsEditor();
+    }
+
+    async function saveProduct() {
+      const originalId = document.getElementById('pf-original-id').value;
+      const id = document.getElementById('pf-id').value.trim();
+      if (!id) return alert('Product ID is required.');
+
+      const payload = {
+        id,
+        name: document.getElementById('pf-name').value.trim(),
+        form_label: document.getElementById('pf-form-label').value.trim(),
+        category: document.getElementById('pf-category').value,
+        price_display: document.getElementById('pf-price').value.trim(),
+        img_class: document.getElementById('pf-img-class').value.trim(),
+        flyer_path: document.getElementById('pf-flyer').value.trim(),
+        sort_order: parseInt(document.getElementById('pf-sort').value, 10) || 0,
+        payout_rows: editingPayoutRows
+      };
+
+      let error;
+      if (originalId) {
+        ({ error } = await supabase.from('products').update(payload).eq('id', originalId));
+      } else {
+        ({ error } = await supabase.from('products').insert(payload));
+      }
+      if (error) return alert('Save failed: ' + error.message);
+      closeProductForm();
+      loadCatalog();
+    }
+
+    // ---- Activity Log ----
+
+    async function loadActivity() { renderActivity(); }
+
+    async function renderActivity() {
+      const log = await CBS.getActivityLog();
       const tbody = document.getElementById('activity-body');
       const noActivity = document.getElementById('no-activity');
 
       if (log.length === 0) {
         tbody.innerHTML = '';
         noActivity.style.display = 'block';
-        document.querySelector('.admin-table thead').style.display = 'none';
+        document.querySelector('#activity-table thead').style.display = 'none';
       } else {
         noActivity.style.display = 'none';
-        document.querySelector('.admin-table thead').style.display = '';
+        document.querySelector('#activity-table thead').style.display = '';
         tbody.innerHTML = log.map(e => `
           <tr>
             <td>${new Date(e.ts).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</td>
-            <td>${e.email}</td>
-            <td>${e.productName || e.productId}</td>
+            <td>${e.user_id || '—'}</td>
+            <td>${e.product_name || e.product_id}</td>
             <td><span class="admin-badge ${e.action}">${e.action === 'saved' ? '♥ Saved' : '♡ Removed'}</span></td>
           </tr>`).join('');
       }
 
-      // Summary stats
-      const saves = CBS.getActivityLog().filter(e => e.action === 'saved');
+      const saves = log.filter(e => e.action === 'saved');
       const counts = {};
-      saves.forEach(e => { counts[e.productName || e.productId] = (counts[e.productName || e.productId] || 0) + 1; });
+      saves.forEach(e => { counts[e.product_name || e.product_id] = (counts[e.product_name || e.product_id] || 0) + 1; });
       const topProduct = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-      const uniqueCustomers = new Set(CBS.getActivityLog().map(e => e.email)).size;
+      const uniqueCustomers = new Set(log.map(e => e.user_id)).size;
 
       document.getElementById('admin-summary').innerHTML = `
-        <div class="admin-stat"><h4>${saves.length}</h4><p>Total saves</p></div>
-        <div class="admin-stat"><h4>${uniqueCustomers}</h4><p>Customers active</p></div>
-        <div class="admin-stat"><h4>${topProduct ? topProduct[1] : 0}</h4><p>Most saves: ${topProduct ? topProduct[0].split(' Form')[0] : '—'}</p></div>`;
+        <div class="admin-stat">
+          <div class="admin-stat-icon"><i data-lucide="heart"></i></div>
+          <p class="admin-stat-label">Total Saves</p>
+          <h4>${saves.length}</h4>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-icon"><i data-lucide="users"></i></div>
+          <p class="admin-stat-label">Customers Active</p>
+          <h4>${uniqueCustomers}</h4>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-icon"><i data-lucide="star"></i></div>
+          <p class="admin-stat-label">Most Saves</p>
+          <h4>${topProduct ? topProduct[1] : 0}</h4>
+          <p class="admin-stat-sub">${topProduct ? topProduct[0] : '—'}</p>
+        </div>`;
+      if (window.lucide) lucide.createIcons();
     }
 
-    function clearLog() {
+    async function clearLog() {
       if (!confirm('Clear all activity data? This cannot be undone.')) return;
-      localStorage.removeItem('cbs_activity');
-      renderDashboard();
+      await supabase.from('activity_log').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      renderActivity();
     }
   </script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>

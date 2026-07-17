@@ -22,23 +22,43 @@
     <nav>
       <ul class="nav-left">
         <li><a href="../index.html">Home</a></li>
-        <li><a id="nav-auth-link" href="login.html">Login</a></li>
-      </ul>
-      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span></div>
-      <ul class="nav-right">
         <li><a href="products.html">Premium Pull Tabs</a></li>
       </ul>
+      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="../images/logo-placeholder-smiley.png" alt="" /></div>
+      <ul class="nav-right">
+        <li><a href="raffles.html">Raffles</a></li>
+        <li><a id="nav-auth-link" href="login.html">Login</a></li>
+      </ul>
     </nav>
+    <a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" class="nav-logout-corner" style="display:none;">Log Out</a>
   </header>
 
   <main>
     <div class="account-section">
       <div class="account-header">
-        <div class="account-welcome">
-          <h2 id="welcome-name">My Account</h2>
-          <p id="welcome-email"></p>
+        <div class="account-welcome" style="display:flex; align-items:center; gap:1.1rem;">
+          <div class="avatar-upload-wrap">
+            <img id="account-avatar" class="account-avatar" src="" alt="" style="display:none" />
+            <div id="account-avatar-placeholder" class="account-avatar account-avatar-placeholder"><i data-lucide="user"></i></div>
+            <div id="account-avatar-preset" class="account-avatar account-avatar-preset" style="display:none"></div>
+            <label for="avatar-file-input" class="avatar-upload-label" title="Upload a photo"><i data-lucide="camera"></i></label>
+            <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)" />
+            <button type="button" class="avatar-edit-label" title="Choose a fun avatar or remove photo" onclick="toggleAvatarPicker()"><i data-lucide="smile"></i></button>
+            <div id="avatar-picker" class="avatar-picker" style="display:none">
+              <p class="avatar-picker-label">Fun Avatars</p>
+              <div class="avatar-swatch-grid" id="avatar-swatch-grid"></div>
+              <button type="button" class="avatar-picker-remove" onclick="handleRemoveAvatar()">Remove Photo</button>
+            </div>
+          </div>
+          <div>
+            <h2 id="welcome-name">My Account</h2>
+            <p id="welcome-email"></p>
+          </div>
         </div>
-        <button class="btn btn-outline-dark" onclick="doLogout()">Log Out</button>
+        <div style="display:flex; gap:0.75rem;">
+          <a id="admin-link" href="admin.html" class="admin-dashboard-btn" style="display:none"><i data-lucide="shield-check"></i> Admin Dashboard</a>
+          <button class="btn btn-outline-dark" onclick="doLogout()">Log Out</button>
+        </div>
       </div>
 
       <p class="account-section-label">Saved Products</p>
@@ -72,28 +92,101 @@
     <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
   </footer>
 
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    const user = CBS.currentUser();
-    if (!user) window.location.href = 'login.html';
+    let user;
 
-    document.getElementById('welcome-name').textContent = 'Welcome back, ' + (user ? (user.name || 'there') : '') + '!';
-    document.getElementById('welcome-email').textContent = user ? user.email : '';
-
-    function doLogout() {
-      CBS.logout();
+    async function doLogout() {
+      await CBS.logout();
       window.location.href = 'login.html';
     }
 
-    function removeFav(productId) {
-      const favs = CBS.getUserFavorites(user.email);
-      const fav = favs.find(f => f.id === productId);
-      if (fav) CBS.toggleFavorite(fav);
+    const AVATAR_PRESETS = [
+      { emoji: '🎉', color: '#c0392b' },
+      { emoji: '😎', color: '#2980b9' },
+      { emoji: '🐊', color: '#27ae60' },
+      { emoji: '🎲', color: '#8e44ad' },
+      { emoji: '♣️', color: '#34495e' },
+      { emoji: '🍀', color: '#16a085' },
+      { emoji: '🔥', color: '#e67e22' },
+      { emoji: '⭐', color: '#f1c40f' },
+    ];
+
+    function renderAvatarSwatches() {
+      const grid = document.getElementById('avatar-swatch-grid');
+      grid.innerHTML = AVATAR_PRESETS.map(p =>
+        `<button type="button" class="avatar-swatch" style="background:${p.color}" title="Use this avatar" onclick="handleSetPreset('${p.emoji}','${p.color}')">${p.emoji}</button>`
+      ).join('');
+    }
+
+    function toggleAvatarPicker() {
+      const picker = document.getElementById('avatar-picker');
+      picker.style.display = picker.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function setAvatarDisplay(url) {
+      const img = document.getElementById('account-avatar');
+      const placeholder = document.getElementById('account-avatar-placeholder');
+      const preset = document.getElementById('account-avatar-preset');
+      const avatar = CBS.parseAvatar(url);
+      img.style.display = 'none';
+      placeholder.style.display = 'none';
+      preset.style.display = 'none';
+      if (avatar.type === 'image') {
+        img.src = avatar.url;
+        img.style.display = 'block';
+      } else if (avatar.type === 'preset') {
+        preset.textContent = avatar.emoji;
+        preset.style.background = avatar.color;
+        preset.style.display = 'flex';
+      } else {
+        placeholder.style.display = 'flex';
+      }
+    }
+
+    async function handleAvatarUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const result = await CBS.uploadAvatar(file);
+      if (!result.ok) {
+        alert('Upload failed: ' + result.error);
+        return;
+      }
+      setAvatarDisplay(result.avatarUrl);
+      CBS.updateNav();
+    }
+
+    async function handleRemoveAvatar() {
+      const result = await CBS.removeAvatar();
+      if (!result.ok) {
+        alert('Could not remove avatar: ' + result.error);
+        return;
+      }
+      setAvatarDisplay(null);
+      CBS.updateNav();
+      document.getElementById('avatar-picker').style.display = 'none';
+    }
+
+    async function handleSetPreset(emoji, color) {
+      const result = await CBS.setAvatarPreset(emoji, color);
+      if (!result.ok) {
+        alert('Could not set avatar: ' + result.error);
+        return;
+      }
+      setAvatarDisplay(result.avatarUrl);
+      CBS.updateNav();
+      document.getElementById('avatar-picker').style.display = 'none';
+    }
+
+    async function removeFav(productId) {
+      await CBS.toggleFavorite({ id: productId });
       renderFavorites();
     }
 
-    function renderFavorites() {
-      const favs = CBS.getUserFavorites(user.email);
+    async function renderFavorites() {
+      const favs = await CBS.getUserFavorites();
       const container = document.getElementById('favorites-container');
       if (favs.length === 0) {
         container.innerHTML = `
@@ -105,23 +198,35 @@
       }
       const cards = favs.map(f => `
         <div class="product-card">
-          <div class="product-img ${f.imgClass || ''}">
-            <span class="product-label">${f.gameName || f.name}</span>
+          <div class="product-img ${f.products.img_class || ''}">
+            <span class="product-label">${f.products.name}</span>
           </div>
           <div class="product-info">
-            <h3>${f.name}</h3>
-            <p class="price">$1.00 per card</p>
-            <p class="saved-date">Saved ${new Date(f.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+            <h3>${f.products.name} <span class="form-badge">${f.products.form_label || ''}</span></h3>
+            <p class="price">${f.products.price_display}</p>
+            <p class="saved-date">Saved ${new Date(f.saved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
             <div class="card-actions">
               <a href="products.html" class="btn btn-sm">View in Catalog</a>
-              <button class="btn btn-sm btn-outline-dark" onclick="removeFav('${f.id}')">Remove</button>
+              <button class="btn btn-sm btn-outline-dark" onclick="removeFav('${f.product_id}')">Remove</button>
             </div>
           </div>
         </div>`).join('');
       container.innerHTML = `<div class="product-grid">${cards}</div>`;
     }
 
-    renderFavorites();
+    (async () => {
+      user = await CBS.currentUser();
+      if (!user || user.status !== 'approved') {
+        window.location.href = 'login.html';
+        return;
+      }
+      document.getElementById('welcome-name').textContent = 'Welcome back, ' + (user.name || 'there') + '!';
+      document.getElementById('welcome-email').textContent = user.email;
+      if (user.role === 'admin') document.getElementById('admin-link').style.display = 'inline-block';
+      setAvatarDisplay(user.avatarUrl);
+      renderAvatarSwatches();
+      renderFavorites();
+    })();
   </script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script>lucide.createIcons();</script>

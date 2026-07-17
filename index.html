@@ -22,14 +22,15 @@
     <nav>
       <ul class="nav-left">
         <li><a href="index.html">Home</a></li>
+        <li><a href="pages/products.html">Premium Pull Tabs</a></li>
+      </ul>
+      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="images/logo-placeholder-smiley.png" alt="" /></div>
+      <ul class="nav-right">
+        <li><a href="pages/raffles.html">Raffles</a></li>
         <li><a id="nav-auth-link" href="pages/login.html">Login</a></li>
       </ul>
-      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span></div>
-      <ul class="nav-right">
-        <li><a href="pages/products.html">Premium Pull Tabs</a></li>
-        <li><a href="pages/raffles.html">Raffles</a></li>
-      </ul>
     </nav>
+    <a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" class="nav-logout-corner" style="display:none;">Log Out</a>
   </header>
 
   <main>
@@ -232,6 +233,8 @@
     <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
   </footer>
 
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/auth.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script>lucide.createIcons();</script>

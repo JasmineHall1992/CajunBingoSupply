@@ -22,13 +22,15 @@
     <nav>
       <ul class="nav-left">
         <li><a href="../index.html">Home</a></li>
-        <li><a id="nav-auth-link" href="login.html">Login</a></li>
-      </ul>
-      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span></div>
-      <ul class="nav-right">
         <li><a href="products.html">Premium Pull Tabs</a></li>
       </ul>
+      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="../images/logo-placeholder-smiley.png" alt="" /></div>
+      <ul class="nav-right">
+        <li><a href="raffles.html">Raffles</a></li>
+        <li><a id="nav-auth-link" href="login.html">Login</a></li>
+      </ul>
     </nav>
+    <a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" class="nav-logout-corner" style="display:none;">Log Out</a>
   </header>
 
   <main>
@@ -38,7 +40,9 @@
     </section>
 
     <section class="contact-section">
-      <form class="contact-form" action="#" method="POST">
+      <p class="auth-error" id="contact-error"></p>
+      <p class="auth-notice" id="contact-success" style="display:none">Thanks — your message has been sent. We'll be in touch soon.</p>
+      <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
         <label for="name">Name</label>
         <input type="text" id="name" name="name" placeholder="Your name" required />
 
@@ -51,7 +55,7 @@
         <label for="message">Message</label>
         <textarea id="message" name="message" rows="5" placeholder="Tell us what you need..." required></textarea>
 
-        <button type="submit" class="btn"><i data-lucide="send"></i> Send Message</button>
+        <button type="submit" class="btn" id="contactSubmitBtn"><i data-lucide="send"></i> Send Message</button>
       </form>
     </section>
   </main>
@@ -83,7 +87,39 @@
     <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
   </footer>
 
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
+  <script>
+    async function submitContact(e) {
+      e.preventDefault();
+      const errorEl = document.getElementById('contact-error');
+      const successEl = document.getElementById('contact-success');
+      const btn = document.getElementById('contactSubmitBtn');
+      errorEl.textContent = '';
+      successEl.style.display = 'none';
+
+      const params = new URLSearchParams(window.location.search);
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim() || null,
+        message: document.getElementById('message').value.trim(),
+        product_id: params.get('product') || null
+      };
+
+      btn.disabled = true;
+      const { error } = await supabase.from('inquiries').insert(payload);
+      btn.disabled = false;
+
+      if (error) {
+        errorEl.textContent = 'Something went wrong sending your message. Please try again.';
+        return;
+      }
+      successEl.style.display = 'block';
+      document.getElementById('contactForm').reset();
+    }
+  </script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script>lucide.createIcons();</script>
 </body>

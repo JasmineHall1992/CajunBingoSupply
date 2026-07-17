@@ -22,18 +22,19 @@
     <nav>
       <ul class="nav-left">
         <li><a href="../index.html">Home</a></li>
+        <li><a href="products.html">Premium Pull Tabs</a></li>
+      </ul>
+      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="../images/logo-placeholder-smiley.png" alt="" /></div>
+      <ul class="nav-right">
+        <li><a href="raffles.html">Raffles</a></li>
         <li><a id="nav-auth-link" href="login.html">Login</a></li>
       </ul>
-      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span></div>
-      <ul class="nav-right">
-        <li><a href="products.html">Premium Pull Tabs</a></li>
-        <li><a href="raffles.html">Raffles</a></li>
-      </ul>
     </nav>
+    <a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" class="nav-logout-corner" style="display:none;">Log Out</a>
   </header>
 
   <main>
-    <section class="page-header">
+    <section class="page-header page-header-raffles">
       <h1>Raffle Catalog</h1>
       <p>Browse our current raffle game inventory — perfect for charitable gaming events</p>
     </section>
@@ -48,77 +49,7 @@
       />
     </div>
 
-    <section class="product-grid" id="productGrid">
-
-      <!-- Lucky Cat CAT1R -->
-      <div class="product-card" data-product-id="CAT1R" data-product-name="Lucky Cat Raffle CAT1R" data-game-name="Lucky Cat" data-img-class="cat-img" data-name="lucky cat cat1r raffle bingo daub">
-        <div class="product-img cat-img">
-          <span class="product-label">Lucky Cat</span>
-        </div>
-        <div class="product-info">
-          <h3>Lucky Cat <span class="form-badge">Form CAT1R</span></h3>
-          <p class="price">$5.00 per card</p>
-          <div class="payout-box">
-            <div class="payout-row"><span>Cards per set</span><strong>180</strong></div>
-            <div class="payout-row"><span>Takes in</span><strong>$900.00</strong></div>
-            <div class="payout-row highlight"><span>Raffle Winner</span><strong>$599.00</strong></div>
-            <div class="payout-row"><span>Payout</span><strong>66.65%</strong></div>
-            <div class="payout-row gross"><span>Gross Profit</span><strong>$301.00</strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-sm" onclick="openFlyer('../images/products/Lucky Cat_CAT1R_Flier.pdf','Lucky Cat — Form CAT1R')">View Flyer</button>
-            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
-            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- The Big Dill TBD -->
-      <div class="product-card" data-product-id="TBD" data-product-name="The Big Dill Raffle TBD" data-game-name="The Big Dill" data-img-class="dill-img" data-name="big dill tbd raffle daub bingo item">
-        <div class="product-img dill-img">
-          <span class="product-label">The Big Dill</span>
-        </div>
-        <div class="product-info">
-          <h3>The Big Dill <span class="form-badge">Item TBD</span></h3>
-          <p class="price">Contact us for pricing</p>
-          <div class="payout-box">
-            <div class="payout-row"><span>Cards per set</span><strong>150</strong></div>
-            <div class="payout-row"><span>Sets per game</span><strong>7 (A–G)</strong></div>
-            <div class="payout-row highlight"><span>Unique tickets</span><strong>1,050</strong></div>
-            <div class="payout-row"><span>Prize</span><strong>Item TBD</strong></div>
-            <div class="payout-row"><span>Daub 1–75 to win</span><strong></strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-sm" onclick="openFlyer('../images/products/TBD The Big Dill Raffle.pdf','The Big Dill — Item TBD Raffle')">View Flyer</button>
-            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
-            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bingo Animals BA180 -->
-      <div class="product-card" data-product-id="BA180" data-product-name="Bingo Animals BA180" data-game-name="Bingo Animals" data-img-class="ba-img" data-name="bingo animals ba180 daub paper animals">
-        <div class="product-img ba-img">
-          <span class="product-label">Bingo Animals</span>
-        </div>
-        <div class="product-info">
-          <h3>Bingo Animals <span class="form-badge">Form BA180</span></h3>
-          <p class="price">Contact us for pricing</p>
-          <div class="payout-box">
-            <div class="payout-row"><span>Cards per set</span><strong>180</strong></div>
-            <div class="payout-row"><span>Sets per case</span><strong>8</strong></div>
-            <div class="payout-row highlight"><span>Unique faces/case</span><strong>1,440</strong></div>
-            <div class="payout-row"><span>Daub 1–75 to win</span><strong></strong></div>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-sm" onclick="openFlyer('../images/products/Bingo Animals_BA180_Flier.pdf','Bingo Animals — Form BA180')">View Flyer</button>
-            <a href="contact.html" class="btn btn-sm btn-outline-dark">Order</a>
-            <button class="btn-fav" onclick="toggleFav(this)" title="Save to favorites">&#9825;</button>
-          </div>
-        </div>
-      </div>
-
-    </section>
+    <section class="product-grid" id="productGrid"></section>
 
     <p class="no-results" id="noResults" style="display:none;">No products match your search.</p>
 
@@ -164,9 +95,12 @@
     <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
   </footer>
 
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    if (!CBS.currentUser()) window.location.href = 'login.html';
+    let allProducts = [];
+    let favoriteIds = new Set();
 
     function openFlyer(src, title) {
       document.getElementById('flyerFrame').src = src;
@@ -187,46 +121,84 @@
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFlyer(); });
 
-    function filterProducts() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const cards = document.querySelectorAll('.product-card');
-      let visible = 0;
-      cards.forEach(card => {
-        const text = card.dataset.name + ' ' + card.innerText.toLowerCase();
-        const show = text.includes(query);
-        card.style.display = show ? '' : 'none';
-        if (show) visible++;
-      });
-      document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+    function payoutRowsHtml(rows) {
+      return (rows || []).map(row => {
+        const cls = row.style && row.style !== 'default' ? ' ' + row.style : '';
+        return `<div class="payout-row${cls}"><span>${row.label}</span><strong>${row.value || ''}</strong></div>`;
+      }).join('');
     }
 
-    function toggleFav(btn) {
-      const card = btn.closest('.product-card');
-      const result = CBS.toggleFavorite({
-        id: card.dataset.productId,
-        name: card.dataset.productName,
-        gameName: card.dataset.gameName,
-        imgClass: card.dataset.imgClass
-      });
+    function cardMediaHtml(p) {
+      const title = `${p.name} — ${p.form_label || ''}`;
+      if (p.flyer_path) {
+        const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
+        const inner = isImage
+          ? `<img src="${p.flyer_path}" alt="${title} flyer preview" />`
+          : `<iframe src="${p.flyer_path}#toolbar=0&view=FitH" title="${title} flyer preview"></iframe>`;
+        return `<div class="flyer-preview" onclick="openFlyer('${p.flyer_path}','${title}')">${inner}</div>`;
+      }
+      return `<div class="product-img ${p.img_class || ''}"><span class="product-label">${p.name}</span></div>`;
+    }
+
+    function productCardHtml(p) {
+      const favorited = favoriteIds.has(p.id);
+      return `
+        <div class="product-card" data-product-id="${p.id}" data-name="${(p.name + ' ' + (p.form_label || '')).toLowerCase()}">
+          ${cardMediaHtml(p)}
+          <div class="product-info">
+            <h3>${p.name} <span class="form-badge">${p.form_label || ''}</span></h3>
+            <p class="price">${p.price_display}</p>
+            <div class="payout-box">${payoutRowsHtml(p.payout_rows)}</div>
+            <div class="card-actions">
+              <a href="contact.html?product=${p.id}" class="btn btn-sm btn-outline-dark">Order</a>
+              <button class="btn-fav${favorited ? ' favorited' : ''}" onclick="toggleFav('${p.id}', this)" title="${favorited ? 'Remove from favorites' : 'Save to favorites'}">${favorited ? '&#9829;' : '&#9825;'}</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderProducts(list) {
+      document.getElementById('productGrid').innerHTML = list.map(productCardHtml).join('');
+      document.getElementById('noResults').style.display = list.length === 0 ? 'block' : 'none';
+    }
+
+    function filterProducts() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      renderProducts(allProducts.filter(p =>
+        (p.name + ' ' + (p.form_label || '') + ' ' + p.category).toLowerCase().includes(query)
+      ));
+    }
+
+    async function toggleFav(productId, btn) {
+      const result = await CBS.toggleFavorite({ id: productId });
       if (!result.ok && result.needsLogin) {
         window.location.href = 'login.html';
         return;
       }
+      if (result.saved) favoriteIds.add(productId); else favoriteIds.delete(productId);
       btn.classList.toggle('favorited', result.saved);
       btn.innerHTML = result.saved ? '&#9829;' : '&#9825;';
       btn.title = result.saved ? 'Remove from favorites' : 'Save to favorites';
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.product-card').forEach(card => {
-        const btn = card.querySelector('.btn-fav');
-        if (btn && CBS.isFavorited(card.dataset.productId)) {
-          btn.classList.add('favorited');
-          btn.innerHTML = '&#9829;';
-          btn.title = 'Remove from favorites';
-        }
-      });
-    });
+    (async () => {
+      const user = await CBS.currentUser();
+      if (!user || user.status !== 'approved') {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const favs = await CBS.getUserFavorites();
+      favoriteIds = new Set(favs.map(f => f.product_id));
+
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .eq('category', 'raffle')
+        .order('sort_order');
+      allProducts = data || [];
+      renderProducts(allProducts);
+    })();
   </script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script>lucide.createIcons();</script>

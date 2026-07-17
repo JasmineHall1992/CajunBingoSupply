@@ -22,13 +22,15 @@
     <nav>
       <ul class="nav-left">
         <li><a href="../index.html">Home</a></li>
-        <li><a id="nav-auth-link" href="login.html">Login</a></li>
-      </ul>
-      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span></div>
-      <ul class="nav-right">
         <li><a href="products.html">Premium Pull Tabs</a></li>
       </ul>
+      <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="../images/logo-placeholder-smiley.png" alt="" /></div>
+      <ul class="nav-right">
+        <li><a href="raffles.html">Raffles</a></li>
+        <li><a id="nav-auth-link" href="login.html">Login</a></li>
+      </ul>
     </nav>
+    <a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" class="nav-logout-corner" style="display:none;">Log Out</a>
   </header>
 
   <main>
@@ -63,7 +65,7 @@
 
         <!-- Sign In Form -->
         <div id="signin-form">
-          <button class="google-btn" onclick="openGoogleOverlay()">
+          <button class="google-btn" onclick="signInWithGoogle()">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
               <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
@@ -98,7 +100,8 @@
 
         <!-- Create Account Form -->
         <div id="register-form" style="display:none">
-          <button class="google-btn" onclick="openGoogleOverlay()">
+          <p class="auth-notice">First-time users: new accounts require admin approval before you can sign in. Submit your request below and you'll be notified once it's reviewed.</p>
+          <button class="google-btn" onclick="signInWithGoogle()">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
               <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
@@ -137,28 +140,6 @@
     </section>
   </main>
 
-  <!-- Google Sign-In Overlay -->
-  <div class="google-overlay" id="google-overlay" style="display:none" onclick="overlayClose(event)">
-    <div class="google-picker">
-      <div class="google-picker-header">
-        <svg width="22" height="22" viewBox="0 0 24 24">
-          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-        </svg>
-        <h3>Sign in with Google</h3>
-      </div>
-      <p>Enter your Google account details to continue to Cajun Bingo Supply.</p>
-      <input type="text" id="google-name" placeholder="Full name" />
-      <input type="email" id="google-email" placeholder="Google email address" />
-      <div class="google-picker-actions">
-        <button class="btn-google-cancel" onclick="closeGoogleOverlay()">Cancel</button>
-        <button class="btn-google-confirm" onclick="confirmGoogle()">Continue</button>
-      </div>
-    </div>
-  </div>
-
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
@@ -185,9 +166,14 @@
     <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
   </footer>
 
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    if (CBS.currentUser()) window.location.href = 'account.html';
+    (async () => {
+      const user = await CBS.currentUser();
+      if (user && user.status === 'approved') window.location.href = 'account.html';
+    })();
 
     function switchTab(tab) {
       const isSignin = tab === 'signin';
@@ -199,59 +185,57 @@
 
     function showError(id, msg) { document.getElementById(id).textContent = msg; }
 
-    function doSignIn() {
+    async function doSignIn() {
       const email = document.getElementById('signin-email').value.trim();
       const pass = document.getElementById('signin-password').value;
       showError('signin-error', '');
       if (!email || !pass) return showError('signin-error', 'Please fill in all fields.');
-      const r = CBS.login(email, pass);
+      const r = await CBS.login(email, pass);
       if (r.ok) window.location.href = 'account.html';
       else showError('signin-error', r.error);
     }
 
-    function doRegister() {
+    async function doRegister() {
       const name = document.getElementById('reg-name').value.trim();
       const email = document.getElementById('reg-email').value.trim();
       const pass = document.getElementById('reg-password').value;
       showError('register-error', '');
       if (!name || !email || !pass) return showError('register-error', 'Please fill in all fields.');
       if (pass.length < 6) return showError('register-error', 'Password must be at least 6 characters.');
-      const r = CBS.register(name, email, pass);
-      if (r.ok) window.location.href = 'account.html';
-      else showError('register-error', r.error);
+      const r = await CBS.register(name, email, pass);
+      if (r.ok) {
+        document.querySelector('#register-form').innerHTML =
+          '<p class="auth-notice">Thanks! Your account request has been submitted. An admin will review it, and you\'ll be able to sign in once it\'s approved.</p>';
+      } else {
+        showError('register-error', r.error);
+      }
     }
 
-    function openGoogleOverlay() {
-      document.getElementById('google-overlay').style.display = 'flex';
-      setTimeout(() => document.getElementById('google-name').focus(), 50);
+    async function signInWithGoogle() {
+      await CBS.loginGoogle();
+      // Browser navigates to Google and back — nothing else runs here.
     }
 
-    function closeGoogleOverlay() {
-      document.getElementById('google-overlay').style.display = 'none';
-    }
-
-    function overlayClose(e) {
-      if (e.target === document.getElementById('google-overlay')) closeGoogleOverlay();
-    }
-
-    function confirmGoogle() {
-      const name = document.getElementById('google-name').value.trim();
-      const email = document.getElementById('google-email').value.trim();
-      if (!name || !email) {
-        document.getElementById('google-name').style.borderColor = name ? '#ddd' : '#c0392b';
-        document.getElementById('google-email').style.borderColor = email ? '#ddd' : '#c0392b';
+    // After a Google OAuth redirect back to this page, Supabase's client
+    // picks up the new session automatically; this fires once that happens.
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event !== 'SIGNED_IN' || !session) return;
+      const user = await CBS.currentUser();
+      if (user && user.status === 'approved') {
+        window.location.href = 'account.html';
         return;
       }
-      CBS.loginGoogle(name, email);
-      window.location.href = 'account.html';
-    }
+      await supabase.auth.signOut();
+      if (user && user.status === 'pending') {
+        showError('signin-error', 'Your account is still awaiting admin approval.');
+      } else if (user && user.status === 'rejected') {
+        showError('signin-error', 'This signup request was not approved.');
+      }
+    });
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeGoogleOverlay();
       if (e.key === 'Enter') {
-        if (document.getElementById('google-overlay').style.display !== 'none') {
-          confirmGoogle();
-        } else if (document.getElementById('signin-form').style.display !== 'none') {
+        if (document.getElementById('signin-form').style.display !== 'none') {
           doSignIn();
         } else {
           doRegister();
