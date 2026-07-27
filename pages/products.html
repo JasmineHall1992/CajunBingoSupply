@@ -27,6 +27,7 @@
       <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="../images/logo-placeholder-smiley.png" alt="" /></div>
       <ul class="nav-right">
         <li><a href="raffles.html">Raffles</a></li>
+        <li><a id="nav-cart-link" href="contact.html" class="nav-cart-link" style="display:none;"><i data-lucide="shopping-basket"></i><span id="nav-cart-count" class="nav-cart-count">0</span></a></li>
         <li><a id="nav-auth-link" href="login.html">Login</a></li>
       </ul>
     </nav>
@@ -150,7 +151,7 @@
             <p class="price">${p.price_display}</p>
             <div class="payout-box">${payoutRowsHtml(p.payout_rows)}</div>
             <div class="card-actions">
-              <a href="contact.html?product=${p.id}" class="btn-order">Order</a>
+              <button class="btn-order" onclick="handleAddToCart('${p.id}', this)">Add to Basket</button>
               <button class="btn-fav${favorited ? ' favorited' : ''}" onclick="toggleFav('${p.id}', this)" title="${favorited ? 'Remove from favorites' : 'Save to favorites'}"><i data-lucide="heart"></i></button>
             </div>
           </div>
@@ -179,6 +180,23 @@
       if (result.saved) favoriteIds.add(productId); else favoriteIds.delete(productId);
       btn.classList.toggle('favorited', result.saved);
       btn.title = result.saved ? 'Remove from favorites' : 'Save to favorites';
+    }
+
+    async function handleAddToCart(productId, btn) {
+      const result = await CBS.addToCart(productId);
+      if (!result.ok && result.needsLogin) {
+        window.location.href = 'login.html';
+        return;
+      }
+      if (!result.ok) {
+        alert('Could not add to basket: ' + result.error);
+        return;
+      }
+      CBS.updateNav();
+      const original = btn.textContent;
+      btn.textContent = 'Added \u2713';
+      btn.disabled = true;
+      setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 1200);
     }
 
     (async () => {

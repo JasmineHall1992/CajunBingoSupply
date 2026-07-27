@@ -27,6 +27,7 @@
       <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="../images/logo-placeholder-smiley.png" alt="" /></div>
       <ul class="nav-right">
         <li><a href="raffles.html">Raffles</a></li>
+        <li><a id="nav-cart-link" href="contact.html" class="nav-cart-link" style="display:none;"><i data-lucide="shopping-basket"></i><span id="nav-cart-count" class="nav-cart-count">0</span></a></li>
         <li><a id="nav-auth-link" href="login.html">Login</a></li>
       </ul>
     </nav>
@@ -40,6 +41,11 @@
     </section>
 
     <section class="contact-section">
+      <div id="order-summary" style="display:none">
+        <p class="account-section-label">Your Order</p>
+        <div id="order-items"></div>
+      </div>
+
       <p class="auth-error" id="contact-error"></p>
       <p class="form-success" id="contact-success" style="display:none"><i data-lucide="check-circle"></i> Thanks — your message has been sent. We'll be in touch soon.</p>
       <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
@@ -52,8 +58,8 @@
         <label for="phone">Phone (optional)</label>
         <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" />
 
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" placeholder="Tell us what you need..." required></textarea>
+        <label for="message" id="message-label">Message</label>
+        <textarea id="message" name="message" rows="5" placeholder="Tell us what you need..."></textarea>
 
         <button type="submit" class="btn" id="contactSubmitBtn"><i data-lucide="send"></i> Send Message</button>
       </form>
@@ -91,6 +97,51 @@
   <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script>
+    let cartItems = [];
+
+    function renderOrderSummary() {
+      const wrap = document.getElementById('order-summary');
+      const list = document.getElementById('order-items');
+      const messageLabel = document.getElementById('message-label');
+
+      if (cartItems.length === 0) {
+        wrap.style.display = 'none';
+        messageLabel.textContent = 'Message';
+        document.getElementById('message').placeholder = 'Tell us what you need...';
+        return;
+      }
+
+      wrap.style.display = 'block';
+      messageLabel.textContent = 'Comments (optional)';
+      document.getElementById('message').placeholder = 'Anything else we should know about this order...';
+
+      list.innerHTML = cartItems.map(item => `
+        <div class="order-item-row" data-cart-id="${item.id}">
+          <div class="order-item-info">
+            <span class="order-item-name">${item.products.name}</span>
+            <span class="order-item-form">${item.products.form_label || ''}</span>
+          </div>
+          <div class="order-item-qty">
+            <button type="button" onclick="changeQty('${item.id}', ${item.quantity - 1})" aria-label="Decrease quantity">&minus;</button>
+            <span>${item.quantity}</span>
+            <button type="button" onclick="changeQty('${item.id}', ${item.quantity + 1})" aria-label="Increase quantity">+</button>
+          </div>
+          <button type="button" class="order-item-remove" onclick="changeQty('${item.id}', 0)" aria-label="Remove item"><i data-lucide="trash-2"></i></button>
+        </div>`).join('');
+      lucide.createIcons();
+    }
+
+    async function loadCart() {
+      cartItems = await CBS.getCartItems();
+      renderOrderSummary();
+    }
+
+    async function changeQty(cartItemId, newQty) {
+      await CBS.updateCartQuantity(cartItemId, newQty);
+      await loadCart();
+      CBS.updateNav();
+    }
+
     async function submitContact(e) {
       e.preventDefault();
       const errorEl = document.getElementById('contact-error');
@@ -99,13 +150,27 @@
       errorEl.textContent = '';
       successEl.style.display = 'none';
 
+      const message = document.getElementById('message').value.trim();
+      const orderItems = cartItems.map(item => ({
+        product_id: item.product_id,
+        name: item.products.name,
+        form_label: item.products.form_label,
+        quantity: item.quantity
+      }));
+
+      if (orderItems.length === 0 && !message) {
+        errorEl.textContent = 'Please add items to your order or write a message.';
+        return;
+      }
+
       const params = new URLSearchParams(window.location.search);
       const payload = {
         name: document.getElementById('name').value.trim(),
         email: document.getElementById('email').value.trim(),
         phone: document.getElementById('phone').value.trim() || null,
-        message: document.getElementById('message').value.trim(),
-        product_id: params.get('product') || null
+        message: message || null,
+        product_id: orderItems.length === 1 ? orderItems[0].product_id : (params.get('product') || null),
+        order_items: orderItems.length > 0 ? orderItems : null
       };
 
       btn.disabled = true;
@@ -116,9 +181,25 @@
         errorEl.textContent = 'Something went wrong sending your message. Please try again.';
         return;
       }
+
+      if (cartItems.length > 0) {
+        await CBS.clearCart();
+        cartItems = [];
+        renderOrderSummary();
+        CBS.updateNav();
+      }
       successEl.style.display = 'flex';
       document.getElementById('contactForm').reset();
     }
+
+    (async () => {
+      const user = await CBS.currentUser();
+      if (user && user.status === 'approved') {
+        document.getElementById('name').value = user.name || '';
+        document.getElementById('email').value = user.email || '';
+        await loadCart();
+      }
+    })();
   </script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script>lucide.createIcons();</script>

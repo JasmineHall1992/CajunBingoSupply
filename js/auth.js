@@ -81,6 +81,71 @@ const CBS = (() => {
     window.location.href = inPages ? 'login.html' : 'pages/login.html';
   }
 
+  // ---- cart ----
+
+  async function getCartItems(knownUser) {
+    const user = knownUser || await currentUser();
+    if (!user) return [];
+    const { data } = await supabase
+      .from('cart_items')
+      .select('id, product_id, quantity, added_at, products(id, name, form_label, price_display, img_class)')
+      .eq('user_id', user.id)
+      .order('added_at', { ascending: true });
+    return data || [];
+  }
+
+  async function getCartCount() {
+    const items = await getCartItems();
+    return items.reduce((sum, item) => sum + item.quantity, 0);
+  }
+
+  async function addToCart(productId, qty = 1) {
+    const user = await currentUser();
+    if (!user || user.status !== 'approved') return { ok: false, needsLogin: true };
+
+    const { data: existing } = await supabase
+      .from('cart_items')
+      .select('id, quantity')
+      .eq('user_id', user.id)
+      .eq('product_id', productId)
+      .maybeSingle();
+
+    if (existing) {
+      const { error } = await supabase
+        .from('cart_items')
+        .update({ quantity: existing.quantity + qty })
+        .eq('id', existing.id);
+      if (error) return { ok: false, error: error.message };
+    } else {
+      const { error } = await supabase
+        .from('cart_items')
+        .insert({ user_id: user.id, product_id: productId, quantity: qty });
+      if (error) return { ok: false, error: error.message };
+    }
+    return { ok: true };
+  }
+
+  async function updateCartQuantity(cartItemId, quantity) {
+    if (quantity <= 0) {
+      const { error } = await supabase.from('cart_items').delete().eq('id', cartItemId);
+      return { ok: !error, error: error ? error.message : null };
+    }
+    const { error } = await supabase.from('cart_items').update({ quantity }).eq('id', cartItemId);
+    return { ok: !error, error: error ? error.message : null };
+  }
+
+  async function removeFromCart(cartItemId) {
+    const { error } = await supabase.from('cart_items').delete().eq('id', cartItemId);
+    return { ok: !error, error: error ? error.message : null };
+  }
+
+  async function clearCart() {
+    const user = await currentUser();
+    if (!user) return { ok: false };
+    const { error } = await supabase.from('cart_items').delete().eq('user_id', user.id);
+    return { ok: !error, error: error ? error.message : null };
+  }
+
   // ---- favorites ----
 
   async function getUserFavorites(knownUser) {
@@ -227,9 +292,19 @@ const CBS = (() => {
     const link = document.getElementById('nav-auth-link');
     if (!link) return;
     const logoutLink = document.getElementById('nav-logout-link');
+    const cartLink = document.getElementById('nav-cart-link');
     const user = await currentUser();
     if (!user || user.status !== 'approved') return;
     if (logoutLink) logoutLink.style.display = '';
+    if (cartLink) {
+      cartLink.style.display = 'inline-flex';
+      const count = await getCartCount();
+      const countEl = document.getElementById('nav-cart-count');
+      if (countEl) {
+        countEl.textContent = count;
+        countEl.style.display = count > 0 ? 'inline-flex' : 'none';
+      }
+    }
     const firstName = (user.name || 'Account').split(' ')[0];
     const inPages = window.location.pathname.includes('/pages/');
     link.href = inPages ? 'account.html' : 'pages/account.html';
@@ -264,6 +339,7 @@ const CBS = (() => {
   return {
     register, login, loginGoogle, logout, logoutRedirect, currentUser, uploadAvatar, removeAvatar, setAvatarPreset, parseAvatar, updateNav,
     getUserFavorites, toggleFavorite, isFavorited,
+    getCartItems, getCartCount, addToCart, updateCartQuantity, removeFromCart, clearCart,
     getActivityLog, getPendingSignups, getAllUsers, reviewSignup
   };
 })();

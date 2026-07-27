@@ -29,15 +29,32 @@ Deno.serve(async (req) => {
   const toEmail = Deno.env.get("CONTACT_TO_EMAIL");
   const fromEmail = Deno.env.get("CONTACT_FROM_EMAIL");
 
-  const subject = `New inquiry from ${record.name} — Cajun Bingo Supply`;
+  const orderItems = Array.isArray(record.order_items) ? record.order_items : null;
+  const isOrder = orderItems && orderItems.length > 0;
+
+  const subject = isOrder
+    ? `New order from ${record.name} — Cajun Bingo Supply`
+    : `New inquiry from ${record.name} — Cajun Bingo Supply`;
+
+  const orderSection = isOrder
+    ? [
+        "Order:",
+        ...orderItems.map((item: { name: string; form_label?: string; quantity: number }) =>
+          `  - ${item.quantity} x ${item.name}${item.form_label ? ` (${item.form_label})` : ""}`
+        ),
+        "",
+      ]
+    : [];
+
   const body = [
     `Name: ${record.name}`,
     `Email: ${record.email}`,
     record.phone ? `Phone: ${record.phone}` : null,
-    record.product_id ? `Product: ${record.product_id}` : null,
+    !isOrder && record.product_id ? `Product: ${record.product_id}` : null,
     "",
-    "Message:",
-    record.message,
+    ...orderSection,
+    isOrder ? "Comments:" : "Message:",
+    record.message || "(none)",
   ].filter(Boolean).join("\n");
 
   const res = await fetch("https://api.resend.com/emails", {

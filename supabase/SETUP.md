@@ -24,6 +24,8 @@ Do these roughly in order — later steps depend on earlier ones.
    `flyers` bucket (Joey's flyer uploads) and the `avatars` bucket (user profile pictures).
 7. Run [`supabase/migration_avatar.sql`](migration_avatar.sql) — adds the `avatar_url` column to
    `profiles` that the profile-picture feature needs.
+8. Run [`supabase/migration_cart.sql`](migration_cart.sql) — creates the `cart_items` table and
+   adds the `order_items` column to `inquiries` that the shopping-basket feature needs.
 
 ## 2. Turn off email-confirmation (approval is the only gate)
 
