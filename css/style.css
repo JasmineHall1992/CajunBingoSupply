@@ -227,7 +227,9 @@ nav {
 .hero-social a:hover { color: #FFD700; }
 
 .family-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   border: 1px solid #FFD700;
   color: #FFD700;
   padding: 0.4rem 1.25rem;
@@ -236,6 +238,8 @@ nav {
   font-weight: 600;
   letter-spacing: 0.05em;
 }
+
+.family-badge svg { width: 14px; height: 14px; fill: currentColor; }
 
 /* Team */
 .team-section {
@@ -351,6 +355,14 @@ nav {
   margin-bottom: 2rem;
 }
 
+.cta-smiley {
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin: 0.5rem auto 1rem;
+}
+
 /* Footer */
 footer {
   background: #5a0000;
@@ -368,6 +380,10 @@ footer {
 }
 
 .footer-brand .logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
@@ -659,6 +675,21 @@ footer {
 
 .card-actions .btn-outline-dark:hover { color: #8b0000; background: none; }
 
+.card-actions .btn-order {
+  display: inline-block;
+  background: #8b0000;
+  color: #fff;
+  padding: 0.55rem 1.4rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: background 0.15s;
+}
+
+.card-actions .btn-order:hover { background: #6b0000; color: #fff; }
+
 .product-img.placeholder {
   width: 100%;
   height: 180px;
@@ -928,6 +959,23 @@ footer {
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
 }
+
+.form-success {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1e7e34;
+  background: #e6f6ea;
+  border: 1px solid #a3d9b1;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.5;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.form-success svg { width: 18px; height: 18px; flex-shrink: 0; }
 
 .form-group {
   display: flex;
@@ -1280,15 +1328,18 @@ footer {
   border: none;
   padding: 0.5rem 0;
   cursor: pointer;
-  font-size: 1.2rem;
   color: #ccc;
   line-height: 1;
   transition: color 0.2s;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
+.btn-fav svg { width: 20px; height: 20px; }
 .btn-fav:hover { color: #8b0000; }
 .btn-fav.favorited { color: #8b0000; }
+.btn-fav.favorited svg { fill: currentColor; }
 
 /* Admin dashboard */
 .admin-section {
@@ -1776,7 +1827,7 @@ body.home .hero {
   display: flex;
   flex-direction: column;
   gap: 4.5rem;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   text-align: left;
 }
@@ -1911,6 +1962,11 @@ body.home .hero {
   .hero { padding: 6rem 2rem 5rem; }
   .cta-section h2 { font-size: 2rem; }
   .team-section h2, .services-section h2 { font-size: 1.9rem; }
+  /* The desktop nav{height:94px} rule above doesn't account for nav-left/logo/
+     nav-right wrapping onto separate lines on narrow screens — without this,
+     wrapped nav content overflows the fixed height and overlaps page content
+     below it. */
+  nav { height: auto; }
 }
 
 /* ================================================================
@@ -2046,14 +2102,16 @@ body.home .hero {
   background: none;
   border: none;
   color: #aaa;
-  font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
-  padding: 0.2rem 0.5rem;
+  padding: 0.4rem;
   border-radius: 6px;
+  display: flex;
+  align-items: center;
   transition: color 0.15s, background 0.15s;
 }
 
+.flyer-modal-close svg { width: 20px; height: 20px; }
 .flyer-modal-close:hover { color: #fff; background: rgba(255,255,255,0.08); }
 
 .flyer-modal-body {

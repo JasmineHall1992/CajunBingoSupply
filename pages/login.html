@@ -100,40 +100,65 @@
 
         <!-- Create Account Form -->
         <div id="register-form" style="display:none">
-          <p class="auth-notice">First-time users: new accounts require admin approval before you can sign in. Submit your request below and you'll be notified once it's reviewed.</p>
-          <button class="google-btn" onclick="signInWithGoogle()">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
-              <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
-              <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
-              <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
-            </svg>
-            Sign up with Google
-          </button>
-          <div class="auth-divider"><span>or create with email</span></div>
-          <p class="auth-error" id="register-error"></p>
-          <div class="form-group">
-            <label for="reg-name">Full Name</label>
-            <div class="field-icon-wrap">
-              <i data-lucide="user"></i>
-              <input type="text" id="reg-name" placeholder="Your name" autocomplete="name" />
-            </div>
+
+          <!-- Screen 1: choose sign-up method -->
+          <div id="signup-screen-method">
+            <p class="auth-notice">First-time users: sign-up requires an access code (ask Joey if you don't have one), and every new account also requires admin approval before you can sign in.</p>
+            <button class="google-btn" onclick="chooseSignupMethod('google')">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+                <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+                <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+                <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+              </svg>
+              Sign up with Google
+            </button>
+            <div class="auth-divider"><span>or</span></div>
+            <button class="btn auth-submit" style="background:#fff;color:#1a1a1a;border:1px solid #ddd;" onclick="chooseSignupMethod('email')">Continue with Email</button>
           </div>
-          <div class="form-group">
-            <label for="reg-email">Email</label>
-            <div class="field-icon-wrap">
-              <i data-lucide="mail"></i>
-              <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" />
+
+          <!-- Screen 2: access code -->
+          <div id="signup-screen-code" style="display:none">
+            <p class="auth-notice">Enter the access code Joey gave you to continue.</p>
+            <p class="auth-error" id="code-error"></p>
+            <div class="form-group">
+              <label for="reg-code">Access Code</label>
+              <div class="field-icon-wrap">
+                <i data-lucide="key"></i>
+                <input type="text" id="reg-code" placeholder="Enter access code" autocomplete="off" />
+              </div>
             </div>
+            <button class="btn auth-submit" onclick="submitAccessCode()">Continue</button>
+            <p class="auth-switch"><a href="#" onclick="backToMethodChoice();return false;">&larr; Back</a></p>
           </div>
-          <div class="form-group">
-            <label for="reg-password">Password</label>
-            <div class="field-icon-wrap">
-              <i data-lucide="lock"></i>
-              <input type="password" id="reg-password" placeholder="At least 6 characters" autocomplete="new-password" />
+
+          <!-- Screen 3: email/password fields (email sign-up only) -->
+          <div id="signup-screen-email" style="display:none">
+            <p class="auth-error" id="register-error"></p>
+            <div class="form-group">
+              <label for="reg-name">Full Name</label>
+              <div class="field-icon-wrap">
+                <i data-lucide="user"></i>
+                <input type="text" id="reg-name" placeholder="Your name" autocomplete="name" />
+              </div>
             </div>
+            <div class="form-group">
+              <label for="reg-email">Email</label>
+              <div class="field-icon-wrap">
+                <i data-lucide="mail"></i>
+                <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="reg-password">Password</label>
+              <div class="field-icon-wrap">
+                <i data-lucide="lock"></i>
+                <input type="password" id="reg-password" placeholder="At least 6 characters" autocomplete="new-password" />
+              </div>
+            </div>
+            <button class="btn auth-submit" onclick="doRegister()">Create Account</button>
           </div>
-          <button class="btn auth-submit" onclick="doRegister()">Create Account</button>
+
           <p class="auth-switch">Already have an account? <a href="#" onclick="switchTab('signin');return false;">Sign in</a></p>
         </div>
       </div>
@@ -181,6 +206,7 @@
       document.getElementById('register-form').style.display = isSignin ? 'none' : 'block';
       document.getElementById('tab-signin').classList.toggle('active', isSignin);
       document.getElementById('tab-register').classList.toggle('active', !isSignin);
+      if (!isSignin) resetSignupFlow();
     }
 
     function showError(id, msg) { document.getElementById(id).textContent = msg; }
@@ -193,6 +219,54 @@
       const r = await CBS.login(email, pass);
       if (r.ok) window.location.href = 'account.html';
       else showError('signin-error', r.error);
+    }
+
+    // Shared sign-up access code — a first-line filter, not a real security boundary
+    // (it's visible in this page's source). Every account still needs admin approval
+    // regardless of this code. Change this value to change the code.
+    const SIGNUP_ACCESS_CODE = 'CAJUN1989';
+
+    // Which sign-up path the user picked on screen 1 ('google' | 'email'),
+    // remembered while they're on the access-code screen.
+    let signupMethod = null;
+
+    function resetSignupFlow() {
+      signupMethod = null;
+      document.getElementById('signup-screen-method').style.display = 'block';
+      document.getElementById('signup-screen-code').style.display = 'none';
+      document.getElementById('signup-screen-email').style.display = 'none';
+      showError('code-error', '');
+      showError('register-error', '');
+      document.getElementById('reg-code').value = '';
+    }
+
+    function chooseSignupMethod(method) {
+      signupMethod = method;
+      document.getElementById('signup-screen-method').style.display = 'none';
+      document.getElementById('signup-screen-code').style.display = 'block';
+      showError('code-error', '');
+      document.getElementById('reg-code').value = '';
+    }
+
+    function backToMethodChoice() {
+      document.getElementById('signup-screen-code').style.display = 'none';
+      document.getElementById('signup-screen-method').style.display = 'block';
+      signupMethod = null;
+    }
+
+    async function submitAccessCode() {
+      const code = document.getElementById('reg-code').value.trim();
+      showError('code-error', '');
+      if (!code) return showError('code-error', 'Please enter the access code.');
+      if (code.toUpperCase() !== SIGNUP_ACCESS_CODE) return showError('code-error', 'Incorrect access code.');
+
+      if (signupMethod === 'google') {
+        await CBS.loginGoogle();
+        // Browser navigates to Google and back — nothing else runs here.
+        return;
+      }
+      document.getElementById('signup-screen-code').style.display = 'none';
+      document.getElementById('signup-screen-email').style.display = 'block';
     }
 
     async function doRegister() {
@@ -234,12 +308,13 @@
     });
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        if (document.getElementById('signin-form').style.display !== 'none') {
-          doSignIn();
-        } else {
-          doRegister();
-        }
+      if (e.key !== 'Enter') return;
+      if (document.getElementById('signin-form').style.display !== 'none') {
+        doSignIn();
+      } else if (document.getElementById('signup-screen-code').style.display !== 'none') {
+        submitAccessCode();
+      } else if (document.getElementById('signup-screen-email').style.display !== 'none') {
+        doRegister();
       }
     });
   </script>

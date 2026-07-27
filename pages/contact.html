@@ -41,7 +41,7 @@
 
     <section class="contact-section">
       <p class="auth-error" id="contact-error"></p>
-      <p class="auth-notice" id="contact-success" style="display:none">Thanks — your message has been sent. We'll be in touch soon.</p>
+      <p class="form-success" id="contact-success" style="display:none"><i data-lucide="check-circle"></i> Thanks — your message has been sent. We'll be in touch soon.</p>
       <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
         <label for="name">Name</label>
         <input type="text" id="name" name="name" placeholder="Your name" required />
@@ -116,7 +116,7 @@
         errorEl.textContent = 'Something went wrong sending your message. Please try again.';
         return;
       }
-      successEl.style.display = 'block';
+      successEl.style.display = 'flex';
       document.getElementById('contactForm').reset();
     }
   </script>

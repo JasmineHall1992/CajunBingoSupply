@@ -77,7 +77,7 @@ Resend-related ones (**Project Settings → Edge Functions → Secrets**, or via
 
 ```
 supabase secrets set RESEND_API_KEY=<from resend.com, next step>
-supabase secrets set CONTACT_TO_EMAIL=<Joey's Gmail address>
+supabase secrets set CONTACT_TO_EMAIL=cajunbingopulltabs@gmail.com
 supabase secrets set CONTACT_FROM_EMAIL=<a Resend-verified sender address>
 ```
 

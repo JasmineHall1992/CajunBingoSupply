@@ -83,8 +83,8 @@ const CBS = (() => {
 
   // ---- favorites ----
 
-  async function getUserFavorites() {
-    const user = await currentUser();
+  async function getUserFavorites(knownUser) {
+    const user = knownUser || await currentUser();
     if (!user) return [];
     const { data } = await supabase
       .from('favorites')
