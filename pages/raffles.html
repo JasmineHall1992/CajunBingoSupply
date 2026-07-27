@@ -159,7 +159,7 @@
                 </div>
                 <button class="btn-order" onclick="handleAddToCart('${p.id}', this)">Add to Basket</button>
               </div>
-              <button class="btn-fav${favorited ? ' favorited' : ''}" onclick="toggleFav('${p.id}', this)" title="${favorited ? 'Remove from favorites' : 'Save to favorites'}"><i data-lucide="heart"></i></button>
+              <button class="btn-fav${favorited ? ' favorited' : ''}" onclick="toggleFav('${p.id}', this)" title="${favorited ? 'Remove from favorites' : 'Save to favorites'}"><i data-lucide="heart"></i><span class="btn-fav-label">${favorited ? 'Saved' : 'Save'}</span></button>
             </div>
           </div>
         </div>`;
@@ -187,6 +187,7 @@
       if (result.saved) favoriteIds.add(productId); else favoriteIds.delete(productId);
       btn.classList.toggle('favorited', result.saved);
       btn.title = result.saved ? 'Remove from favorites' : 'Save to favorites';
+      btn.querySelector('.btn-fav-label').textContent = result.saved ? 'Saved' : 'Save';
     }
 
     const cardQty = {};

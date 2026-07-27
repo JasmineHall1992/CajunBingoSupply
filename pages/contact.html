@@ -35,7 +35,7 @@
   </header>
 
   <main>
-    <section class="page-header">
+    <section class="page-header page-header-contact">
       <i data-lucide="mail" class="page-header-icon"></i>
       <h1>Contact Us</h1>
       <p>Questions, bulk orders, or custom requests — we're here to help.</p>
@@ -138,6 +138,14 @@
   <script>
     let cartItems = [];
 
+    function orderItemThumbHtml(p) {
+      const isImage = p.flyer_path && /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
+      if (isImage) {
+        return `<img class="order-item-thumb" src="${p.flyer_path}" alt="${p.name} preview" />`;
+      }
+      return `<div class="order-item-thumb order-item-thumb-placeholder ${p.img_class || ''}"></div>`;
+    }
+
     function renderOrderSummary() {
       const wrap = document.getElementById('order-summary');
       const list = document.getElementById('order-items');
@@ -156,6 +164,7 @@
 
       list.innerHTML = cartItems.map(item => `
         <div class="order-item-row" data-cart-id="${item.id}">
+          ${orderItemThumbHtml(item.products)}
           <div class="order-item-info">
             <span class="order-item-name">${item.products.name}</span>
             <span class="order-item-form">${item.products.form_label || ''}</span>

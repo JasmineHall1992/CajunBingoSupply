@@ -186,6 +186,14 @@
       renderFavorites();
     }
 
+    function favMediaHtml(p) {
+      const isImage = p.flyer_path && /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
+      if (isImage) {
+        return `<div class="flyer-preview"><img src="${p.flyer_path}" alt="${p.name} flyer preview" /></div>`;
+      }
+      return `<div class="product-img ${p.img_class || ''}"><span class="product-label">${p.name}</span></div>`;
+    }
+
     async function renderFavorites() {
       const favs = await CBS.getUserFavorites();
       const container = document.getElementById('favorites-container');
@@ -199,9 +207,7 @@
       }
       const cards = favs.map(f => `
         <div class="product-card">
-          <div class="product-img ${f.products.img_class || ''}">
-            <span class="product-label">${f.products.name}</span>
-          </div>
+          ${favMediaHtml(f.products)}
           <div class="product-info">
             <h3>${f.products.name} <span class="form-badge">${f.products.form_label || ''}</span></h3>
             <p class="price">${f.products.price_display}</p>
