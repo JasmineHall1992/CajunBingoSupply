@@ -2224,6 +2224,10 @@ body.home .hero {
      wrapped nav content overflows the fixed height and overlaps page content
      below it. */
   nav { height: auto; }
+  /* The base header{position:sticky} rule keeps the nav pinned while
+     scrolling on every page — on mobile, let it scroll away with the page
+     instead across the whole site. */
+  header { position: static; }
   /* Nav links are low-opacity white at a small size for the desktop look;
      on a small phone screen that reads as too faint/small to scan quickly. */
   .nav-left a, .nav-right a {
