@@ -2272,9 +2272,9 @@ body.home .hero {
   /* Full desktop size (2rem name + smiley + est line) is too wide to sit
      comfortably between the hamburger's matching side columns on an
      actual phone screen — shrink it down for mobile specifically. */
-  .logo-name { font-size: 1.15rem; }
-  .logo-est { font-size: 0.55rem; letter-spacing: 0.12em; }
-  .logo-smiley { width: 18px; height: 18px; margin-top: 2px; }
+  .logo-name { font-size: 1.4rem; }
+  .logo-est { font-size: 0.68rem; letter-spacing: 0.14em; }
+  .logo-smiley { width: 24px; height: 24px; margin-top: 2px; }
 
   /* Explicit rows (rather than relying on grid auto-placement, which
      follows DOM order and shoved the logo down between nav-left and
