@@ -2236,7 +2236,7 @@ body.home .hero {
     justify-content: space-between;
     align-items: center;
     gap: 0;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1rem 0.75rem 0.5rem;
   }
   /* The base header{position:sticky} rule keeps the nav pinned while
      scrolling on every page — on mobile, let it scroll away with the page
@@ -2248,13 +2248,16 @@ body.home .hero {
     align-items: center;
     justify-content: center;
     order: 1;
-    background: none;
-    border: none;
+    width: 44px;
+    height: 44px;
+    background: rgba(255,215,0,0.08);
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 8px;
     color: #FFD700;
     cursor: pointer;
-    padding: 0.25rem;
   }
-  .nav-hamburger svg { width: 24px; height: 24px; }
+  .nav-hamburger:active { background: rgba(255,215,0,0.16); }
+  .nav-hamburger svg { width: 26px; height: 26px; }
 
   .logo { order: 2; }
 
