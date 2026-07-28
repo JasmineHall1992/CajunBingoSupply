@@ -249,7 +249,7 @@ const CBS = (() => {
   async function getActivityLog() {
     const { data, error } = await supabase
       .from('activity_log')
-      .select('*')
+      .select('*, profiles(name, email)')
       .order('ts', { ascending: false });
     if (error) return [];
     return data;

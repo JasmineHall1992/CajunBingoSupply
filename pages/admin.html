@@ -429,7 +429,7 @@
         tbody.innerHTML = log.map(e => `
           <tr>
             <td>${new Date(e.ts).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</td>
-            <td>${e.user_id || '—'}</td>
+            <td>${e.profiles?.name || e.profiles?.email || e.user_id || '—'}</td>
             <td>${e.product_name || e.product_id}</td>
             <td><span class="admin-badge ${e.action}">${e.action === 'saved' ? '♥ Saved' : '♡ Removed'}</span></td>
           </tr>`).join('');
