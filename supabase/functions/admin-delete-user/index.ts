@@ -10,14 +10,26 @@
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 
+// Required for browser-invoked functions: the browser sends a preflight
+// OPTIONS request before the real one, and blocks the whole call unless
+// these headers come back on every response (not just OPTIONS).
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: corsHeaders });
   }
 
   const authHeader = req.headers.get("Authorization");
   if (!authHeader) {
-    return new Response(JSON.stringify({ error: "Missing Authorization header" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "Missing Authorization header" }), { status: 401, headers: corsHeaders });
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -30,7 +42,7 @@ Deno.serve(async (req) => {
   });
   const { data: { user }, error: userError } = await callerClient.auth.getUser();
   if (userError || !user) {
-    return new Response(JSON.stringify({ error: "Invalid session" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "Invalid session" }), { status: 401, headers: corsHeaders });
   }
 
   // Service-role client — bypasses RLS, only used after admin check passes.
@@ -43,28 +55,28 @@ Deno.serve(async (req) => {
     .single();
 
   if (profileError || !callerProfile || callerProfile.role !== "admin") {
-    return new Response(JSON.stringify({ error: "Not authorized" }), { status: 403 });
+    return new Response(JSON.stringify({ error: "Not authorized" }), { status: 403, headers: corsHeaders });
   }
 
   let body;
   try {
     body = await req.json();
   } catch {
-    return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400, headers: corsHeaders });
   }
 
   const { userId } = body;
   if (!userId) {
-    return new Response(JSON.stringify({ error: "userId is required" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "userId is required" }), { status: 400, headers: corsHeaders });
   }
 
   const { error: deleteError } = await adminClient.auth.admin.deleteUser(userId);
   if (deleteError) {
-    return new Response(JSON.stringify({ error: deleteError.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: deleteError.message }), { status: 500, headers: corsHeaders });
   }
 
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
-    headers: { "Content-Type": "application/json" },
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 });
