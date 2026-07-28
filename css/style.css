@@ -2230,13 +2230,19 @@ body.home .hero {
      Premium Pull Tabs, Raffles, basket, account/login) as a full-width,
      easy-to-tap dropdown list, instead of cramming everything into one
      tiny row or stacking each group on its own centered line. */
+  /* Grid instead of flex for the compact row: a 1fr/auto/1fr split makes
+     the logo (column 2) truly centered on the full row width, with the
+     hamburger sitting in column 1 — the empty, equal-width column 3
+     balances it out, rather than the logo just being centered in
+     whatever space is left after the hamburger (which reads as off-center
+     and pushed toward the right). */
   nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     height: auto;
-    flex-wrap: wrap;
-    justify-content: space-between;
     align-items: center;
     gap: 0;
-    padding: 0.75rem 1rem 0.75rem 0.5rem;
+    padding: 0.75rem 1rem;
   }
   /* The base header{position:sticky} rule keeps the nav pinned while
      scrolling on every page — on mobile, let it scroll away with the page
@@ -2244,10 +2250,12 @@ body.home .hero {
   header { position: static; }
 
   .nav-hamburger {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
     display: flex;
     align-items: center;
     justify-content: center;
-    order: 1;
     width: 44px;
     height: 44px;
     background: rgba(255,215,0,0.08);
@@ -2259,15 +2267,20 @@ body.home .hero {
   .nav-hamburger:active { background: rgba(255,215,0,0.16); }
   .nav-hamburger svg { width: 26px; height: 26px; }
 
-  .logo { order: 2; }
+  .logo { grid-column: 2; grid-row: 1; justify-self: center; }
 
+  /* Explicit rows (rather than relying on grid auto-placement, which
+     follows DOM order and shoved the logo down between nav-left and
+     nav-right) — hamburger+logo always occupy row 1, links stack below. */
+  .nav-left { grid-row: 2; }
+  .nav-right { grid-row: 3; }
   .nav-left, .nav-right {
+    grid-column: 1 / -1;
     display: none;
     width: 100%;
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    order: 3;
   }
   nav.mobile-open .nav-left,
   nav.mobile-open .nav-right {
