@@ -2219,22 +2219,49 @@ body.home .hero {
   .hero { padding: 6rem 2rem 5rem; }
   .cta-section h2 { font-size: 2rem; }
   .team-section h2, .services-section h2 { font-size: 1.9rem; }
-  /* The desktop nav{height:94px} rule above doesn't account for nav-left/logo/
-     nav-right wrapping onto separate lines on narrow screens — without this,
-     wrapped nav content overflows the fixed height and overlaps page content
-     below it. */
-  nav { height: auto; }
+  /* Mobile nav: keep the same left-links / logo / right-links arrangement
+     as desktop in one row (not stacked/wrapped lines, which read as
+     unpolished), shrinking everything to fit a phone-width screen. */
+  nav {
+    height: auto;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 0.4rem;
+    padding: 0.6rem 0.25rem;
+  }
   /* The base header{position:sticky} rule keeps the nav pinned while
      scrolling on every page — on mobile, let it scroll away with the page
      instead across the whole site. */
-  header { position: static; }
-  /* Nav links are low-opacity white at a small size for the desktop look;
-     on a small phone screen that reads as too faint/small to scan quickly. */
-  .nav-left a, .nav-right a {
-    font-size: 0.88rem;
-    letter-spacing: 0.06em;
-    color: rgba(255,255,255,0.92);
+  header { position: static; padding: 0 0.75rem; }
+  .nav-left, .nav-right {
+    flex: 1;
+    gap: 0.5rem;
+    min-width: 0;
   }
+  .nav-left { justify-content: flex-start; }
+  .nav-right { justify-content: flex-end; }
+  /* Nav links are low-opacity white at a small size for the desktop look;
+     on a small phone screen that reads as too faint/small to scan quickly.
+     Letting them wrap to 2 lines within their own slot (instead of forcing
+     the whole row to wrap) keeps the logo centered with links flanking it,
+     matching the desktop layout instead of stacking everything vertically. */
+  .nav-left a, .nav-right a {
+    font-size: 0.62rem;
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.92);
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+  }
+  .logo {
+    flex-shrink: 0;
+    gap: 0;
+  }
+  .logo-name { font-size: 1.05rem; }
+  .logo-est { display: none; }
+  .logo-smiley { width: 18px; height: 18px; margin-top: 1px; }
+  .nav-avatar { width: 30px; height: 30px; }
+  .nav-user-link { font-size: 0.62rem; }
   /* On the homepage the nav floats transparently over the hero photo and
      bingo-ball decorations — fine on desktop, but on a small screen those
      bright balls sit right behind the nav text and make it hard to read.
