@@ -1712,6 +1712,13 @@ nav {
   cursor: default;
 }
 
+a.logo {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+a.logo:hover { opacity: 0.85; }
+
 .logo-smiley {
   width: 32px;
   height: 32px;
