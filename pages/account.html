@@ -35,8 +35,14 @@
   </header>
 
   <main>
+    <section class="page-header page-header-textured">
+      <i data-lucide="layout-dashboard" class="page-header-icon"></i>
+      <h1>My Account</h1>
+      <p>Manage your profile and saved products</p>
+    </section>
+
     <div class="account-section">
-      <div class="account-header">
+      <div class="account-header account-card">
         <div class="account-welcome" style="display:flex; align-items:center; gap:1.1rem;">
           <div class="avatar-upload-wrap">
             <img id="account-avatar" class="account-avatar" src="" alt="" style="display:none" />
@@ -62,7 +68,10 @@
         </div>
       </div>
 
-      <p class="account-section-label">Saved Products</p>
+      <div class="account-section-heading">
+        <p class="account-section-label">Saved Products</p>
+        <span class="account-section-count" id="favorites-count"></span>
+      </div>
       <div id="favorites-container"></div>
     </div>
   </main>
@@ -200,12 +209,16 @@
     async function renderFavorites() {
       const favs = await CBS.getUserFavorites();
       const container = document.getElementById('favorites-container');
+      const countEl = document.getElementById('favorites-count');
+      countEl.textContent = favs.length > 0 ? `${favs.length} saved` : '';
       if (favs.length === 0) {
         container.innerHTML = `
           <div class="favorites-empty">
+            <i data-lucide="heart"></i>
             <p>You haven't saved any products yet.</p>
-            <a href="products.html">Browse the catalog</a> and tap ♡ on any product to save it here.
+            <a href="products.html">Browse the catalog</a> and tap the heart on any product to save it here.
           </div>`;
+        lucide.createIcons();
         return;
       }
       const cards = favs.map(f => `
