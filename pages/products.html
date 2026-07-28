@@ -106,9 +106,16 @@
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
+  <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="../js/pdf-thumbs.js"></script>
   <script>
     let allProducts = [];
     let favoriteIds = new Set();
+
+    function pdfCardThumbFallback(canvas) {
+      const title = canvas.dataset.pdfTitle || '';
+      canvas.outerHTML = `<div class="product-img"><span class="product-label">${title}</span></div>`;
+    }
 
     function openFlyer(src, title) {
       document.getElementById('flyerFrame').src = src;
@@ -142,7 +149,7 @@
         const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
         const inner = isImage
           ? `<img src="${p.flyer_path}" alt="${title} flyer preview" />`
-          : `<iframe src="${p.flyer_path}#toolbar=0&view=FitH" title="${title} flyer preview"></iframe>`;
+          : `<canvas class="flyer-pdf-thumb" data-pdf-url="${p.flyer_path}" data-pdf-title="${p.name}"></canvas>`;
         return `<div class="flyer-preview" onclick="openFlyer('${p.flyer_path}','${title}')">${inner}</div>`;
       }
       return `<div class="product-img ${p.img_class || ''}"><span class="product-label">${p.name}</span></div>`;
@@ -175,6 +182,7 @@
     function renderProducts(list) {
       document.getElementById('productGrid').innerHTML = list.map(productCardHtml).join('');
       lucide.createIcons();
+      renderPdfCardThumbs('canvas.flyer-pdf-thumb', pdfCardThumbFallback);
       document.getElementById('noResults').style.display = list.length === 0 ? 'block' : 'none';
     }
 

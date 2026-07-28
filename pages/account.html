@@ -112,8 +112,15 @@
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
+  <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="../js/pdf-thumbs.js"></script>
   <script>
     let user;
+
+    function pdfCardThumbFallback(canvas) {
+      const title = canvas.dataset.pdfTitle || '';
+      canvas.outerHTML = `<div class="product-img"><span class="product-label">${title}</span></div>`;
+    }
 
     async function doLogout() {
       await CBS.logout();
@@ -207,7 +214,7 @@
         const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
         const inner = isImage
           ? `<img src="${p.flyer_path}" alt="${p.name} flyer preview" />`
-          : `<iframe src="${p.flyer_path}#toolbar=0&view=FitH" title="${p.name} flyer preview"></iframe>`;
+          : `<canvas class="flyer-pdf-thumb" data-pdf-url="${p.flyer_path}" data-pdf-title="${p.name}"></canvas>`;
         return `<div class="flyer-preview">${inner}</div>`;
       }
       return `<div class="product-img ${p.img_class || ''}"><span class="product-label">${p.name}</span></div>`;
@@ -242,6 +249,7 @@
           </div>
         </div>`).join('');
       container.innerHTML = `<div class="product-grid">${cards}</div>`;
+      renderPdfCardThumbs('canvas.flyer-pdf-thumb', pdfCardThumbFallback);
     }
 
     (async () => {
