@@ -36,9 +36,9 @@
         <li><a href="raffles.html">Raffles</a></li>
         <li><a id="nav-cart-link" href="contact.html" class="nav-cart-link" style="display:none;"><i data-lucide="shopping-basket"></i><span id="nav-cart-count" class="nav-cart-count">0</span></a></li>
         <li><a id="nav-auth-link" href="login.html">Login</a></li>
+        <li><a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" style="display:none;">Log Out</a></li>
       </ul>
     </nav>
-    <a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" class="nav-logout-corner" style="display:none;">Log Out</a>
   </header>
 
   <!-- Shown only if signed in but not an admin account -->
@@ -70,7 +70,6 @@
               <h2>Owner Dashboard</h2>
               <p>Signed in as <span id="admin-whoami"></span></p>
             </div>
-            <button class="btn btn-outline-dark btn-sm" onclick="adminSignOut()" style="flex:none">Sign Out</button>
           </div>
 
           <!-- Pending Signups -->
@@ -170,11 +169,6 @@
   <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    async function adminSignOut() {
-      await CBS.logout();
-      window.location.href = 'login.html';
-    }
-
     (async () => {
       const user = await CBS.currentUser();
       if (!user || user.status !== 'approved') {

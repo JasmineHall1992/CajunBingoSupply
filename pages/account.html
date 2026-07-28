@@ -36,9 +36,9 @@
         <li><a href="raffles.html">Raffles</a></li>
         <li><a id="nav-cart-link" href="contact.html" class="nav-cart-link" style="display:none;"><i data-lucide="shopping-basket"></i><span id="nav-cart-count" class="nav-cart-count">0</span></a></li>
         <li><a id="nav-auth-link" href="login.html">Login</a></li>
+        <li><a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" style="display:none;">Log Out</a></li>
       </ul>
     </nav>
-    <a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" class="nav-logout-corner" style="display:none;">Log Out</a>
   </header>
 
   <main>
@@ -71,7 +71,6 @@
         </div>
         <div style="display:flex; gap:0.75rem;">
           <a id="admin-link" href="admin.html" class="admin-dashboard-btn" style="display:none"><i data-lucide="shield-check"></i> Admin Dashboard</a>
-          <button class="btn btn-outline-dark" onclick="doLogout()">Log Out</button>
         </div>
       </div>
 
@@ -120,11 +119,6 @@
     function pdfCardThumbFallback(canvas) {
       const title = canvas.dataset.pdfTitle || '';
       canvas.outerHTML = `<div class="product-img"><span class="product-label">${title}</span></div>`;
-    }
-
-    async function doLogout() {
-      await CBS.logout();
-      window.location.href = 'login.html';
     }
 
     const AVATAR_PRESETS = [
