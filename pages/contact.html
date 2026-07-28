@@ -135,8 +135,48 @@
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
+  <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
   <script>
+    // The worker script must be same-origin (browsers won't run a cross-origin
+    // Worker script), so it's vendored locally rather than loaded from the CDN.
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '../js/vendor/pdf.worker.min.js';
+
     let cartItems = [];
+
+    // Renders page 1 of a PDF flyer onto a small square canvas, scaled/cropped
+    // to fill it (same idea as object-fit:cover for an <img>). Falls back to
+    // a plain document icon if the PDF can't be fetched/rendered, or if it
+    // takes too long (PDF.js's worker can occasionally hang on some setups).
+    async function renderPdfThumb(url, canvas) {
+      const fallback = () => {
+        canvas.outerHTML = '<div class="order-item-thumb order-item-thumb-doc"><i data-lucide="file-text"></i></div>';
+        lucide.createIcons();
+      };
+      try {
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 6000));
+        const render = (async () => {
+          const pdf = await pdfjsLib.getDocument(url).promise;
+          const page = await pdf.getPage(1);
+          const targetW = canvas.width;
+          const targetH = canvas.height;
+          const baseViewport = page.getViewport({ scale: 1 });
+          const scale = Math.max(targetW / baseViewport.width, targetH / baseViewport.height);
+          const viewport = page.getViewport({ scale });
+          const ctx = canvas.getContext('2d');
+          ctx.translate(-(viewport.width - targetW) / 2, -(viewport.height - targetH) / 2);
+          await page.render({ canvasContext: ctx, viewport }).promise;
+        })();
+        await Promise.race([render, timeout]);
+      } catch (err) {
+        fallback();
+      }
+    }
+
+    function renderPendingPdfThumbs() {
+      document.querySelectorAll('canvas.order-item-thumb-pdf[data-pdf-url]').forEach(canvas => {
+        renderPdfThumb(canvas.dataset.pdfUrl, canvas);
+      });
+    }
 
     function orderItemThumbHtml(p) {
       if (p.flyer_path) {
@@ -144,7 +184,7 @@
         if (isImage) {
           return `<img class="order-item-thumb" src="${p.flyer_path}" alt="${p.name} preview" />`;
         }
-        return `<div class="order-item-thumb order-item-thumb-doc"><i data-lucide="file-text"></i></div>`;
+        return `<canvas class="order-item-thumb order-item-thumb-pdf" width="112" height="112" data-pdf-url="${p.flyer_path}"></canvas>`;
       }
       return `<div class="order-item-thumb order-item-thumb-placeholder ${p.img_class || ''}"></div>`;
     }
@@ -180,6 +220,7 @@
           <button type="button" class="order-item-remove" onclick="changeQty('${item.id}', 0)" aria-label="Remove item"><i data-lucide="trash-2"></i></button>
         </div>`).join('');
       lucide.createIcons();
+      renderPendingPdfThumbs();
     }
 
     async function loadCart() {
