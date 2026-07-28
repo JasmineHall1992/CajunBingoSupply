@@ -2242,12 +2242,13 @@ body.home .hero {
     height: auto;
     align-items: center;
     gap: 0;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0.25rem;
   }
   /* The base header{position:sticky} rule keeps the nav pinned while
      scrolling on every page — on mobile, let it scroll away with the page
-     instead across the whole site. */
-  header { position: static; }
+     instead across the whole site. header's own 2rem side padding also
+     eats into a phone's already-tight width, so trim it down here too. */
+  header { position: static; padding: 0 0.75rem; }
 
   .nav-hamburger {
     grid-column: 1;
@@ -2267,7 +2268,13 @@ body.home .hero {
   .nav-hamburger:active { background: rgba(255,215,0,0.16); }
   .nav-hamburger svg { width: 26px; height: 26px; }
 
-  .logo { grid-column: 2; grid-row: 1; justify-self: center; }
+  .logo { grid-column: 2; grid-row: 1; justify-self: center; gap: 0; }
+  /* Full desktop size (2rem name + smiley + est line) is too wide to sit
+     comfortably between the hamburger's matching side columns on an
+     actual phone screen — shrink it down for mobile specifically. */
+  .logo-name { font-size: 1.15rem; }
+  .logo-est { font-size: 0.55rem; letter-spacing: 0.12em; }
+  .logo-smiley { width: 18px; height: 18px; margin-top: 2px; }
 
   /* Explicit rows (rather than relying on grid auto-placement, which
      follows DOM order and shoved the logo down between nav-left and
