@@ -902,7 +902,6 @@ footer {
 
 .contact-form-note svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-.field-icon-wrap-textarea svg { top: 1.1rem; transform: none; }
 .field-icon-wrap-textarea textarea { padding-left: 2.4rem; width: 100%; }
 
 @media (max-width: 700px) {
@@ -2406,6 +2405,10 @@ body.home .hero {
   stroke: #bbb;
   pointer-events: none;
 }
+
+/* Textarea icon aligns with the first line of text instead of the
+   whole (much taller) box's vertical center. */
+.field-icon-wrap-textarea svg { top: 0.8rem; transform: none; }
 
 .btn svg {
   width: 16px;
