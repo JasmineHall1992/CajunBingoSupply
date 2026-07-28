@@ -2224,6 +2224,28 @@ body.home .hero {
      wrapped nav content overflows the fixed height and overlaps page content
      below it. */
   nav { height: auto; }
+  /* Nav links are low-opacity white at a small size for the desktop look;
+     on a small phone screen that reads as too faint/small to scan quickly. */
+  .nav-left a, .nav-right a {
+    font-size: 0.88rem;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.92);
+  }
+  /* On the homepage the nav floats transparently over the hero photo and
+     bingo-ball decorations — fine on desktop, but on a small screen those
+     bright balls sit right behind the nav text and make it hard to read.
+     Give it a solid backdrop on mobile instead. */
+  body.home header {
+    position: sticky;
+    background: #07000d;
+    border-top: 2px solid #FFD700;
+    border-bottom: 1px solid rgba(255,215,0,0.18);
+  }
+  /* The hero's 11rem top padding exists to leave room under the floating
+     transparent nav (desktop only) — now that the mobile nav takes up real
+     space above it instead of overlaying, that extra padding just leaves a
+     big gap. */
+  body.home .hero { padding-top: 6rem; }
 }
 
 /* ================================================================
