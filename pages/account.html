@@ -187,9 +187,12 @@
     }
 
     function favMediaHtml(p) {
-      const isImage = p.flyer_path && /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
-      if (isImage) {
-        return `<div class="flyer-preview"><img src="${p.flyer_path}" alt="${p.name} flyer preview" /></div>`;
+      if (p.flyer_path) {
+        const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
+        const inner = isImage
+          ? `<img src="${p.flyer_path}" alt="${p.name} flyer preview" />`
+          : `<iframe src="${p.flyer_path}#toolbar=0&view=FitH" title="${p.name} flyer preview"></iframe>`;
+        return `<div class="flyer-preview">${inner}</div>`;
       }
       return `<div class="product-img ${p.img_class || ''}"><span class="product-label">${p.name}</span></div>`;
     }

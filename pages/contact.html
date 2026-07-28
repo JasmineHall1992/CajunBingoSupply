@@ -139,9 +139,12 @@
     let cartItems = [];
 
     function orderItemThumbHtml(p) {
-      const isImage = p.flyer_path && /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
-      if (isImage) {
-        return `<img class="order-item-thumb" src="${p.flyer_path}" alt="${p.name} preview" />`;
+      if (p.flyer_path) {
+        const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
+        if (isImage) {
+          return `<img class="order-item-thumb" src="${p.flyer_path}" alt="${p.name} preview" />`;
+        }
+        return `<div class="order-item-thumb order-item-thumb-doc"><i data-lucide="file-text"></i></div>`;
       }
       return `<div class="order-item-thumb order-item-thumb-placeholder ${p.img_class || ''}"></div>`;
     }

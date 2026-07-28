@@ -564,6 +564,16 @@ footer {
 
 .order-item-thumb-placeholder { opacity: 0.85; }
 
+.order-item-thumb-doc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  color: #999;
+}
+
+.order-item-thumb-doc svg { width: 22px; height: 22px; }
+
 .kb-img   { background: linear-gradient(135deg, #1a1a1a, #f5c400); }
 .rd-img   { background: linear-gradient(135deg, #0077cc, #ffe066); }
 .tb-img   { background: linear-gradient(135deg, #cc6600, #ffd700); }
