@@ -2236,7 +2236,7 @@ body.home .hero {
      bright balls sit right behind the nav text and make it hard to read.
      Give it a solid backdrop on mobile instead. */
   body.home header {
-    position: sticky;
+    position: static;
     background: #07000d;
     border-top: 2px solid #FFD700;
     border-bottom: 1px solid rgba(255,215,0,0.18);
