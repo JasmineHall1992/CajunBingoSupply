@@ -84,6 +84,37 @@ nav {
 
 .btn-outline:hover { background: rgba(255,255,255,0.1); }
 
+/* Button system — every variant keeps .btn's border-radius, padding,
+   font-weight and transition; only color/background/border change.
+   (Note: inside .card-actions specifically, more specific rules further
+   down give .btn-sm/.btn-outline-dark a deliberately minimal text-link
+   look for catalog cards — this general version is for everywhere else,
+   e.g. the admin dashboard, where these classes previously had no effect
+   at all since they were only ever defined scoped to .card-actions.) */
+.btn-sm {
+  padding: 0.45rem 1rem;
+  font-size: 0.8rem;
+}
+
+.btn-outline-dark {
+  background: transparent;
+  color: #1a1a1a;
+  border: 1.5px solid #1a1a1a;
+}
+
+.btn-outline-dark:hover { background: #1a1a1a; color: #fff; }
+
+.btn:disabled,
+.btn[disabled] {
+  background: #ddd;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.btn:disabled:hover,
+.btn[disabled]:hover { background: #ddd; }
+
 /* Hero */
 .hero {
   background: #8b0000;
