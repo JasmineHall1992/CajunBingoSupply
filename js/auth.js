@@ -343,3 +343,14 @@ const CBS = (() => {
     getActivityLog, getPendingSignups, getAllUsers, reviewSignup
   };
 })();
+
+// Mobile hamburger menu toggle — plain global function (not part of CBS)
+// since it's just a UI show/hide, not an auth/data operation.
+function toggleMobileNav() {
+  const nav = document.querySelector('header nav');
+  if (!nav) return;
+  const isOpen = nav.classList.toggle('mobile-open');
+  const btn = nav.querySelector('.nav-hamburger');
+  if (btn) btn.innerHTML = isOpen ? '<i data-lucide="x"></i>' : '<i data-lucide="menu"></i>';
+  if (window.lucide) lucide.createIcons();
+}
