@@ -74,6 +74,39 @@
         </div>
       </div>
 
+      <div class="account-card" id="password-card" style="margin-bottom:2.5rem;">
+        <div class="account-section-heading">
+          <p class="account-section-label">Password &amp; Security</p>
+        </div>
+        <div id="password-google-notice" style="display:none">
+          <p style="color:#666; font-size:0.9rem;">You sign in with Google, so there's no separate password to change here.</p>
+        </div>
+        <form class="contact-form" id="passwordForm" style="max-width:420px;" onsubmit="submitPasswordChange(event)">
+          <p class="auth-error" id="password-error"></p>
+          <p class="form-success" id="password-success" style="display:none"><i data-lucide="check-circle"></i> Password updated.</p>
+
+          <label for="current-password">Current Password</label>
+          <div class="field-icon-wrap">
+            <i data-lucide="lock"></i>
+            <input type="password" id="current-password" autocomplete="current-password" required />
+          </div>
+
+          <label for="new-password">New Password</label>
+          <div class="field-icon-wrap">
+            <i data-lucide="lock"></i>
+            <input type="password" id="new-password" autocomplete="new-password" minlength="6" required />
+          </div>
+
+          <label for="confirm-password">Confirm New Password</label>
+          <div class="field-icon-wrap">
+            <i data-lucide="lock"></i>
+            <input type="password" id="confirm-password" autocomplete="new-password" minlength="6" required />
+          </div>
+
+          <button type="submit" class="btn" id="passwordSubmitBtn">Update Password</button>
+        </form>
+      </div>
+
       <div class="account-section-heading">
         <p class="account-section-label">Saved Products</p>
         <span class="account-section-count" id="favorites-count"></span>
@@ -198,6 +231,39 @@
       document.getElementById('avatar-picker').style.display = 'none';
     }
 
+    async function submitPasswordChange(e) {
+      e.preventDefault();
+      const errorEl = document.getElementById('password-error');
+      const successEl = document.getElementById('password-success');
+      const btn = document.getElementById('passwordSubmitBtn');
+      errorEl.textContent = '';
+      successEl.style.display = 'none';
+
+      const currentPassword = document.getElementById('current-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      if (newPassword !== confirmPassword) {
+        errorEl.textContent = 'New password and confirmation do not match.';
+        return;
+      }
+      if (newPassword.length < 6) {
+        errorEl.textContent = 'New password must be at least 6 characters.';
+        return;
+      }
+
+      btn.disabled = true;
+      const result = await CBS.changePassword(currentPassword, newPassword);
+      btn.disabled = false;
+
+      if (!result.ok) {
+        errorEl.textContent = result.error;
+        return;
+      }
+      successEl.style.display = 'flex';
+      document.getElementById('passwordForm').reset();
+    }
+
     async function removeFav(productId) {
       await CBS.toggleFavorite({ id: productId });
       renderFavorites();
@@ -258,6 +324,12 @@
       setAvatarDisplay(user.avatarUrl);
       renderAvatarSwatches();
       renderFavorites();
+
+      const provider = await CBS.getAuthProvider();
+      if (provider && provider !== 'email') {
+        document.getElementById('passwordForm').style.display = 'none';
+        document.getElementById('password-google-notice').style.display = 'block';
+      }
     })();
   </script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>

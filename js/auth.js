@@ -61,6 +61,26 @@ const CBS = (() => {
     return { ok: true };
   }
 
+  async function getAuthProvider() {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session ? session.user.app_metadata.provider : null;
+  }
+
+  async function changePassword(currentPassword, newPassword) {
+    const user = await currentUser();
+    if (!user) return { ok: false, error: 'Not signed in.' };
+
+    const { error: reauthError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: currentPassword
+    });
+    if (reauthError) return { ok: false, error: 'Current password is incorrect.' };
+
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  }
+
   async function loginGoogle() {
     // Redirects the browser to Google, then back to this same page.
     // Approval-status handling happens in the page's own onAuthStateChange
@@ -337,7 +357,7 @@ const CBS = (() => {
   document.addEventListener('DOMContentLoaded', updateNav);
 
   return {
-    register, login, loginGoogle, logout, logoutRedirect, currentUser, uploadAvatar, removeAvatar, setAvatarPreset, parseAvatar, updateNav,
+    register, login, loginGoogle, logout, logoutRedirect, currentUser, getAuthProvider, changePassword, uploadAvatar, removeAvatar, setAvatarPreset, parseAvatar, updateNav,
     getUserFavorites, toggleFavorite, isFavorited,
     getCartItems, getCartCount, addToCart, updateCartQuantity, removeFromCart, clearCart,
     getActivityLog, getPendingSignups, getAllUsers, reviewSignup
