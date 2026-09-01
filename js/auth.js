@@ -61,6 +61,19 @@ const CBS = (() => {
     return { ok: true };
   }
 
+  async function requestPasswordReset(email) {
+    const redirectTo = window.location.href.replace(/login\.html.*$/, 'reset-password.html');
+    const { error } = await supabase.auth.resetPasswordForEmail(email.toLowerCase().trim(), { redirectTo });
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  }
+
+  async function setNewPassword(newPassword) {
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  }
+
   async function getAuthProvider() {
     const { data: { session } } = await supabase.auth.getSession();
     return session ? session.user.app_metadata.provider : null;
@@ -357,7 +370,7 @@ const CBS = (() => {
   document.addEventListener('DOMContentLoaded', updateNav);
 
   return {
-    register, login, loginGoogle, logout, logoutRedirect, currentUser, getAuthProvider, changePassword, uploadAvatar, removeAvatar, setAvatarPreset, parseAvatar, updateNav,
+    register, login, loginGoogle, logout, logoutRedirect, currentUser, getAuthProvider, changePassword, requestPasswordReset, setNewPassword, uploadAvatar, removeAvatar, setAvatarPreset, parseAvatar, updateNav,
     getUserFavorites, toggleFavorite, isFavorited,
     getCartItems, getCartCount, addToCart, updateCartQuantity, removeFromCart, clearCart,
     getActivityLog, getPendingSignups, getAllUsers, reviewSignup

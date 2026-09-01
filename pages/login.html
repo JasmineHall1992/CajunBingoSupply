@@ -100,10 +100,26 @@
           </div>
           <div class="form-check">
             <label><input type="checkbox" id="remember-me"> Remember me</label>
-            <a href="#" class="forgot-link">Forgot password?</a>
+            <a href="#" class="forgot-link" onclick="showForgotForm();return false;">Forgot password?</a>
           </div>
           <button class="btn auth-submit" onclick="doSignIn()">Sign In</button>
           <p class="auth-switch">Don't have an account? <a href="#" onclick="switchTab('register');return false;">Create one</a></p>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div id="forgot-form" style="display:none">
+          <p class="auth-notice">Enter your email and we'll send you a link to reset your password. Signed in with Google? Use the Google button on the sign-in screen instead — Google accounts don't have a password here.</p>
+          <p class="auth-error" id="forgot-error"></p>
+          <p class="form-success" id="forgot-success" style="display:none"><i data-lucide="check-circle"></i> If an account exists for that email, a reset link is on its way.</p>
+          <div class="form-group" id="forgot-email-group">
+            <label for="forgot-email">Email</label>
+            <div class="field-icon-wrap">
+              <i data-lucide="mail"></i>
+              <input type="email" id="forgot-email" placeholder="you@example.com" autocomplete="email" />
+            </div>
+          </div>
+          <button class="btn auth-submit" id="forgot-submit-btn" onclick="doRequestPasswordReset()">Send Reset Link</button>
+          <p class="auth-switch"><a href="#" onclick="showSignInForm();return false;">&larr; Back to Sign In</a></p>
         </div>
 
         <!-- Create Account Form -->
@@ -219,6 +235,34 @@
 
     function showError(id, msg) { document.getElementById(id).textContent = msg; }
 
+    function showForgotForm() {
+      document.getElementById('signin-form').style.display = 'none';
+      document.getElementById('forgot-form').style.display = 'block';
+      showError('forgot-error', '');
+      document.getElementById('forgot-success').style.display = 'none';
+      document.getElementById('forgot-email-group').style.display = 'flex';
+      document.getElementById('forgot-submit-btn').style.display = 'block';
+    }
+
+    function showSignInForm() {
+      document.getElementById('forgot-form').style.display = 'none';
+      document.getElementById('signin-form').style.display = 'block';
+    }
+
+    async function doRequestPasswordReset() {
+      const email = document.getElementById('forgot-email').value.trim();
+      showError('forgot-error', '');
+      if (!email) return showError('forgot-error', 'Please enter your email address.');
+      const btn = document.getElementById('forgot-submit-btn');
+      btn.disabled = true;
+      const r = await CBS.requestPasswordReset(email);
+      btn.disabled = false;
+      if (!r.ok) return showError('forgot-error', r.error);
+      document.getElementById('forgot-success').style.display = 'flex';
+      document.getElementById('forgot-email-group').style.display = 'none';
+      btn.style.display = 'none';
+    }
+
     async function doSignIn() {
       const email = document.getElementById('signin-email').value.trim();
       const pass = document.getElementById('signin-password').value;
@@ -319,6 +363,8 @@
       if (e.key !== 'Enter') return;
       if (document.getElementById('signin-form').style.display !== 'none') {
         doSignIn();
+      } else if (document.getElementById('forgot-form').style.display !== 'none') {
+        doRequestPasswordReset();
       } else if (document.getElementById('signup-screen-code').style.display !== 'none') {
         submitAccessCode();
       } else if (document.getElementById('signup-screen-email').style.display !== 'none') {
