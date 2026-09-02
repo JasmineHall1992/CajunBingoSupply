@@ -377,6 +377,16 @@ const CBS = (() => {
   };
 })();
 
+// Password show/hide toggle — plain global function (not part of CBS)
+// since it's just a UI show/hide, not an auth/data operation.
+function togglePasswordVisibility(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  btn.innerHTML = showing ? '<i data-lucide="eye"></i>' : '<i data-lucide="eye-off"></i>';
+  if (window.lucide) lucide.createIcons();
+}
+
 // Mobile hamburger menu toggle — plain global function (not part of CBS)
 // since it's just a UI show/hide, not an auth/data operation.
 function toggleMobileNav() {

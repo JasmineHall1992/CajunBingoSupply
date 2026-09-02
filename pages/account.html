@@ -77,30 +77,34 @@
       <div class="account-card" id="password-card" style="margin-bottom:2.5rem;">
         <div class="account-section-heading">
           <p class="account-section-label">Password &amp; Security</p>
+          <button type="button" class="btn btn-sm btn-outline-dark" id="password-toggle-btn" onclick="togglePasswordCard()">Change Password</button>
         </div>
         <div id="password-google-notice" style="display:none">
           <p style="color:#666; font-size:0.9rem;">You sign in with Google, so there's no separate password to change here.</p>
         </div>
-        <form class="contact-form" id="passwordForm" style="max-width:420px;" onsubmit="submitPasswordChange(event)">
+        <form class="contact-form" id="passwordForm" style="max-width:420px; display:none;" onsubmit="submitPasswordChange(event)">
           <p class="auth-error" id="password-error"></p>
           <p class="form-success" id="password-success" style="display:none"><i data-lucide="check-circle"></i> Password updated.</p>
 
           <label for="current-password">Current Password</label>
-          <div class="field-icon-wrap">
+          <div class="field-icon-wrap field-icon-wrap-password">
             <i data-lucide="lock"></i>
             <input type="password" id="current-password" autocomplete="current-password" required />
+            <button type="button" class="field-toggle-btn" tabindex="-1" aria-label="Show password" onclick="togglePasswordVisibility('current-password', this)"><i data-lucide="eye"></i></button>
           </div>
 
           <label for="new-password">New Password</label>
-          <div class="field-icon-wrap">
+          <div class="field-icon-wrap field-icon-wrap-password">
             <i data-lucide="lock"></i>
             <input type="password" id="new-password" autocomplete="new-password" minlength="6" required />
+            <button type="button" class="field-toggle-btn" tabindex="-1" aria-label="Show password" onclick="togglePasswordVisibility('new-password', this)"><i data-lucide="eye"></i></button>
           </div>
 
           <label for="confirm-password">Confirm New Password</label>
-          <div class="field-icon-wrap">
+          <div class="field-icon-wrap field-icon-wrap-password">
             <i data-lucide="lock"></i>
             <input type="password" id="confirm-password" autocomplete="new-password" minlength="6" required />
+            <button type="button" class="field-toggle-btn" tabindex="-1" aria-label="Show password" onclick="togglePasswordVisibility('confirm-password', this)"><i data-lucide="eye"></i></button>
           </div>
 
           <button type="submit" class="btn" id="passwordSubmitBtn">Update Password</button>
@@ -231,6 +235,14 @@
       document.getElementById('avatar-picker').style.display = 'none';
     }
 
+    function togglePasswordCard() {
+      const form = document.getElementById('passwordForm');
+      const btn = document.getElementById('password-toggle-btn');
+      const isOpen = form.style.display !== 'none';
+      form.style.display = isOpen ? 'none' : 'flex';
+      btn.textContent = isOpen ? 'Change Password' : 'Cancel';
+    }
+
     async function submitPasswordChange(e) {
       e.preventDefault();
       const errorEl = document.getElementById('password-error');
@@ -327,7 +339,7 @@
 
       const provider = await CBS.getAuthProvider();
       if (provider && provider !== 'email') {
-        document.getElementById('passwordForm').style.display = 'none';
+        document.getElementById('password-toggle-btn').style.display = 'none';
         document.getElementById('password-google-notice').style.display = 'block';
       }
     })();

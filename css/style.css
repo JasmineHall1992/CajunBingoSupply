@@ -2464,6 +2464,34 @@ body.home .hero {
    whole (much taller) box's vertical center. */
 .field-icon-wrap-textarea svg { top: 0.8rem; transform: none; }
 
+/* Password show/hide toggle button, sits on the right side of the field
+   opposite the lock icon on the left. */
+.field-icon-wrap-password input { padding-right: 2.4rem; }
+
+.field-toggle-btn {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.field-toggle-btn svg {
+  position: static;
+  transform: none;
+  pointer-events: auto;
+  width: 15px;
+  height: 15px;
+  stroke: #bbb;
+}
+
+.field-toggle-btn:hover svg { stroke: #666; }
+
 .btn svg {
   width: 16px;
   height: 16px;
