@@ -29,7 +29,15 @@
       <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu"><i data-lucide="menu"></i></button>
       <ul class="nav-left">
         <li><a href="../index.html">Home</a></li>
-        <li><a href="products.html">Premium Pull Tabs</a></li>
+        <li class="nav-dropdown">
+          <a href="products.html">Premium Pull Tabs</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="pulltabs-coming-soon.html">Coming Soon</a></li>
+            <li><a href="pulltabs-out-of-stock.html">Out of Stock &mdash; In Production</a></li>
+            <li><a href="pulltabs-newest.html">Newest Tabs</a></li>
+            <li><a href="pulltabs-instants.html">Instants</a></li>
+          </ul>
+        </li>
       </ul>
       <a href="../index.html" class="logo" aria-label="Cajun Bingo Supply — Home"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span><img class="logo-smiley" src="../images/logo-placeholder-smiley.png" alt="" /></a>
       <ul class="nav-right">
@@ -101,7 +109,7 @@
           </div>
           <div style="overflow-x:auto">
             <table class="admin-table" id="catalog-table">
-              <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Active</th><th>Actions</th></tr></thead>
+              <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Status Tag</th><th>Price</th><th>Active</th><th>Actions</th></tr></thead>
               <tbody id="catalog-body"></tbody>
             </table>
           </div>
@@ -115,6 +123,16 @@
             <div class="form-group">
               <label>Category</label>
               <select id="pf-category"><option value="pull-tab">Pull Tab</option><option value="raffle">Raffle</option></select>
+            </div>
+            <div class="form-group">
+              <label>Status tag (Pull Tab subcategory)</label>
+              <select id="pf-status-tag">
+                <option value="">None — regular catalog listing</option>
+                <option value="coming_soon">Coming Soon</option>
+                <option value="out_of_stock_production">Out of Stock — In Production</option>
+                <option value="newest">Newest Tabs</option>
+                <option value="instant">Instants</option>
+              </select>
             </div>
             <div class="form-group"><label>Price display</label><input type="text" id="pf-price" placeholder="e.g. $1.00 per card" /></div>
             <div class="form-group"><label>Image CSS class</label><input type="text" id="pf-img-class" placeholder="e.g. kb-img" /></div>
@@ -265,6 +283,13 @@
 
     let editingPayoutRows = [];
 
+    const STATUS_TAG_LABELS = {
+      coming_soon: 'Coming Soon',
+      out_of_stock_production: 'Out of Stock — In Production',
+      newest: 'Newest Tabs',
+      instant: 'Instants'
+    };
+
     async function loadCatalog() {
       const { data } = await supabase.from('products').select('*').order('category').order('sort_order');
       const rows = data || [];
@@ -273,6 +298,7 @@
           <td>${p.id}</td>
           <td>${p.name}</td>
           <td>${p.category}</td>
+          <td>${STATUS_TAG_LABELS[p.status_tag] || '—'}</td>
           <td>${p.price_display}</td>
           <td>${p.is_active ? 'Yes' : 'No'}</td>
           <td>
@@ -303,6 +329,7 @@
       document.getElementById('pf-name').value = product ? product.name : '';
       document.getElementById('pf-form-label').value = product ? (product.form_label || '') : '';
       document.getElementById('pf-category').value = product ? product.category : 'pull-tab';
+      document.getElementById('pf-status-tag').value = product ? (product.status_tag || '') : '';
       document.getElementById('pf-price').value = product ? product.price_display : '';
       document.getElementById('pf-img-class').value = product ? (product.img_class || '') : '';
       document.getElementById('pf-flyer').value = product ? (product.flyer_path || '') : '';
@@ -386,6 +413,7 @@
         name: document.getElementById('pf-name').value.trim(),
         form_label: document.getElementById('pf-form-label').value.trim(),
         category: document.getElementById('pf-category').value,
+        status_tag: document.getElementById('pf-status-tag').value || null,
         price_display: document.getElementById('pf-price').value.trim(),
         img_class: document.getElementById('pf-img-class').value.trim(),
         flyer_path: document.getElementById('pf-flyer').value.trim(),

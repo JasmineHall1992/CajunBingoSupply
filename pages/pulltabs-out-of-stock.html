@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pull Tab Catalog — Cajun Bingo Supply</title>
+  <title>Out of Stock — In Production — Cajun Bingo Supply</title>
   <link rel="icon" type="image/png" href="../images/logo-placeholder-smiley.png" />
-  <meta property="og:title" content="Pull Tab Catalog — Cajun Bingo Supply" />
-  <meta property="og:description" content="Louisiana's #1 Pull Tab Supplier — family-owned and operated since 1989." />
+  <meta property="og:title" content="Out of Stock — In Production — Cajun Bingo Supply" />
+  <meta property="og:description" content="Pull tab games currently being restocked from Louisiana's #1 Pull Tab Supplier." />
   <meta property="og:image" content="https://cajunbingosupply.com/images/logo-social-preview.png" />
-  <meta property="og:url" content="https://cajunbingosupply.com/pages/products.html" />
+  <meta property="og:url" content="https://cajunbingosupply.com/pages/pulltabs-out-of-stock.html" />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,8 +51,8 @@
 
   <main>
     <section class="page-header page-header-pulltabs">
-      <h1>Pull Tab Catalog</h1>
-      <p>Browse our current inventory of premium pull tab games — all $1.00 per card</p>
+      <h1>Out of Stock — In Production</h1>
+      <p>Currently being restocked — these games will be available again soon.</p>
     </section>
 
     <!-- Search bar -->
@@ -67,7 +67,7 @@
 
     <section class="product-grid" id="productGrid"></section>
 
-    <p class="no-results" id="noResults" style="display:none;">No products match your search.</p>
+    <p class="no-results" id="noResults" style="display:none;">Nothing is currently out of stock.</p>
 
   </main>
 
@@ -251,7 +251,7 @@
 
       const [favs, { data }] = await Promise.all([
         CBS.getUserFavorites(user),
-        supabase.from('products').select('*').eq('category', 'pull-tab').order('sort_order')
+        supabase.from('products').select('*').eq('category', 'pull-tab').eq('status_tag', 'out_of_stock_production').order('sort_order')
       ]);
       favoriteIds = new Set(favs.map(f => f.product_id));
       allProducts = data || [];

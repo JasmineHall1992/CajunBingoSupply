@@ -2830,3 +2830,61 @@ body.home .hero {
   .admin-sidebar-label { display: none; }
   #admin-dashboard .admin-section { padding: 1.5rem 1.25rem 3rem; }
 }
+
+/* Nav dropdown — "Premium Pull Tabs" subcategories (Coming Soon, Out of
+   Stock, Newest, Instants). Placed at the end of the file so it reliably
+   overrides the general .nav-left a / .nav-right a rules declared earlier. */
+.nav-dropdown { position: relative; }
+
+.nav-dropdown-menu {
+  list-style: none;
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #1a0f2a;
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 6px;
+  padding: 0.4rem 0;
+  margin: 0;
+  min-width: 250px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  z-index: 50;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu { display: block; }
+
+.nav-dropdown-menu a {
+  display: block;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  color: rgba(255,255,255,0.8);
+  white-space: nowrap;
+  border-top: none;
+}
+
+.nav-dropdown-menu a:hover { background: rgba(255,215,0,0.08); }
+.nav-dropdown-menu a::after { display: none; }
+
+@media (max-width: 700px) {
+  .nav-dropdown-menu {
+    display: block;
+    position: static;
+    background: rgba(0,0,0,0.22);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    min-width: 0;
+  }
+  .nav-dropdown-menu a {
+    padding: 0.75rem 0.5rem 0.75rem 2.25rem;
+    font-size: 0.85rem;
+    text-align: center;
+    white-space: normal;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+}
