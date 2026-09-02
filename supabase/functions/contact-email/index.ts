@@ -1,6 +1,7 @@
 // Supabase Edge Function: contact-email
 //
-// Sends an email (via Resend) whenever a new row lands in `inquiries`.
+// Sends an email (via Resend) and a text reminder (via Twilio) whenever a
+// new row lands in `inquiries`.
 // Wire this up in the Supabase Dashboard: Database → Webhooks → New webhook
 //   - Table: inquiries
 //   - Events: Insert
@@ -11,6 +12,13 @@
 //   RESEND_API_KEY   — from resend.com
 //   CONTACT_TO_EMAIL — Joey's Gmail address, where inquiries should land
 //   CONTACT_FROM_EMAIL — a Resend-verified sender, e.g. inquiries@cajunbingosupply.com
+//   TWILIO_ACCOUNT_SID  — from twilio.com console
+//   TWILIO_AUTH_TOKEN   — from twilio.com console
+//   TWILIO_FROM_NUMBER  — the Twilio phone number texts are sent from, e.g. +15551234567
+//   CONTACT_TO_PHONE    — Joey's cell number, e.g. +13379626584
+//
+// Email and SMS are sent independently — if one fails the other still goes
+// out, and the response reports both outcomes.
 
 Deno.serve(async (req) => {
   let payload;
@@ -57,7 +65,7 @@ Deno.serve(async (req) => {
     record.message || "(none)",
   ].filter(Boolean).join("\n");
 
-  const res = await fetch("https://api.resend.com/emails", {
+  const emailRes = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${resendApiKey}`,
@@ -72,12 +80,46 @@ Deno.serve(async (req) => {
     }),
   });
 
-  if (!res.ok) {
-    const errText = await res.text();
-    return new Response(JSON.stringify({ error: `Resend error: ${errText}` }), { status: 500 });
+  const emailError = emailRes.ok ? null : `Resend error: ${await emailRes.text()}`;
+
+  // Short SMS summary — a nudge to go check email, not the full message.
+  const itemsSummary = isOrder
+    ? orderItems.map((item: { name: string; form_label?: string; quantity: number }) =>
+        `${item.quantity}x ${item.name}`
+      ).join(", ")
+    : null;
+
+  const rawSmsBody = isOrder
+    ? `Cajun Bingo Supply: New order from ${record.name} — ${itemsSummary}. Check your email for details.`
+    : `Cajun Bingo Supply: New message from ${record.name}: "${record.message || "(no message)"}" Check your email.`;
+
+  // Keep it to one SMS segment's worth of plain-text characters.
+  const smsBody = rawSmsBody.length > 300 ? rawSmsBody.slice(0, 297) + "..." : rawSmsBody;
+
+  const twilioSid = Deno.env.get("TWILIO_ACCOUNT_SID");
+  const twilioToken = Deno.env.get("TWILIO_AUTH_TOKEN");
+  const twilioFrom = Deno.env.get("TWILIO_FROM_NUMBER");
+  const toPhone = Deno.env.get("CONTACT_TO_PHONE");
+
+  const smsRes = await fetch(
+    `https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Messages.json`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${btoa(`${twilioSid}:${twilioToken}`)}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({ From: twilioFrom ?? "", To: toPhone ?? "", Body: smsBody }),
+    }
+  );
+
+  const smsError = smsRes.ok ? null : `Twilio error: ${await smsRes.text()}`;
+
+  if (emailError && smsError) {
+    return new Response(JSON.stringify({ error: { email: emailError, sms: smsError } }), { status: 500 });
   }
 
-  return new Response(JSON.stringify({ ok: true }), {
+  return new Response(JSON.stringify({ ok: true, emailError, smsError }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
