@@ -68,6 +68,7 @@
           <button class="admin-nav-item" id="tabbtn-users" onclick="switchAdminTab('users')"><i data-lucide="users"></i> All Users</button>
           <button class="admin-nav-item" id="tabbtn-catalog" onclick="switchAdminTab('catalog')"><i data-lucide="package"></i> Catalog</button>
           <button class="admin-nav-item" id="tabbtn-activity" onclick="switchAdminTab('activity')"><i data-lucide="activity"></i> Activity Log</button>
+          <button class="admin-nav-item" id="tabbtn-settings" onclick="switchAdminTab('settings')"><i data-lucide="settings"></i> Settings</button>
         </nav>
       </aside>
 
@@ -178,6 +179,19 @@
             <p id="no-activity" style="text-align:center;padding:3rem;color:#aaa;display:none">No activity recorded yet. Activity appears here when customers save or remove products.</p>
           </div>
         </div>
+
+        <!-- Settings -->
+        <div id="tab-settings" class="admin-tab-panel" style="display:none">
+          <p class="account-section-label">Sign-Up Access Code</p>
+          <p style="color:#666; font-size:0.9rem; max-width:520px; margin:0.5rem 0 1.25rem;">This is the code new users must enter before they can create an account (they still need your approval afterward). It's a first-line filter, not a real secret — share it with people you want signing up, and change it any time.</p>
+          <p class="auth-error" id="settings-error"></p>
+          <p class="form-success" id="settings-success" style="display:none"><i data-lucide="check-circle"></i> Access code updated.</p>
+          <div class="form-group" style="max-width:320px;">
+            <label for="settings-access-code">Access Code</label>
+            <input type="text" id="settings-access-code" placeholder="e.g. CAJUN1989" />
+          </div>
+          <button class="btn" onclick="saveAccessCode()">Save Access Code</button>
+        </div>
       </div>
       </main>
     </div>
@@ -208,7 +222,7 @@
     })();
 
     function switchAdminTab(tab) {
-      ['pending', 'users', 'catalog', 'activity'].forEach(t => {
+      ['pending', 'users', 'catalog', 'activity', 'settings'].forEach(t => {
         document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
         document.getElementById('tabbtn-' + t).classList.toggle('active', t === tab);
       });
@@ -216,6 +230,7 @@
       if (tab === 'users') loadUsers();
       if (tab === 'catalog') loadCatalog();
       if (tab === 'activity') loadActivity();
+      if (tab === 'settings') loadSettings();
     }
 
     // ---- Pending Signups ----
@@ -487,6 +502,32 @@
       if (!confirm('Clear all activity data? This cannot be undone.')) return;
       await supabase.from('activity_log').delete().neq('id', '00000000-0000-0000-0000-000000000000');
       renderActivity();
+    }
+
+    // ---- Settings ----
+
+    async function loadSettings() {
+      document.getElementById('settings-error').textContent = '';
+      document.getElementById('settings-success').style.display = 'none';
+      const code = await CBS.getSignupAccessCode();
+      document.getElementById('settings-access-code').value = code || '';
+    }
+
+    async function saveAccessCode() {
+      const errorEl = document.getElementById('settings-error');
+      const successEl = document.getElementById('settings-success');
+      errorEl.textContent = '';
+      successEl.style.display = 'none';
+
+      const code = document.getElementById('settings-access-code').value.trim();
+      if (!code) return errorEl.textContent = 'Access code cannot be blank.';
+
+      const result = await CBS.setSignupAccessCode(code);
+      if (!result.ok) {
+        errorEl.textContent = result.error;
+        return;
+      }
+      successEl.style.display = 'flex';
     }
   </script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>

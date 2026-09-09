@@ -283,11 +283,6 @@
       else showError('signin-error', r.error);
     }
 
-    // Shared sign-up access code — a first-line filter, not a real security boundary
-    // (it's visible in this page's source). Every account still needs admin approval
-    // regardless of this code. Change this value to change the code.
-    const SIGNUP_ACCESS_CODE = 'CAJUN1989';
-
     // Which sign-up path the user picked on screen 1 ('google' | 'email'),
     // remembered while they're on the access-code screen.
     let signupMethod = null;
@@ -320,7 +315,10 @@
       const code = document.getElementById('reg-code').value.trim();
       showError('code-error', '');
       if (!code) return showError('code-error', 'Please enter the access code.');
-      if (code.toUpperCase() !== SIGNUP_ACCESS_CODE) return showError('code-error', 'Incorrect access code.');
+      const validCode = await CBS.getSignupAccessCode();
+      if (!validCode || code.toUpperCase() !== validCode.toUpperCase()) {
+        return showError('code-error', 'Incorrect access code.');
+      }
 
       if (signupMethod === 'google') {
         await CBS.loginGoogle();

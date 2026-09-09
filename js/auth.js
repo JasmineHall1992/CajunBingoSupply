@@ -19,6 +19,15 @@ const CBS = (() => {
     return { id: session.user.id, email: profile.email, name: profile.name, status: profile.status, role: profile.role, avatarUrl: profile.avatar_url };
   }
 
+  async function getSignupAccessCode() {
+    const { data } = await supabase
+      .from('app_settings')
+      .select('signup_access_code')
+      .eq('id', 1)
+      .single();
+    return data ? data.signup_access_code : null;
+  }
+
   async function register(name, email, password) {
     const { data, error } = await supabase.auth.signUp({
       email: email.toLowerCase().trim(),
@@ -319,6 +328,19 @@ const CBS = (() => {
     return { ok: !error, error: error ? error.message : null };
   }
 
+  async function setSignupAccessCode(newCode) {
+    const admin = await currentUser();
+    const { error } = await supabase
+      .from('app_settings')
+      .update({
+        signup_access_code: newCode,
+        updated_at: new Date().toISOString(),
+        updated_by: admin ? admin.id : null
+      })
+      .eq('id', 1);
+    return { ok: !error, error: error ? error.message : null };
+  }
+
   // ---- nav helper ----
 
   async function updateNav() {
@@ -370,10 +392,10 @@ const CBS = (() => {
   document.addEventListener('DOMContentLoaded', updateNav);
 
   return {
-    register, login, loginGoogle, logout, logoutRedirect, currentUser, getAuthProvider, changePassword, requestPasswordReset, setNewPassword, uploadAvatar, removeAvatar, setAvatarPreset, parseAvatar, updateNav,
+    register, login, loginGoogle, logout, logoutRedirect, currentUser, getAuthProvider, changePassword, requestPasswordReset, setNewPassword, getSignupAccessCode, uploadAvatar, removeAvatar, setAvatarPreset, parseAvatar, updateNav,
     getUserFavorites, toggleFavorite, isFavorited,
     getCartItems, getCartCount, addToCart, updateCartQuantity, removeFromCart, clearCart,
-    getActivityLog, getPendingSignups, getAllUsers, reviewSignup
+    getActivityLog, getPendingSignups, getAllUsers, reviewSignup, setSignupAccessCode
   };
 })();
 
