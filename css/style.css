@@ -382,6 +382,7 @@ nav {
   width: 48px;
   height: 48px;
   object-fit: contain;
+  border-radius: 50%;
   margin: 0.5rem auto 1rem;
 }
 
@@ -1738,11 +1739,11 @@ a.logo {
 
 a.logo:hover { opacity: 0.85; }
 
-.logo-smiley {
-  width: 32px;
-  height: 32px;
+.logo-badge {
+  width: 68px;
+  height: 68px;
   object-fit: contain;
-  margin-top: 4px;
+  border-radius: 50%;
 }
 
 .logo-name {
@@ -2324,12 +2325,9 @@ body.home .hero {
   .nav-hamburger svg { width: 26px; height: 26px; }
 
   .logo { grid-column: 2; grid-row: 1; justify-self: center; gap: 0; }
-  /* Full desktop size (2rem name + smiley + est line) is too wide to sit
-     comfortably between the hamburger's matching side columns on an
-     actual phone screen — shrink it down for mobile specifically. */
-  .logo-name { font-size: 1.4rem; }
-  .logo-est { font-size: 0.68rem; letter-spacing: 0.14em; }
-  .logo-smiley { width: 24px; height: 24px; margin-top: 2px; }
+  /* Shrink the badge slightly on mobile so it sits comfortably between
+     the hamburger's matching side columns on an actual phone screen. */
+  .logo-badge { width: 48px; height: 48px; }
 
   /* Explicit rows (rather than relying on grid auto-placement, which
      follows DOM order and shoved the logo down between nav-left and
