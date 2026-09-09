@@ -2208,6 +2208,30 @@ body.home .hero {
   .team-row-media { flex: none; width: 100%; }
 }
 
+.team-row-media-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  border: 1px dashed rgba(255,215,0,0.3);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  background: rgba(255,255,255,0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: rgba(255,215,0,0.4);
+}
+
+.team-row-media-placeholder svg { width: 44px; height: 44px; }
+
+.team-row-media-placeholder span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 /* ================================================================
    SERVICES SECTION — Dark luxury
    ================================================================ */
