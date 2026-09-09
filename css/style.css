@@ -1719,9 +1719,21 @@ header {
   box-shadow: 0 4px 28px rgba(0,0,0,0.7);
 }
 
+/* Grid instead of flex so the logo sits at the true center of the bar
+   regardless of how wide nav-left/nav-right are — flex + justify-content:
+   center only centers the (nav-left + logo + nav-right) group as a whole,
+   so the logo drifts off-center whenever the two sides are unequal width
+   (e.g. nav-right grows once a user is logged in: basket + avatar/name +
+   Log Out vs. just Raffles + Login when logged out). */
 nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   height: 140px;
 }
+
+.nav-left { justify-self: end; }
+.nav-right { justify-self: start; }
+.logo { justify-self: center; }
 
 .logo {
   display: flex;
