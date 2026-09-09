@@ -1733,7 +1733,6 @@ nav {
 
 .nav-left { justify-self: end; }
 .nav-right { justify-self: start; }
-.logo { justify-self: center; }
 
 .logo {
   display: flex;
