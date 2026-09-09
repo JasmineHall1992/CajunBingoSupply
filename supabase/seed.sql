@@ -27,7 +27,7 @@ insert into public.products (id, name, form_label, category, price_display, img_
   {"label":"Cards per deal","value":"385","style":"default"},
   {"label":"Takes in","value":"$385.00","style":"default"},
   {"label":"Duck Winner","value":"$200","style":"highlight"},
-  {"label":"Bingo Winner","value":"$50","style":"default"},
+  {"label":"Ball Winner","value":"$50","style":"default"},
   {"label":"Payout","value":"71.17%","style":"default"},
   {"label":"Gross Profit","value":"$111.00","style":"gross"}
 ]'::jsonb, 30),
@@ -36,7 +36,7 @@ insert into public.products (id, name, form_label, category, price_display, img_
   {"label":"Cards per deal","value":"630","style":"default"},
   {"label":"Takes in","value":"$630.00","style":"default"},
   {"label":"Duck Winner","value":"$300","style":"highlight"},
-  {"label":"Bingo Winner","value":"$100","style":"default"},
+  {"label":"Ball Winner","value":"$100","style":"default"},
   {"label":"Payout","value":"70.48%","style":"default"},
   {"label":"Gross Profit","value":"$186.00","style":"gross"}
 ]'::jsonb, 40),
@@ -45,7 +45,7 @@ insert into public.products (id, name, form_label, category, price_display, img_
   {"label":"Cards per deal","value":"945","style":"default"},
   {"label":"Takes in","value":"$945.00","style":"default"},
   {"label":"Duck Winner","value":"$500","style":"highlight"},
-  {"label":"Bingo Winner","value":"$100","style":"default"},
+  {"label":"Ball Winner","value":"$100","style":"default"},
   {"label":"Payout","value":"71.96%","style":"default"},
   {"label":"Gross Profit","value":"$265.00","style":"gross"}
 ]'::jsonb, 50),
