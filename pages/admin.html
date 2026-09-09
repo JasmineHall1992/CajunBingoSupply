@@ -67,6 +67,7 @@
           <button class="admin-nav-item active" id="tabbtn-pending" onclick="switchAdminTab('pending')"><i data-lucide="user-plus"></i> Pending Signups</button>
           <button class="admin-nav-item" id="tabbtn-users" onclick="switchAdminTab('users')"><i data-lucide="users"></i> All Users</button>
           <button class="admin-nav-item" id="tabbtn-catalog" onclick="switchAdminTab('catalog')"><i data-lucide="package"></i> Catalog</button>
+          <button class="admin-nav-item" id="tabbtn-sales" onclick="switchAdminTab('sales')"><i data-lucide="trending-up"></i> Product Sales</button>
           <button class="admin-nav-item" id="tabbtn-activity" onclick="switchAdminTab('activity')"><i data-lucide="activity"></i> Activity Log</button>
           <button class="admin-nav-item" id="tabbtn-settings" onclick="switchAdminTab('settings')"><i data-lucide="settings"></i> Settings</button>
         </nav>
@@ -156,6 +157,19 @@
           </div>
         </div>
 
+        <!-- Product Sales -->
+        <div id="tab-sales" class="admin-tab-panel" style="display:none">
+          <div class="admin-summary" id="sales-summary"></div>
+          <p class="account-section-label">Sales by Product</p>
+          <p style="color:#666; font-size:0.85rem; margin:0.25rem 0 1rem;">Based on orders submitted through the contact form's basket checkout. Sorted highest to lowest — anything showing 0 hasn't sold yet.</p>
+          <div style="overflow-x:auto">
+            <table class="admin-table" id="sales-table">
+              <thead><tr><th>Product</th><th>Category</th><th>Times Ordered</th><th>Units Ordered</th></tr></thead>
+              <tbody id="sales-body"></tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- Activity Log -->
         <div id="tab-activity" class="admin-tab-panel" style="display:none">
           <div class="admin-summary" id="admin-summary"></div>
@@ -221,13 +235,14 @@
     })();
 
     function switchAdminTab(tab) {
-      ['pending', 'users', 'catalog', 'activity', 'settings'].forEach(t => {
+      ['pending', 'users', 'catalog', 'sales', 'activity', 'settings'].forEach(t => {
         document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
         document.getElementById('tabbtn-' + t).classList.toggle('active', t === tab);
       });
       if (tab === 'pending') loadPending();
       if (tab === 'users') loadUsers();
       if (tab === 'catalog') loadCatalog();
+      if (tab === 'sales') loadSales();
       if (tab === 'activity') loadActivity();
       if (tab === 'settings') loadSettings();
     }
@@ -465,6 +480,71 @@
       if (error) return alert('Save failed: ' + error.message);
       closeProductForm();
       loadCatalog();
+    }
+
+    // ---- Product Sales ----
+
+    async function loadSales() {
+      const [{ data: products }, { data: inquiries }] = await Promise.all([
+        supabase.from('products').select('id, name, category, form_label').eq('is_active', true),
+        supabase.from('inquiries').select('product_id, order_items')
+      ]);
+
+      const stats = {};
+      (products || []).forEach(p => {
+        stats[p.id] = { name: p.name, form_label: p.form_label, category: p.category, orders: 0, units: 0 };
+      });
+
+      let totalOrders = 0;
+      (inquiries || []).forEach(inq => {
+        const items = Array.isArray(inq.order_items) && inq.order_items.length > 0
+          ? inq.order_items
+          : (inq.product_id ? [{ product_id: inq.product_id, quantity: 1 }] : []);
+        if (items.length === 0) return;
+        totalOrders += 1;
+        items.forEach(item => {
+          const pid = item.product_id;
+          if (!pid) return;
+          if (!stats[pid]) {
+            // Not in the active catalog anymore (deactivated/deleted), but still shows up historically.
+            stats[pid] = { name: item.name || pid, form_label: item.form_label || '', category: '—', orders: 0, units: 0 };
+          }
+          stats[pid].orders += 1;
+          stats[pid].units += item.quantity || 1;
+        });
+      });
+
+      const rows = Object.values(stats).sort((a, b) => b.units - a.units);
+
+      document.getElementById('sales-body').innerHTML = rows.map(r => `
+        <tr${r.units === 0 ? ' style="opacity:0.5;"' : ''}>
+          <td>${r.name}${r.form_label ? ` <span class="form-badge">${r.form_label}</span>` : ''}</td>
+          <td>${r.category}</td>
+          <td>${r.orders}</td>
+          <td>${r.units}</td>
+        </tr>`).join('');
+
+      const totalUnits = rows.reduce((sum, r) => sum + r.units, 0);
+      const topSeller = rows.find(r => r.units > 0);
+
+      document.getElementById('sales-summary').innerHTML = `
+        <div class="admin-stat">
+          <div class="admin-stat-icon"><i data-lucide="shopping-basket"></i></div>
+          <p class="admin-stat-label">Total Orders</p>
+          <h4>${totalOrders}</h4>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-icon"><i data-lucide="package"></i></div>
+          <p class="admin-stat-label">Units Ordered</p>
+          <h4>${totalUnits}</h4>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat-icon"><i data-lucide="star"></i></div>
+          <p class="admin-stat-label">Top Seller</p>
+          <h4>${topSeller ? topSeller.units : 0}</h4>
+          <p class="admin-stat-sub">${topSeller ? topSeller.name : '—'}</p>
+        </div>`;
+      if (window.lucide) lucide.createIcons();
     }
 
     // ---- Activity Log ----
