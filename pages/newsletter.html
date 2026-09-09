@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Newsletter — Cajun Bingo Supply</title>
+  <link rel="icon" type="image/png" href="../images/logo.png" />
+  <meta property="og:title" content="Newsletter — Cajun Bingo Supply" />
+  <meta property="og:description" content="Announcements, giveaways, and free drawings from Cajun Bingo Supply." />
+  <meta property="og:image" content="https://cajunbingosupply.com/images/logo-social-preview.png" />
+  <meta property="og:url" content="https://cajunbingosupply.com/pages/newsletter.html" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css" />
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xb62v217zr");
+  </script>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu"><i data-lucide="menu"></i></button>
+      <ul class="nav-left">
+        <li><a href="../index.html">Home</a></li>
+        <li class="nav-dropdown">
+          <a href="products.html">Premium Pull Tabs</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="pulltabs-coming-soon.html">Coming Soon</a></li>
+            <li><a href="pulltabs-out-of-stock.html">Out of Stock &mdash; In Production</a></li>
+            <li><a href="pulltabs-newest.html">Newest Tabs</a></li>
+            <li><a href="pulltabs-instants.html">Instants</a></li>
+          </ul>
+        </li>
+        <li><a href="newsletter.html">Newsletter</a></li>
+      </ul>
+      <a href="../index.html" class="logo" aria-label="Cajun Bingo Supply — Home"><img class="logo-badge" src="../images/logo.png" alt="Cajun Bingo Supply" /></a>
+      <ul class="nav-right">
+        <li><a href="raffles.html">Raffles</a></li>
+        <li><a id="nav-cart-link" href="contact.html" class="nav-cart-link" style="display:none;"><i data-lucide="shopping-basket"></i><span id="nav-cart-count" class="nav-cart-count">0</span></a></li>
+        <li><a id="nav-auth-link" href="login.html">Login</a></li>
+        <li><a id="nav-logout-link" href="javascript:void(0)" onclick="CBS.logoutRedirect()" style="display:none;">Log Out</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-header page-header-textured">
+      <i data-lucide="megaphone" class="page-header-icon"></i>
+      <h1>Newsletter</h1>
+      <p>Announcements, giveaways, and free drawings from Cajun Bingo Supply</p>
+    </section>
+
+    <section class="newsletter-feed">
+      <div id="newsletter-posts"></div>
+      <p id="newsletter-empty" style="display:none; text-align:center; color:#999; padding:3rem 1rem;">Nothing posted yet — check back soon!</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-name">Cajun Bingo Supply</span><span class="logo-est">Est. 1989</span></div>
+        <p>Your trusted partner since 1989</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="products.html">Catalog</a></li>
+          <li><a href="newsletter.html">Newsletter</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="about.html">About Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2026 Cajun Bingo Supply. All rights reserved.</p>
+  </footer>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    const POST_CATEGORY_LABELS = {
+      announcement: 'Announcement',
+      giveaway: 'Giveaway',
+      drawing: 'Free Drawing',
+      general: 'General'
+    };
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str || '';
+      return div.innerHTML;
+    }
+
+    function commentHtml(c) {
+      return `
+        <div class="newsletter-comment">
+          <p class="newsletter-comment-name">${escapeHtml(c.name)} <span class="newsletter-comment-date">${new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></p>
+          <p class="newsletter-comment-text">${escapeHtml(c.comment)}</p>
+        </div>`;
+    }
+
+    function postHtml(post) {
+      const comments = (post.newsletter_comments || []).slice().sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      return `
+        <article class="newsletter-post" data-post-id="${post.id}">
+          <span class="newsletter-badge newsletter-badge-${post.category}">${POST_CATEGORY_LABELS[post.category] || post.category}</span>
+          <h2>${escapeHtml(post.title)}</h2>
+          <p class="newsletter-post-date">${new Date(post.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          ${post.image_url ? `<img class="newsletter-post-image" src="${post.image_url}" alt="${escapeHtml(post.title)}" />` : ''}
+          <p class="newsletter-post-body">${escapeHtml(post.body)}</p>
+
+          <div class="newsletter-comments">
+            <p class="newsletter-comments-heading">${comments.length > 0 ? `${comments.length} Comment${comments.length === 1 ? '' : 's'}` : 'No comments yet'}</p>
+            <div class="newsletter-comments-list">${comments.map(commentHtml).join('')}</div>
+
+            <form class="newsletter-comment-form" onsubmit="submitComment(event, '${post.id}')">
+              <p class="auth-error" id="comment-error-${post.id}"></p>
+              <input type="text" placeholder="Your name" required maxlength="80" id="comment-name-${post.id}" />
+              <textarea placeholder="Leave a comment..." rows="2" required maxlength="1000" id="comment-text-${post.id}"></textarea>
+              <button type="submit" class="btn btn-sm">Post Comment</button>
+            </form>
+          </div>
+        </article>`;
+    }
+
+    async function loadPosts() {
+      const { data, error } = await supabase
+        .from('newsletter_posts')
+        .select('*, newsletter_comments(*)')
+        .eq('published', true)
+        .order('created_at', { ascending: false });
+
+      const container = document.getElementById('newsletter-posts');
+      if (error || !data || data.length === 0) {
+        document.getElementById('newsletter-empty').style.display = 'block';
+        return;
+      }
+      container.innerHTML = data.map(postHtml).join('');
+      lucide.createIcons();
+    }
+
+    async function submitComment(e, postId) {
+      e.preventDefault();
+      const errorEl = document.getElementById('comment-error-' + postId);
+      const nameEl = document.getElementById('comment-name-' + postId);
+      const textEl = document.getElementById('comment-text-' + postId);
+      errorEl.textContent = '';
+
+      const name = nameEl.value.trim();
+      const comment = textEl.value.trim();
+      if (!name || !comment) {
+        errorEl.textContent = 'Please fill in both fields.';
+        return;
+      }
+
+      const { error } = await supabase.from('newsletter_comments').insert({ post_id: postId, name, comment });
+      if (error) {
+        errorEl.textContent = 'Could not post your comment. Please try again.';
+        return;
+      }
+      nameEl.value = '';
+      textEl.value = '';
+      loadPosts();
+    }
+
+    loadPosts();
+  </script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

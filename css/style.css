@@ -1227,7 +1227,8 @@ footer {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
   padding: 0.7rem 1rem;
   border: 1px solid rgba(255,215,0,0.15);
   border-radius: 8px;
@@ -1235,15 +1236,20 @@ footer {
   font-family: inherit;
   background: rgba(255,255,255,0.05);
   color: #fff;
+  width: 100%;
   transition: border-color 0.2s, background 0.2s;
 }
 
+.form-group textarea { resize: vertical; }
+
 .form-group select option { background: #1a0f2a; color: #fff; }
 
-.form-group input::placeholder { color: rgba(255,255,255,0.22); }
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: rgba(255,255,255,0.22); }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: rgba(255,215,0,0.5);
   background: rgba(255,255,255,0.08);
@@ -2797,7 +2803,8 @@ body.home .hero {
 #admin-dashboard .form-group label { color: #6b7280; }
 
 #admin-dashboard .form-group input,
-#admin-dashboard .form-group select {
+#admin-dashboard .form-group select,
+#admin-dashboard .form-group textarea {
   background: #fff;
   color: #1f2430;
   border: 1px solid #ddd;
@@ -2806,7 +2813,8 @@ body.home .hero {
 #admin-dashboard .form-group select option { background: #fff; color: #1f2430; }
 
 #admin-dashboard .form-group input:focus,
-#admin-dashboard .form-group select:focus {
+#admin-dashboard .form-group select:focus,
+#admin-dashboard .form-group textarea:focus {
   border-color: #8b0000;
   background: #fff;
 }
@@ -2885,3 +2893,129 @@ body.home .hero {
     border-top: 1px solid rgba(255,255,255,0.08);
   }
 }
+
+/* Newsletter feed */
+.newsletter-feed {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.newsletter-post {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+  padding: 2rem;
+}
+
+.newsletter-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.newsletter-badge-announcement { background: #fdecea; color: #8b0000; }
+.newsletter-badge-giveaway { background: #e8f5e9; color: #2e7d32; }
+.newsletter-badge-drawing { background: #ede7f6; color: #5e35b1; }
+.newsletter-badge-general { background: #eceff1; color: #546e7a; }
+
+.newsletter-post h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+}
+
+.newsletter-post-date { color: #999; font-size: 0.85rem; margin-bottom: 1rem; }
+
+.newsletter-post-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.newsletter-post-body {
+  color: #333;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  margin-bottom: 1.5rem;
+}
+
+.newsletter-comments {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 1.25rem;
+}
+
+.newsletter-comments-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 1rem;
+}
+
+.newsletter-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.newsletter-comment {
+  background: #faf9f7;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+}
+
+.newsletter-comment-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+}
+
+.newsletter-comment-date {
+  font-weight: 400;
+  color: #aaa;
+  font-size: 0.75rem;
+  margin-left: 0.4rem;
+}
+
+.newsletter-comment-text { color: #444; font-size: 0.9rem; line-height: 1.6; }
+
+.newsletter-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.newsletter-comment-form input,
+.newsletter-comment-form textarea {
+  padding: 0.65rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  width: 100%;
+  resize: vertical;
+}
+
+.newsletter-comment-form input:focus,
+.newsletter-comment-form textarea:focus {
+  outline: 2px solid #FFD700;
+  border-color: transparent;
+}
+
+.newsletter-comment-form button { align-self: flex-start; }

@@ -43,3 +43,23 @@ create policy "avatars_own_update" on storage.objects
 
 create policy "avatars_own_delete" on storage.objects
   for delete using (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- ============================================================
+-- Storage bucket for newsletter post images
+-- ============================================================
+
+insert into storage.buckets (id, name, public)
+values ('newsletter', 'newsletter', true)
+on conflict (id) do nothing;
+
+create policy "newsletter_public_read" on storage.objects
+  for select using (bucket_id = 'newsletter');
+
+create policy "newsletter_admin_insert" on storage.objects
+  for insert with check (bucket_id = 'newsletter' and public.is_admin());
+
+create policy "newsletter_admin_update" on storage.objects
+  for update using (bucket_id = 'newsletter' and public.is_admin());
+
+create policy "newsletter_admin_delete" on storage.objects
+  for delete using (bucket_id = 'newsletter' and public.is_admin());

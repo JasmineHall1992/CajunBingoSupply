@@ -38,6 +38,7 @@
             <li><a href="pulltabs-instants.html">Instants</a></li>
           </ul>
         </li>
+        <li><a href="newsletter.html">Newsletter</a></li>
       </ul>
       <a href="../index.html" class="logo" aria-label="Cajun Bingo Supply — Home"><img class="logo-badge" src="../images/logo.png" alt="Cajun Bingo Supply" /></a>
       <ul class="nav-right">
@@ -68,6 +69,7 @@
           <button class="admin-nav-item" id="tabbtn-users" onclick="switchAdminTab('users')"><i data-lucide="users"></i> All Users</button>
           <button class="admin-nav-item" id="tabbtn-catalog" onclick="switchAdminTab('catalog')"><i data-lucide="package"></i> Catalog</button>
           <button class="admin-nav-item" id="tabbtn-sales" onclick="switchAdminTab('sales')"><i data-lucide="trending-up"></i> Product Sales</button>
+          <button class="admin-nav-item" id="tabbtn-newsletter" onclick="switchAdminTab('newsletter')"><i data-lucide="megaphone"></i> Newsletter</button>
           <button class="admin-nav-item" id="tabbtn-activity" onclick="switchAdminTab('activity')"><i data-lucide="activity"></i> Activity Log</button>
           <button class="admin-nav-item" id="tabbtn-settings" onclick="switchAdminTab('settings')"><i data-lucide="settings"></i> Settings</button>
         </nav>
@@ -170,6 +172,60 @@
           </div>
         </div>
 
+        <!-- Newsletter -->
+        <div id="tab-newsletter" class="admin-tab-panel" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+            <p class="account-section-label" style="margin:0">Posts</p>
+            <button class="btn btn-sm" onclick="openPostForm()">+ New Post</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table" id="newsletter-posts-table">
+              <thead><tr><th>Title</th><th>Category</th><th>Published</th><th>Posted</th><th>Actions</th></tr></thead>
+              <tbody id="newsletter-posts-body"></tbody>
+            </table>
+          </div>
+
+          <div id="post-form-wrap" style="display:none; margin-top:2rem; border-top:1px solid #eee; padding-top:1.5rem;">
+            <h3 id="post-form-title">New Post</h3>
+            <input type="hidden" id="pf-post-id" />
+            <div class="form-group"><label>Title</label><input type="text" id="pf-post-title" placeholder="e.g. Friday Night Free Drawing!" /></div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="pf-post-category">
+                <option value="announcement">Announcement</option>
+                <option value="giveaway">Giveaway</option>
+                <option value="drawing">Free Drawing</option>
+                <option value="general">General</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Body</label><textarea id="pf-post-body" rows="6" placeholder="Write the post..."></textarea></div>
+            <div class="form-group">
+              <label>Image (optional)</label>
+              <input type="file" id="pf-post-image-file" accept="image/*" onchange="uploadPostImage(this)" />
+              <p id="pf-post-image-status" style="font-size:0.8rem;color:#888;margin-top:0.35rem;"></p>
+              <a id="pf-post-image-link" href="#" target="_blank" style="font-size:0.85rem;display:none;">View current image</a>
+              <input type="text" id="pf-post-image" placeholder="or paste an image URL directly" style="margin-top:0.5rem;" />
+            </div>
+            <div class="form-group">
+              <label><input type="checkbox" id="pf-post-published" checked style="width:auto;margin-right:0.5rem;" /> Published (visible on the site)</label>
+            </div>
+            <div style="margin-top:1.5rem;display:flex;gap:0.75rem;">
+              <button class="btn" onclick="savePost()">Save Post</button>
+              <button class="btn btn-outline-dark" onclick="closePostForm()">Cancel</button>
+            </div>
+          </div>
+
+          <p class="account-section-label" style="margin-top:2.5rem;">Comments</p>
+          <p style="color:#666; font-size:0.85rem; margin:0.25rem 0 1rem;">Anyone can comment without an account — hide or delete anything inappropriate.</p>
+          <div style="overflow-x:auto">
+            <table class="admin-table" id="newsletter-comments-table">
+              <thead><tr><th>Post</th><th>Name</th><th>Comment</th><th>Posted</th><th>Actions</th></tr></thead>
+              <tbody id="newsletter-comments-body"></tbody>
+            </table>
+            <p id="no-comments" style="text-align:center;padding:3rem;color:#aaa;display:none">No comments yet.</p>
+          </div>
+        </div>
+
         <!-- Activity Log -->
         <div id="tab-activity" class="admin-tab-panel" style="display:none">
           <div class="admin-summary" id="admin-summary"></div>
@@ -235,7 +291,7 @@
     })();
 
     function switchAdminTab(tab) {
-      ['pending', 'users', 'catalog', 'sales', 'activity', 'settings'].forEach(t => {
+      ['pending', 'users', 'catalog', 'sales', 'newsletter', 'activity', 'settings'].forEach(t => {
         document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
         document.getElementById('tabbtn-' + t).classList.toggle('active', t === tab);
       });
@@ -243,6 +299,7 @@
       if (tab === 'users') loadUsers();
       if (tab === 'catalog') loadCatalog();
       if (tab === 'sales') loadSales();
+      if (tab === 'newsletter') loadNewsletter();
       if (tab === 'activity') loadActivity();
       if (tab === 'settings') loadSettings();
     }
@@ -545,6 +602,165 @@
           <p class="admin-stat-sub">${topSeller ? topSeller.name : '—'}</p>
         </div>`;
       if (window.lucide) lucide.createIcons();
+    }
+
+    // ---- Newsletter ----
+
+    const POST_CATEGORY_LABELS = {
+      announcement: 'Announcement',
+      giveaway: 'Giveaway',
+      drawing: 'Free Drawing',
+      general: 'General'
+    };
+
+    async function loadNewsletter() {
+      loadNewsletterPosts();
+      loadNewsletterComments();
+    }
+
+    async function loadNewsletterPosts() {
+      const { data } = await supabase.from('newsletter_posts').select('*').order('created_at', { ascending: false });
+      const rows = data || [];
+      document.getElementById('newsletter-posts-body').innerHTML = rows.map(p => `
+        <tr>
+          <td>${p.title}</td>
+          <td>${POST_CATEGORY_LABELS[p.category] || p.category}</td>
+          <td>${p.published ? 'Yes' : 'No'}</td>
+          <td>${new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+          <td>
+            <button class="btn btn-sm" onclick='openPostForm(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Edit</button>
+            <button class="btn btn-sm btn-outline-dark" onclick="togglePostPublished('${p.id}', ${p.published})">${p.published ? 'Unpublish' : 'Publish'}</button>
+            <button class="btn btn-sm btn-danger" onclick="deletePost('${p.id}')">Delete</button>
+          </td>
+        </tr>`).join('');
+    }
+
+    async function togglePostPublished(id, current) {
+      await supabase.from('newsletter_posts').update({ published: !current }).eq('id', id);
+      loadNewsletterPosts();
+    }
+
+    async function deletePost(id) {
+      if (!confirm('Delete this post? Its comments will be deleted too. This cannot be undone.')) return;
+      await supabase.from('newsletter_posts').delete().eq('id', id);
+      loadNewsletterPosts();
+    }
+
+    function openPostForm(post) {
+      document.getElementById('post-form-wrap').style.display = 'block';
+      document.getElementById('post-form-title').textContent = post ? 'Edit Post' : 'New Post';
+      document.getElementById('pf-post-id').value = post ? post.id : '';
+      document.getElementById('pf-post-title').value = post ? post.title : '';
+      document.getElementById('pf-post-category').value = post ? post.category : 'announcement';
+      document.getElementById('pf-post-body').value = post ? post.body : '';
+      document.getElementById('pf-post-image').value = post ? (post.image_url || '') : '';
+      document.getElementById('pf-post-image-file').value = '';
+      document.getElementById('pf-post-image-status').textContent = '';
+      document.getElementById('pf-post-published').checked = post ? post.published : true;
+      const imageLink = document.getElementById('pf-post-image-link');
+      if (post && post.image_url) {
+        imageLink.href = post.image_url;
+        imageLink.style.display = 'inline';
+      } else {
+        imageLink.style.display = 'none';
+      }
+      document.getElementById('post-form-wrap').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closePostForm() {
+      document.getElementById('post-form-wrap').style.display = 'none';
+    }
+
+    async function uploadPostImage(inputEl) {
+      const file = inputEl.files[0];
+      if (!file) return;
+
+      const statusEl = document.getElementById('pf-post-image-status');
+      statusEl.textContent = 'Uploading...';
+
+      const ext = file.name.split('.').pop();
+      const path = `post-${Date.now()}.${ext}`;
+
+      const { error } = await supabase.storage.from('newsletter').upload(path, file, { upsert: true });
+      if (error) {
+        statusEl.textContent = 'Upload failed: ' + error.message;
+        return;
+      }
+
+      const { data } = supabase.storage.from('newsletter').getPublicUrl(path);
+      document.getElementById('pf-post-image').value = data.publicUrl;
+      const imageLink = document.getElementById('pf-post-image-link');
+      imageLink.href = data.publicUrl;
+      imageLink.style.display = 'inline';
+      statusEl.textContent = 'Uploaded — ' + file.name;
+    }
+
+    async function savePost() {
+      const id = document.getElementById('pf-post-id').value;
+      const title = document.getElementById('pf-post-title').value.trim();
+      const body = document.getElementById('pf-post-body').value.trim();
+      if (!title || !body) return alert('Title and body are required.');
+
+      const admin = await CBS.currentUser();
+      const payload = {
+        title,
+        category: document.getElementById('pf-post-category').value,
+        body,
+        image_url: document.getElementById('pf-post-image').value.trim() || null,
+        published: document.getElementById('pf-post-published').checked
+      };
+
+      let error;
+      if (id) {
+        ({ error } = await supabase.from('newsletter_posts').update(payload).eq('id', id));
+      } else {
+        payload.created_by = admin ? admin.id : null;
+        ({ error } = await supabase.from('newsletter_posts').insert(payload));
+      }
+      if (error) return alert('Save failed: ' + error.message);
+      closePostForm();
+      loadNewsletterPosts();
+    }
+
+    async function loadNewsletterComments() {
+      const { data } = await supabase
+        .from('newsletter_comments')
+        .select('*, newsletter_posts(title)')
+        .order('created_at', { ascending: false });
+      const rows = data || [];
+      const tbody = document.getElementById('newsletter-comments-body');
+      const noComments = document.getElementById('no-comments');
+
+      if (rows.length === 0) {
+        tbody.innerHTML = '';
+        noComments.style.display = 'block';
+        document.querySelector('#newsletter-comments-table thead').style.display = 'none';
+        return;
+      }
+      noComments.style.display = 'none';
+      document.querySelector('#newsletter-comments-table thead').style.display = '';
+      tbody.innerHTML = rows.map(c => `
+        <tr${c.hidden ? ' style="opacity:0.5;"' : ''}>
+          <td>${c.newsletter_posts ? c.newsletter_posts.title : '(deleted post)'}</td>
+          <td>${c.name}</td>
+          <td>${c.comment}</td>
+          <td>${new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-dark" onclick="toggleCommentHidden('${c.id}', ${c.hidden})">${c.hidden ? 'Unhide' : 'Hide'}</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteComment('${c.id}')">Delete</button>
+          </td>
+        </tr>`).join('');
+    }
+
+    async function toggleCommentHidden(id, current) {
+      await supabase.from('newsletter_comments').update({ hidden: !current }).eq('id', id);
+      loadNewsletterComments();
+    }
+
+    async function deleteComment(id) {
+      if (!confirm('Delete this comment? This cannot be undone.')) return;
+      await supabase.from('newsletter_comments').delete().eq('id', id);
+      loadNewsletterComments();
     }
 
     // ---- Activity Log ----
