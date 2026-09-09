@@ -187,10 +187,17 @@
       document.getElementById('noResults').style.display = list.length === 0 ? 'block' : 'none';
     }
 
+    const STATUS_TAG_SEARCH_LABELS = {
+      coming_soon: 'coming soon',
+      out_of_stock_production: 'out of stock in production',
+      newest: 'newest',
+      instant: 'instants instant'
+    };
+
     function filterProducts() {
       const query = document.getElementById('searchInput').value.toLowerCase();
       renderProducts(allProducts.filter(p =>
-        (p.name + ' ' + (p.form_label || '') + ' ' + p.category).toLowerCase().includes(query)
+        (p.name + ' ' + (p.form_label || '') + ' ' + p.category + ' ' + (STATUS_TAG_SEARCH_LABELS[p.status_tag] || '')).toLowerCase().includes(query)
       ));
     }
 
