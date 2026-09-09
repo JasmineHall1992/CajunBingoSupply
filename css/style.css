@@ -248,21 +248,6 @@ nav {
   flex-wrap: wrap;
 }
 
-.hero-social {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.hero-social a {
-  color: #aaa;
-  font-size: 0.9rem;
-  transition: color 0.2s;
-}
-
-.hero-social a:hover { color: #FFD700; }
-
 .family-badge {
   display: inline-flex;
   align-items: center;
@@ -409,7 +394,7 @@ footer {
 
 .footer-inner {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 2rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -427,8 +412,7 @@ footer {
 
 .footer-brand p { color: #666; }
 
-.footer-links h4,
-.footer-social h4 {
+.footer-links h4 {
   color: #fff;
   font-size: 0.875rem;
   text-transform: uppercase;
@@ -436,22 +420,19 @@ footer {
   margin-bottom: 1rem;
 }
 
-.footer-links ul,
-.footer-social ul {
+.footer-links ul {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.footer-links a,
-.footer-social a {
+.footer-links a {
   color: #888;
   transition: color 0.2s;
 }
 
-.footer-links a:hover,
-.footer-social a:hover { color: #FFD700; }
+.footer-links a:hover { color: #FFD700; }
 
 .footer-copy {
   text-align: center;
@@ -1932,9 +1913,6 @@ body.home .hero {
   line-height: 1.85;
 }
 
-.hero-social a { color: rgba(255,255,255,0.8); }
-.hero-social a:hover { color: #FFD700; }
-
 .family-badge {
   border: 1px solid rgba(255,215,0,0.42);
   color: #FFD700;
@@ -2425,26 +2403,12 @@ body.home .hero {
   stroke-width: 1.5;
 }
 
-.hero-social a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-.hero-social svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-}
-
-.footer-social li a,
 .footer-links li a {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
 }
 
-.footer-social svg,
 .footer-links svg {
   width: 13px;
   height: 13px;
