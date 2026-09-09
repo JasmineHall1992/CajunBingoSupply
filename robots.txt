@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /pages/admin.html
+Disallow: /pages/account.html
+Disallow: /pages/login.html
+Disallow: /pages/reset-password.html
+
+Sitemap: https://cajunbingosupply.com/sitemap.xml
