@@ -118,7 +118,6 @@
           <div id="product-form-wrap" style="display:none; margin-top:2rem; border-top:1px solid #eee; padding-top:1.5rem;">
             <h3 id="product-form-title">Add Product</h3>
             <input type="hidden" id="pf-original-id" />
-            <div class="form-group"><label>ID (slug — can't change after creation)</label><input type="text" id="pf-id" placeholder="e.g. KB2" /></div>
             <div class="form-group"><label>Name</label><input type="text" id="pf-name" placeholder="e.g. Killer Bees" /></div>
             <div class="form-group"><label>Form / item label</label><input type="text" id="pf-form-label" placeholder="e.g. Form KB2" /></div>
             <div class="form-group">
@@ -339,8 +338,6 @@
       document.getElementById('product-form-wrap').style.display = 'block';
       document.getElementById('product-form-title').textContent = product ? 'Edit Product' : 'Add Product';
       document.getElementById('pf-original-id').value = product ? product.id : '';
-      document.getElementById('pf-id').value = product ? product.id : '';
-      document.getElementById('pf-id').disabled = !!product;
       document.getElementById('pf-name').value = product ? product.name : '';
       document.getElementById('pf-form-label').value = product ? (product.form_label || '') : '';
       document.getElementById('pf-category').value = product ? product.category : 'pull-tab';
@@ -375,7 +372,9 @@
       const statusEl = document.getElementById('pf-flyer-status');
       statusEl.textContent = 'Uploading...';
 
-      const productId = document.getElementById('pf-id').value.trim() || 'product';
+      const productId = document.getElementById('pf-original-id').value.trim()
+        || slugify(document.getElementById('pf-name').value)
+        || 'product';
       const ext = file.name.split('.').pop();
       const path = `${productId}-${Date.now()}.${ext}`;
 
@@ -418,14 +417,35 @@
       renderPayoutRowsEditor();
     }
 
+    function slugify(str) {
+      return (str || '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+
+    async function generateUniqueProductId(name) {
+      const base = slugify(name) || 'product';
+      let candidate = base;
+      let suffix = 1;
+      while (true) {
+        const { data } = await supabase.from('products').select('id').eq('id', candidate).maybeSingle();
+        if (!data) return candidate;
+        suffix += 1;
+        candidate = `${base}-${suffix}`;
+      }
+    }
+
     async function saveProduct() {
       const originalId = document.getElementById('pf-original-id').value;
-      const id = document.getElementById('pf-id').value.trim();
-      if (!id) return alert('Product ID is required.');
+      const name = document.getElementById('pf-name').value.trim();
+      if (!name) return alert('Product name is required.');
+      const id = originalId || await generateUniqueProductId(name);
 
       const payload = {
         id,
-        name: document.getElementById('pf-name').value.trim(),
+        name,
         form_label: document.getElementById('pf-form-label').value.trim(),
         category: document.getElementById('pf-category').value,
         status_tag: document.getElementById('pf-status-tag').value || null,
