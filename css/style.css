@@ -475,7 +475,8 @@ footer {
 
 .page-header-pulltabs,
 .page-header-raffles,
-.page-header-account {
+.page-header-account,
+.page-header-dabbers {
   background-size: cover;
   background-position: center;
   position: relative;
@@ -483,7 +484,8 @@ footer {
 
 .page-header-pulltabs::before,
 .page-header-raffles::before,
-.page-header-account::before {
+.page-header-account::before,
+.page-header-dabbers::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -496,7 +498,9 @@ footer {
 .page-header-raffles p,
 .page-header-account h1,
 .page-header-account p,
-.page-header-account .page-header-icon {
+.page-header-account .page-header-icon,
+.page-header-dabbers h1,
+.page-header-dabbers p {
   position: relative;
   z-index: 1;
 }
@@ -511,6 +515,10 @@ footer {
 
 .page-header-account {
   background-image: url('../images/account-header.jpg');
+}
+
+.page-header-dabbers {
+  background-image: url('../images/dabbers-header.jpg');
 }
 
 .page-header-video {
