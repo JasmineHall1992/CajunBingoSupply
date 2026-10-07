@@ -476,7 +476,6 @@ footer {
 .page-header-pulltabs,
 .page-header-raffles,
 .page-header-account,
-.page-header-dabbers,
 .page-header-advocacy {
   background-size: cover;
   background-position: center;
@@ -486,7 +485,6 @@ footer {
 .page-header-pulltabs::before,
 .page-header-raffles::before,
 .page-header-account::before,
-.page-header-dabbers::before,
 .page-header-advocacy::before {
   content: '';
   position: absolute;
@@ -501,8 +499,6 @@ footer {
 .page-header-account h1,
 .page-header-account p,
 .page-header-account .page-header-icon,
-.page-header-dabbers h1,
-.page-header-dabbers p,
 .page-header-advocacy h1,
 .page-header-advocacy p,
 .page-header-advocacy .page-header-icon {
@@ -524,10 +520,6 @@ footer {
 
 .page-header-advocacy {
   background-image: url('../images/advocacy-header.jpg');
-}
-
-.page-header-dabbers {
-  background-image: url('../images/dabbers-header.jpg');
 }
 
 .page-header-video {
