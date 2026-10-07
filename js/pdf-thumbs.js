@@ -1,7 +1,8 @@
 // Shared PDF.js thumbnail rendering — draws page 1 of a PDF flyer onto a
-// canvas, scaled/cropped to fill it (the canvas equivalent of object-fit:
-// cover for an <img>). Used anywhere a flyer preview needs to look like a
-// real image instead of an embedded PDF viewer (which shows its own native
+// canvas, scaled to fit entirely within it (the canvas equivalent of
+// object-fit: contain for an <img>), letterboxed on whichever axis has
+// leftover space. Used anywhere a flyer preview needs to look like a real
+// image instead of an embedded PDF viewer (which shows its own native
 // scrollbar/controls when the page is taller than the preview box).
 //
 // Requires pdfjs-dist's pdf.min.js to be loaded first, and this script to
@@ -17,10 +18,12 @@ async function renderPdfThumb(url, canvas, targetW, targetH, onError) {
       const pdf = await pdfjsLib.getDocument(url).promise;
       const page = await pdf.getPage(1);
       const baseViewport = page.getViewport({ scale: 1 });
-      const scale = Math.max(targetW / baseViewport.width, targetH / baseViewport.height);
+      const scale = Math.min(targetW / baseViewport.width, targetH / baseViewport.height);
       const viewport = page.getViewport({ scale });
       const ctx = canvas.getContext('2d');
-      ctx.translate(-(viewport.width - targetW) / 2, -(viewport.height - targetH) / 2);
+      ctx.fillStyle = '#f4f4f4';
+      ctx.fillRect(0, 0, targetW, targetH);
+      ctx.translate((targetW - viewport.width) / 2, (targetH - viewport.height) / 2);
       await page.render({ canvasContext: ctx, viewport }).promise;
     })();
     await Promise.race([render, timeout]);
