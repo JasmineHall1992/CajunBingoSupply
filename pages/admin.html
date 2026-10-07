@@ -151,7 +151,6 @@
               </select>
             </div>
             <div class="form-group"><label>Price display</label><input type="text" id="pf-price" placeholder="e.g. $1.00 per card" /></div>
-            <div class="form-group"><label>Image CSS class</label><input type="text" id="pf-img-class" placeholder="e.g. kb-img" /></div>
             <div class="form-group">
               <label>Flyer (PDF or image)</label>
               <input type="file" id="pf-flyer-file" accept="application/pdf,image/*" onchange="uploadFlyer(this)" />
@@ -433,7 +432,6 @@
       document.getElementById('pf-category').value = product ? product.category : 'pull-tab';
       document.getElementById('pf-status-tag').value = product ? (product.status_tag || '') : '';
       document.getElementById('pf-price').value = product ? product.price_display : '';
-      document.getElementById('pf-img-class').value = product ? (product.img_class || '') : '';
       document.getElementById('pf-flyer').value = product ? (product.flyer_path || '') : '';
       document.getElementById('pf-flyer-file').value = '';
       document.getElementById('pf-flyer-status').textContent = '';
@@ -540,7 +538,6 @@
         category: document.getElementById('pf-category').value,
         status_tag: document.getElementById('pf-status-tag').value || null,
         price_display: document.getElementById('pf-price').value.trim(),
-        img_class: document.getElementById('pf-img-class').value.trim(),
         flyer_path: document.getElementById('pf-flyer').value.trim(),
         sort_order: parseInt(document.getElementById('pf-sort').value, 10) || 0,
         payout_rows: editingPayoutRows
