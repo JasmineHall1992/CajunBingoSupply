@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coming Soon Pull Tabs | Cajun Bingo Supply</title>
-  <meta name="description" content="Preview upcoming pull tab games from Cajun Bingo Supply before they hit the catalog." />
+  <title>Dab Tickets — Cajun Bingo Supply</title>
+  <meta name="description" content="Dab ticket pull tab games from Louisiana's #1 Pull Tab Supplier." />
   <link rel="icon" type="image/png" href="../images/logo.png" />
-  <meta property="og:title" content="Coming Soon — Cajun Bingo Supply" />
-  <meta property="og:description" content="New pull tab games on the way from Louisiana's #1 Pull Tab Supplier." />
+  <meta property="og:title" content="Dab Tickets — Cajun Bingo Supply" />
+  <meta property="og:description" content="Dab ticket pull tab games from Louisiana's #1 Pull Tab Supplier." />
   <meta property="og:image" content="https://cajunbingosupply.com/images/logo-social-preview.png" />
-  <meta property="og:url" content="https://cajunbingosupply.com/pages/pulltabs-coming-soon.html" />
+  <meta property="og:url" content="https://cajunbingosupply.com/pages/pulltabs-dab-tickets.html" />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,8 +60,8 @@
 
   <main>
     <section class="page-header page-header-pulltabs">
-      <h1>Coming Soon</h1>
-      <p>New pull tab games on the way — check back soon for release dates.</p>
+      <h1>Dab Tickets</h1>
+      <p>Browse our dab ticket pull tab games.</p>
     </section>
 
     <!-- Search bar -->
@@ -76,7 +76,7 @@
 
     <section class="product-grid" id="productGrid"></section>
 
-    <p class="no-results" id="noResults" style="display:none;">Nothing marked Coming Soon right now — check back soon.</p>
+    <p class="no-results" id="noResults" style="display:none;">No Dab Tickets listed yet.</p>
 
   </main>
 
@@ -195,10 +195,17 @@
       document.getElementById('noResults').style.display = list.length === 0 ? 'block' : 'none';
     }
 
+    const STATUS_TAG_SEARCH_LABELS = {
+      coming_soon: 'coming soon',
+      out_of_stock_production: 'out of stock in production',
+      newest: 'newest',
+      instant: 'instants instant'
+    };
+
     function filterProducts() {
       const query = document.getElementById('searchInput').value.toLowerCase();
       renderProducts(allProducts.filter(p =>
-        (p.name + ' ' + (p.form_label || '') + ' ' + p.category).toLowerCase().includes(query)
+        (p.name + ' ' + (p.form_label || '') + ' ' + p.category + ' ' + (STATUS_TAG_SEARCH_LABELS[p.status_tag] || '')).toLowerCase().includes(query)
       ));
     }
 
@@ -252,7 +259,7 @@
 
       const [favs, { data }] = await Promise.all([
         CBS.getUserFavorites(user),
-        supabase.from('products').select('*').eq('category', 'pull-tab').eq('status_tag', 'coming_soon').order('sort_order')
+        supabase.from('products').select('*').eq('category', 'pull-tab').eq('status_tag', 'dab_tickets').order('sort_order')
       ]);
       favoriteIds = new Set(favs.map(f => f.product_id));
       allProducts = data || [];

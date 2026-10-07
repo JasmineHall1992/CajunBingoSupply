@@ -13,6 +13,10 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://cajunbingosupply.com/pages/dabbers.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://cajunbingosupply.com/pages/contact.html</loc>
     <priority>0.8</priority>
   </url>
@@ -43,5 +47,25 @@
   <url>
     <loc>https://cajunbingosupply.com/pages/pulltabs-out-of-stock.html</loc>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://cajunbingosupply.com/pages/pulltabs-all-plays.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://cajunbingosupply.com/pages/pulltabs-dab-tickets.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://cajunbingosupply.com/pages/pulltabs-horse-races.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://cajunbingosupply.com/pages/pulltabs-progressives.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://cajunbingosupply.com/pages/pulltabs-seasonal.html</loc>
+    <priority>0.6</priority>
   </url>
 </urlset>

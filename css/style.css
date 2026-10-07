@@ -722,7 +722,13 @@ footer {
 
 .flyer-preview:hover { opacity: 0.85; }
 
-.flyer-preview img,
+.flyer-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
 .flyer-preview canvas {
   width: 100%;
   height: 100%;
