@@ -612,7 +612,7 @@ footer {
 
 /* Product image banners */
 .product-img {
-  height: 260px;
+  height: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -721,7 +721,7 @@ footer {
 }
 
 .flyer-preview {
-  height: 260px;
+  height: 360px;
   overflow: hidden;
   cursor: pointer;
   background: #f4f4f4;
