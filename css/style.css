@@ -2216,6 +2216,9 @@ body.home .hero {
   line-height: 1.7;
 }
 
+.team-bio a { color: #FFD700; font-weight: 600; }
+.team-bio a:hover { text-decoration: underline; }
+
 @media (max-width: 700px) {
   .team-zigzag { gap: 3rem; }
   .team-row, .team-row-reverse {
