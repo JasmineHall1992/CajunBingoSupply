@@ -260,7 +260,7 @@
 
       const [favs, { data }] = await Promise.all([
         CBS.getUserFavorites(user),
-        supabase.from('products').select('*').eq('category', 'dabber').order('sort_order')
+        supabase.from('products').select('*').eq('category', 'dabber').order('name')
       ]);
       favoriteIds = new Set(favs.map(f => f.product_id));
       allProducts = data || [];

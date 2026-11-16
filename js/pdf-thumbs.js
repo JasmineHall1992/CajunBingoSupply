@@ -13,8 +13,8 @@
 pdfjsLib.GlobalWorkerOptions.workerSrc = '../js/vendor/pdf.worker.min.js';
 
 async function renderPdfThumb(url, canvas, targetW, targetH, onError) {
-  try {
-    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 6000));
+  const attempt = () => {
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000));
     const render = (async () => {
       const pdf = await pdfjsLib.getDocument(url).promise;
       const page = await pdf.getPage(1);
@@ -39,9 +39,20 @@ async function renderPdfThumb(url, canvas, targetW, targetH, onError) {
       ctx.fillRect(0, 0, targetW, targetH);
       ctx.drawImage(off, (targetW - off.width) / 2, (targetH - off.height) / 2);
     })();
-    await Promise.race([render, timeout]);
+    return Promise.race([render, timeout]);
+  };
+
+  try {
+    await attempt();
   } catch (err) {
-    if (onError) onError(canvas);
+    // A slow connection or a momentary hiccup fetching/rendering the PDF is
+    // the most common cause of a thumbnail not showing up — retry once
+    // automatically rather than making the visitor reload the whole page.
+    try {
+      await attempt();
+    } catch (err2) {
+      if (onError) onError(canvas);
+    }
   }
 }
 

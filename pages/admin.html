@@ -158,7 +158,6 @@
               <a id="pf-flyer-link" href="#" target="_blank" style="font-size:0.85rem;display:none;">View current flyer</a>
               <input type="text" id="pf-flyer" placeholder="or paste a flyer URL directly" style="margin-top:0.5rem;" />
             </div>
-            <div class="form-group"><label>Sort order</label><input type="number" id="pf-sort" value="0" /></div>
 
             <label style="display:block;margin:1rem 0 0.5rem;font-weight:600;">Payout rows</label>
             <div id="payout-rows-editor"></div>
@@ -394,7 +393,7 @@
     };
 
     async function loadCatalog() {
-      const { data } = await supabase.from('products').select('*').order('category').order('sort_order');
+      const { data } = await supabase.from('products').select('*').order('category').order('name');
       const rows = data || [];
       document.getElementById('catalog-body').innerHTML = rows.map(p => `
         <tr>
@@ -442,7 +441,6 @@
       } else {
         flyerLink.style.display = 'none';
       }
-      document.getElementById('pf-sort').value = product ? product.sort_order : 0;
 
       editingPayoutRows = product && product.payout_rows ? JSON.parse(JSON.stringify(product.payout_rows)) : [];
       renderPayoutRowsEditor();
@@ -539,7 +537,6 @@
         status_tag: document.getElementById('pf-status-tag').value || null,
         price_display: document.getElementById('pf-price').value.trim(),
         flyer_path: document.getElementById('pf-flyer').value.trim(),
-        sort_order: parseInt(document.getElementById('pf-sort').value, 10) || 0,
         payout_rows: editingPayoutRows
       };
 
