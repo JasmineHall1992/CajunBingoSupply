@@ -48,9 +48,11 @@ async function renderPdfThumb(url, canvas, targetW, targetH, onError) {
     // A slow connection or a momentary hiccup fetching/rendering the PDF is
     // the most common cause of a thumbnail not showing up — retry once
     // automatically rather than making the visitor reload the whole page.
+    console.warn('PDF thumb failed, retrying:', url, err);
     try {
       await attempt();
     } catch (err2) {
+      console.error('PDF thumb failed on retry too, giving up:', url, err2);
       if (onError) onError(canvas);
     }
   }
@@ -59,14 +61,28 @@ async function renderPdfThumb(url, canvas, targetW, targetH, onError) {
 // Renders every canvas matching `selector` (each needs a data-pdf-url
 // attribute) at its own actual displayed size, times devicePixelRatio for
 // sharpness on retina screens.
+//
+// Rendering is throttled to a handful at a time instead of firing every
+// thumbnail on the page at once — a catalog page can easily have a dozen+
+// PDFs, and starting that many PDF.js documents (each with its own worker)
+// simultaneously is what was causing some to silently fail even with a
+// generous timeout, especially on a slower computer or connection.
 function renderPdfCardThumbs(selector, onError) {
-  document.querySelectorAll(selector).forEach(canvas => {
+  const canvases = Array.from(document.querySelectorAll(selector));
+  const CONCURRENCY = 3;
+  let next = 0;
+
+  function startNext() {
+    if (next >= canvases.length) return;
+    const canvas = canvases[next++];
     const rect = canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
     const w = Math.max(1, Math.round(rect.width * dpr));
     const h = Math.max(1, Math.round(rect.height * dpr));
     canvas.width = w;
     canvas.height = h;
-    renderPdfThumb(canvas.dataset.pdfUrl, canvas, w, h, onError);
-  });
+    renderPdfThumb(canvas.dataset.pdfUrl, canvas, w, h, onError).then(startNext);
+  }
+
+  for (let i = 0; i < CONCURRENCY; i++) startNext();
 }
