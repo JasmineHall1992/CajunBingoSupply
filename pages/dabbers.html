@@ -156,10 +156,18 @@
     function cardMediaHtml(p) {
       const title = `${p.name} — ${p.form_label || ''}`;
       if (p.flyer_path) {
-        const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
-        const inner = isImage
-          ? `<img src="${p.flyer_path}" alt="${title} flyer preview" />`
-          : `<canvas class="flyer-pdf-thumb" data-pdf-url="${p.flyer_path}" data-pdf-title="${p.name}"></canvas>`;
+        let inner;
+        if (p.flyer_thumb_path) {
+          // Pre-generated at upload time — just a plain image, no PDF.js
+          // rendering needed (faster to load, and can't fail the way a
+          // live render can under load).
+          inner = `<img src="${p.flyer_thumb_path}" alt="${title} flyer preview" />`;
+        } else {
+          const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
+          inner = isImage
+            ? `<img src="${p.flyer_path}" alt="${title} flyer preview" />`
+            : `<canvas class="flyer-pdf-thumb" data-pdf-url="${p.flyer_path}" data-pdf-title="${p.name}"></canvas>`;
+        }
         return `<div class="flyer-preview" onclick="openFlyer('${p.flyer_path}','${title}')">${inner}</div>`;
       }
       return `<div class="product-img ${p.img_class || ''}"><span class="product-label">${p.name}</span></div>`;

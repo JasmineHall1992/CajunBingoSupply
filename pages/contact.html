@@ -170,6 +170,9 @@
     }
 
     function orderItemThumbHtml(p) {
+      if (p.flyer_thumb_path) {
+        return `<img class="order-item-thumb" src="${p.flyer_thumb_path}" alt="${p.name} preview" />`;
+      }
       if (p.flyer_path) {
         const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
         if (isImage) {

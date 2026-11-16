@@ -292,10 +292,15 @@
 
     function favMediaHtml(p) {
       if (p.flyer_path) {
-        const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
-        const inner = isImage
-          ? `<img src="${p.flyer_path}" alt="${p.name} flyer preview" />`
-          : `<canvas class="flyer-pdf-thumb" data-pdf-url="${p.flyer_path}" data-pdf-title="${p.name}"></canvas>`;
+        let inner;
+        if (p.flyer_thumb_path) {
+          inner = `<img src="${p.flyer_thumb_path}" alt="${p.name} flyer preview" />`;
+        } else {
+          const isImage = /\.(jpe?g|png|gif|webp)(\?.*)?$/i.test(p.flyer_path);
+          inner = isImage
+            ? `<img src="${p.flyer_path}" alt="${p.name} flyer preview" />`
+            : `<canvas class="flyer-pdf-thumb" data-pdf-url="${p.flyer_path}" data-pdf-title="${p.name}"></canvas>`;
+        }
         return `<div class="flyer-preview">${inner}</div>`;
       }
       return `<div class="product-img ${p.img_class || ''}"><span class="product-label">${p.name}</span></div>`;

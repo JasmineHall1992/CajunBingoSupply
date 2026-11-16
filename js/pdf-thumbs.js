@@ -86,3 +86,29 @@ function renderPdfCardThumbs(selector, onError) {
 
   for (let i = 0; i < CONCURRENCY; i++) startNext();
 }
+
+// Generates a static thumbnail image (JPEG Blob) from page 1 of a PDF
+// File object — used once, at upload time in the admin dashboard, so the
+// catalog can show a plain <img> instead of re-rendering the PDF live in
+// every visitor's browser on every page view. Returns null on failure
+// (caller should fall back to the live-render path for that product).
+async function generatePdfThumbnailBlob(file, targetW = 700, targetH = 700) {
+  try {
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    const page = await pdf.getPage(1);
+    const baseViewport = page.getViewport({ scale: 1 });
+    const scale = Math.min(targetW / baseViewport.width, targetH / baseViewport.height);
+    const viewport = page.getViewport({ scale });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(viewport.width));
+    canvas.height = Math.max(1, Math.round(viewport.height));
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+
+    return await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+  } catch (err) {
+    console.error('Failed to generate PDF thumbnail:', err);
+    return null;
+  }
+}

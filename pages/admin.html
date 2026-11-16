@@ -157,6 +157,7 @@
               <p id="pf-flyer-status" style="font-size:0.8rem;color:#888;margin-top:0.35rem;"></p>
               <a id="pf-flyer-link" href="#" target="_blank" style="font-size:0.85rem;display:none;">View current flyer</a>
               <input type="text" id="pf-flyer" placeholder="or paste a flyer URL directly" style="margin-top:0.5rem;" />
+              <input type="hidden" id="pf-flyer-thumb" />
             </div>
 
             <label style="display:block;margin:1rem 0 0.5rem;font-weight:600;">Payout rows</label>
@@ -280,6 +281,8 @@
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
+  <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="../js/pdf-thumbs.js"></script>
   <script>
     (async () => {
       const user = await CBS.currentUser();
@@ -432,6 +435,7 @@
       document.getElementById('pf-status-tag').value = product ? (product.status_tag || '') : '';
       document.getElementById('pf-price').value = product ? product.price_display : '';
       document.getElementById('pf-flyer').value = product ? (product.flyer_path || '') : '';
+      document.getElementById('pf-flyer-thumb').value = product ? (product.flyer_thumb_path || '') : '';
       document.getElementById('pf-flyer-file').value = '';
       document.getElementById('pf-flyer-status').textContent = '';
       const flyerLink = document.getElementById('pf-flyer-link');
@@ -475,6 +479,37 @@
       const flyerLink = document.getElementById('pf-flyer-link');
       flyerLink.href = data.publicUrl;
       flyerLink.style.display = 'inline';
+
+      const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+      if (!isPdf) {
+        // Already an image — it's already fast to display as-is, no
+        // separate thumbnail needed; just point the thumb at the same file.
+        document.getElementById('pf-flyer-thumb').value = data.publicUrl;
+        statusEl.textContent = 'Uploaded — ' + file.name;
+        return;
+      }
+
+      // Generate a static thumbnail once, here, instead of making every
+      // visitor's browser re-render the PDF live on every catalog page
+      // view — this is what actually makes the catalog fast (and reliable).
+      statusEl.textContent = 'Uploaded — generating thumbnail...';
+      const thumbBlob = await generatePdfThumbnailBlob(file);
+      if (!thumbBlob) {
+        document.getElementById('pf-flyer-thumb').value = '';
+        statusEl.textContent = 'Uploaded — ' + file.name + ' (thumbnail generation failed; catalog will render this one live, which may load slower)';
+        return;
+      }
+
+      const thumbPath = `${productId}-thumb-${Date.now()}.jpg`;
+      const { error: thumbError } = await supabase.storage.from('flyers').upload(thumbPath, thumbBlob, { upsert: true, contentType: 'image/jpeg' });
+      if (thumbError) {
+        document.getElementById('pf-flyer-thumb').value = '';
+        statusEl.textContent = 'Uploaded — ' + file.name + ' (thumbnail upload failed; catalog will render this one live, which may load slower)';
+        return;
+      }
+
+      const { data: thumbData } = supabase.storage.from('flyers').getPublicUrl(thumbPath);
+      document.getElementById('pf-flyer-thumb').value = thumbData.publicUrl;
       statusEl.textContent = 'Uploaded — ' + file.name;
     }
 
@@ -537,6 +572,7 @@
         status_tag: document.getElementById('pf-status-tag').value || null,
         price_display: document.getElementById('pf-price').value.trim(),
         flyer_path: document.getElementById('pf-flyer').value.trim(),
+        flyer_thumb_path: document.getElementById('pf-flyer-thumb').value.trim() || null,
         payout_rows: editingPayoutRows
       };
 

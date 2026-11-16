@@ -130,7 +130,7 @@ const CBS = (() => {
     if (!user) return [];
     const { data } = await supabase
       .from('cart_items')
-      .select('id, product_id, quantity, added_at, products(id, name, form_label, price_display, img_class, flyer_path)')
+      .select('id, product_id, quantity, added_at, products(id, name, form_label, price_display, img_class, flyer_path, flyer_thumb_path)')
       .eq('user_id', user.id)
       .order('added_at', { ascending: true });
     return data || [];
@@ -195,7 +195,7 @@ const CBS = (() => {
     if (!user) return [];
     const { data } = await supabase
       .from('favorites')
-      .select('product_id, saved_at, products(id, name, form_label, price_display, img_class, flyer_path)')
+      .select('product_id, saved_at, products(id, name, form_label, price_display, img_class, flyer_path, flyer_thumb_path)')
       .eq('user_id', user.id);
     return data || [];
   }
