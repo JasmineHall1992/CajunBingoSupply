@@ -176,7 +176,7 @@
     function productCardHtml(p) {
       const favorited = favoriteIds.has(p.id);
       return `
-        <div class="product-card" data-product-id="${p.id}" data-name="${(p.name + ' ' + (p.form_label || '')).toLowerCase()}">
+        <div class="product-card" data-product-id="${p.id}" data-search="${(p.name + ' ' + (p.form_label || '') + ' ' + p.category + ' ' + (STATUS_TAG_SEARCH_LABELS[p.status_tag] || '')).toLowerCase()}">
           ${cardMediaHtml(p)}
           <div class="product-info">
             <h3>${p.name} <span class="form-badge">${p.form_label || ''}</span></h3>
@@ -212,10 +212,21 @@
     };
 
     function filterProducts() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      renderProducts(allProducts.filter(p =>
-        (p.name + ' ' + (p.form_label || '') + ' ' + p.category + ' ' + (STATUS_TAG_SEARCH_LABELS[p.status_tag] || '')).toLowerCase().includes(query)
-      ));
+      // Toggling display on the already-rendered cards instead of
+      // re-rendering the whole grid on every keystroke — rebuilding the
+      // grid re-triggered renderPdfCardThumbs() each time, which spun up a
+      // fresh batch of PDF.js workers per keystroke and piled them up
+      // faster than they could finish, crashing mobile Safari on anything
+      // but a single short search.
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('#productGrid .product-card');
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const match = card.dataset.search.includes(query);
+        card.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+      });
+      document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
     }
 
     async function toggleFav(productId, btn) {
